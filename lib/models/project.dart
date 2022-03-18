@@ -16,7 +16,8 @@ class Project with _$Project {
     @JsonKey(name: 'abstract') required String abstract,
     @JsonKey(name: 'pdf_url') required String pdfUrl,
     @JsonKey(name: 'doc_url') required String docUrl,
-    @JsonKey(name: 'keywords', defaultValue: []) required List<String> keywords,
+    @JsonKey(name: 'key_words', defaultValue: [])
+        required List<String> keywords,
     @JsonKey(name: 'level', unknownEnumValue: Level.unKnown)
         required Level level,
   }) = _Project;
