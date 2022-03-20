@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["Cupertino", "dotenv"]
+  "cSpell.words": ["Cupertino", "dotenv"],
+  "cSpell.enableFiletypes": ["!dart"]
 }

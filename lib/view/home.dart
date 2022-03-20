@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
+import 'package:projects_archiving/data/strings.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -41,14 +42,14 @@ class MyHomeScreen extends StatelessWidget {
     }
 
     List<DataColumn> columns = const [
-      DataColumn(label: Text('Name')),
-      DataColumn(label: Text('Graduation Year')),
-      DataColumn(label: Text('Student Name')),
-      DataColumn(label: Text('Supervisor Name')),
-      DataColumn(label: Text('Level')),
-      DataColumn(label: Text('keywords')),
-      DataColumn(label: Text('PDF')),
-      DataColumn(label: Text('DOC')),
+      DataColumn(label: Text(Strings.projectName)),
+      DataColumn(label: Text(Strings.graduationYear)),
+      DataColumn(label: Text(Strings.studentName)),
+      DataColumn(label: Text(Strings.supervisorName)),
+      DataColumn(label: Text(Strings.level)),
+      DataColumn(label: Text(Strings.keywords)),
+      DataColumn(label: Text(Strings.pdf)),
+      DataColumn(label: Text(Strings.doc)),
     ];
 
     const borderSide =
@@ -65,7 +66,7 @@ class MyHomeScreen extends StatelessWidget {
                   AutoRouter.of(context).push(const AddProjectRoute());
                 },
                 icon: const Icon(Icons.add),
-                label: const Text('إضافة مشروع'),
+                label: const Text(Strings.addProject),
               ),
             ],
           ),
