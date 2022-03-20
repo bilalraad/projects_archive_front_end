@@ -1,37 +1,41 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/data/api/dio_client.dart';
 import 'package:projects_archiving/data/api/helper/network.dart';
 import 'package:projects_archiving/data/api/projects_api.dart';
 import 'package:projects_archiving/data/shared_pref_helper.dart';
-import 'package:projects_archiving/view/home.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  runApp(await configureInjections(const MyApp()));
+  final app = await configureInjections(MyApp());
+  runApp(app);
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
 
   // This widget is the root of your application.
+
+  final appRouter = AppRouter();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Projects Archiving',
-      theme: ThemeData(
-        primarySwatch: Colors.orange,
-      ),
+      routerDelegate: AutoRouterDelegate(appRouter),
+      routeInformationParser: appRouter.defaultRouteParser(),
+      theme: ThemeData(primarySwatch: Colors.orange),
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [Locale('ar')],
-      home: const MyHomePage(),
     );
   }
 }

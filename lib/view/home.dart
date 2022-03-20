@@ -1,10 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/models/project.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
+class MyHomeScreen extends StatelessWidget {
+  const MyHomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +22,17 @@ class MyHomePage extends StatelessWidget {
         DataCell(Text(project.level.name)),
         DataCell(Text(project.keywords.toString())),
         DataCell(InkWell(
-            onTap: () {},
+            onTap: () {
+              launch(project.pdfUrl);
+            },
             child: Text(
               "Url",
               style: TextStyle(color: Theme.of(context).primaryColor),
             ))),
         DataCell(InkWell(
-            onTap: () {},
+            onTap: () {
+              launch(project.docUrl);
+            },
             child: Text(
               "Url",
               style: TextStyle(color: Theme.of(context).primaryColor),
@@ -54,7 +61,9 @@ class MyHomePage extends StatelessWidget {
           Row(
             children: [
               ElevatedButton.icon(
-                onPressed: () {},
+                onPressed: () {
+                  AutoRouter.of(context).push(const AddProjectRoute());
+                },
                 icon: const Icon(Icons.add),
                 label: const Text('إضافة مشروع'),
               ),
@@ -80,7 +89,7 @@ class MyHomePage extends StatelessWidget {
                       ),
                     );
                   },
-                  error: (e) => Text(e.raw)),
+                  error: (e) => Text(e.raw.toString())),
             ),
           ),
         ],
