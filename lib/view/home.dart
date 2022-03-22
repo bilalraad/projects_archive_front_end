@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
-import 'package:projects_archiving/data/strings.dart';
+import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -57,43 +57,51 @@ class MyHomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              ElevatedButton.icon(
-                onPressed: () {
-                  AutoRouter.of(context).push(const AddProjectRoute());
-                },
-                icon: const Icon(Icons.add),
-                label: const Text(Strings.addProject),
-              ),
-            ],
-          ),
-          Expanded(
-            child: Container(
-              child: projectsP.state.whenOrNull(
-                  loading: () =>
-                      const Center(child: CircularProgressIndicator()),
-                  loaded: (ps) {
-                    return SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: DataTable(
-                        border: const TableBorder(
-                          horizontalInside: borderSide,
-                          verticalInside: borderSide,
-                        ),
-                        columns: columns,
-                        rows: ps.results
-                            .map((e) => DataRow(cells: projectRow(e)))
-                            .toList(),
-                      ),
-                    );
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: () {
+                    AutoRouter.of(context).push(const AddProjectRoute());
                   },
-                  error: (e) => Text(e.raw.toString())),
+                  icon: const Icon(Icons.add),
+                  label: const Text(Strings.addProject),
+                ),
+                Text(
+                  Strings.count(projectsP.state
+                      .whenOrNull(loaded: (r) => r.count.toString())),
+                )
+              ],
             ),
-          ),
-        ],
+            Expanded(
+              child: Container(
+                child: projectsP.state.whenOrNull(
+                    loading: () =>
+                        const Center(child: CircularProgressIndicator()),
+                    loaded: (ps) {
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: DataTable(
+                          border: const TableBorder(
+                            horizontalInside: borderSide,
+                            verticalInside: borderSide,
+                          ),
+                          columns: columns,
+                          rows: ps.results
+                              .map((e) => DataRow(cells: projectRow(e)))
+                              .toList(),
+                        ),
+                      );
+                    },
+                    error: (e) => Text(e.raw.toString())),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
