@@ -29,6 +29,8 @@ dependencies:
   url_launcher: ^6.0.20
   flutter_expandable_table: ^1.0.2
   auto_route: ^3.2.4
+  flutter_dropzone: ^3.0.5
+  drag_and_drop_flutter: ^0.2.0
 
 dev_dependencies:
   flutter_test:

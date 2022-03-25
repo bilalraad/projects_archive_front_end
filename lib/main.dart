@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:projects_archiving/app_router.gr.dart';
+import 'package:projects_archiving/blocs/add_project/add_project_bloc.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/data/api/dio_client.dart';
 import 'package:projects_archiving/data/api/helper/network.dart';
@@ -54,6 +55,7 @@ Future<Widget> configureInjections(Widget child) async {
           lazy: false,
           create: (context) =>
               ProjectsBloc(_projectsRepo)..add(const ProjectsEvent.started())),
+      BlocProvider(create: (_) => AddProjectBloc(_projectsRepo))
     ],
     child: child,
   );

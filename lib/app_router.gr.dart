@@ -37,7 +37,9 @@ class AppRouter extends _i3.RootStackRouter {
         _i3.RouteConfig(MyHomeRoute.name, path: '/'),
         _i3.RouteConfig(AddProjectRoute.name, path: '/projects/add'),
         _i3.RouteConfig('*#redirect',
-            path: '*', redirectTo: '/', fullMatch: true)
+            path: '*', redirectTo: '/projects', fullMatch: true),
+        _i3.RouteConfig('/#redirect',
+            path: '/', redirectTo: '/projects', fullMatch: true)
       ];
 }
 

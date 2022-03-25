@@ -1,3 +1,5 @@
+import 'package:projects_archiving/utils/enums.dart';
+
 class Strings {
   static const addProject = 'إضافة مشروع';
   static const projectName = 'اسم المشروع';
@@ -15,5 +17,18 @@ class Strings {
 
   static String count(String? count) {
     return "العدد: ${count ?? 0}";
+  }
+
+  static String translateLevel(Level? level) {
+    switch (level) {
+      case Level.bachelor:
+        return 'بكالريوس';
+      case Level.master:
+        return 'الماستر';
+      case Level.phD:
+        return 'الدكتوراة';
+      default:
+        return 'بكالريوس';
+    }
   }
 }

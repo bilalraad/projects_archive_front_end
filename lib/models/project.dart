@@ -1,9 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:projects_archiving/utils/enums.dart';
 
 part 'project.freezed.dart';
 part 'project.g.dart';
-
-enum Level { phD, master, bachelor, unKnown }
 
 @freezed
 class Project with _$Project {
@@ -24,6 +23,18 @@ class Project with _$Project {
 
   factory Project.fromJson(Map<String, dynamic> json) =>
       _$ProjectFromJson(json);
+
+  factory Project.empty() => Project(
+      name: '',
+      graduationYear: DateTime.now(),
+      studentName: '',
+      studentPhoneNo: '',
+      supervisorName: '',
+      abstract: '',
+      pdfUrl: '',
+      docUrl: '',
+      keywords: [],
+      level: Level.bachelor);
 
   static Project fromJsonModel(dynamic json) => Project.fromJson(json);
 }

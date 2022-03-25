@@ -162,6 +162,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+  cross_file:
+    dependency: transitive
+    description:
+      name: cross_file
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.2"
   crypto:
     dependency: transitive
     description:
@@ -197,6 +204,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.4"
+  drag_and_drop_flutter:
+    dependency: "direct main"
+    description:
+      name: drag_and_drop_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
+  drag_and_drop_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: drag_and_drop_flutter_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
+  drag_and_drop_flutter_web:
+    dependency: transitive
+    description:
+      name: drag_and_drop_flutter_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.2.0"
   fake_async:
     dependency: transitive
     description:
@@ -244,6 +272,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.2"
+  flutter_dropzone:
+    dependency: "direct main"
+    description:
+      name: flutter_dropzone
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.5"
+  flutter_dropzone_platform_interface:
+    dependency: transitive
+    description:
+      name: flutter_dropzone_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.5"
+  flutter_dropzone_web:
+    dependency: transitive
+    description:
+      name: flutter_dropzone_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.8"
   flutter_expandable_table:
     dependency: "direct main"
     description:
