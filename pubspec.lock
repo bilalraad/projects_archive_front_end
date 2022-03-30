@@ -197,6 +197,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.2"
+  desktop_drop:
+    dependency: "direct main"
+    description:
+      name: desktop_drop
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.3"
   dio:
     dependency: "direct main"
     description:
@@ -204,27 +211,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.4"
-  drag_and_drop_flutter:
+  equatable:
     dependency: "direct main"
     description:
-      name: drag_and_drop_flutter
+      name: equatable
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.2.0"
-  drag_and_drop_flutter_platform_interface:
-    dependency: transitive
-    description:
-      name: drag_and_drop_flutter_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0"
-  drag_and_drop_flutter_web:
-    dependency: transitive
-    description:
-      name: drag_and_drop_flutter_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.0"
+    version: "2.0.3"
   fake_async:
     dependency: transitive
     description:
@@ -470,7 +463,7 @@ packages:
     source: hosted
     version: "1.7.0"
   mime:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: mime
       url: "https://pub.dartlang.org"

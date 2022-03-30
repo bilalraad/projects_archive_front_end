@@ -59,48 +59,57 @@ class MyHomeScreen extends StatelessWidget {
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: () {
-                    AutoRouter.of(context).push(const AddProjectRoute());
-                  },
-                  icon: const Icon(Icons.add),
-                  label: const Text(Strings.addProject),
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              Container(
+                constraints: const BoxConstraints(maxWidth: 500),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.all(20)),
+                      onPressed: () {
+                        AutoRouter.of(context).push(const AddProjectRoute());
+                      },
+                      icon: const Icon(Icons.add),
+                      label: const Text(Strings.addProject),
+                    ),
+                    Text(
+                      Strings.count(projectsP.state
+                          .whenOrNull(loaded: (r) => r.count.toString())),
+                    )
+                  ],
                 ),
-                Text(
-                  Strings.count(projectsP.state
-                      .whenOrNull(loaded: (r) => r.count.toString())),
-                )
-              ],
-            ),
-            Expanded(
-              child: Container(
-                child: projectsP.state.whenOrNull(
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
-                    loaded: (ps) {
-                      return SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: DataTable(
-                          border: const TableBorder(
-                            horizontalInside: borderSide,
-                            verticalInside: borderSide,
-                          ),
-                          columns: columns,
-                          rows: ps.results
-                              .map((e) => DataRow(cells: projectRow(e)))
-                              .toList(),
-                        ),
-                      );
-                    },
-                    error: (e) => Text(e.raw.toString())),
               ),
-            ),
-          ],
+              Expanded(
+                child: SizedBox(
+                  child: projectsP.state.whenOrNull(
+                      loading: () =>
+                          const Center(child: CircularProgressIndicator()),
+                      loaded: (ps) {
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: DataTable(
+                            border: const TableBorder(
+                              horizontalInside: borderSide,
+                              verticalInside: borderSide,
+                            ),
+                            columns: columns,
+                            rows: ps.results
+                                .map((e) => DataRow(cells: projectRow(e)))
+                                .toList(),
+                          ),
+                        );
+                      },
+                      error: (e) => Text(e.raw.toString())),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

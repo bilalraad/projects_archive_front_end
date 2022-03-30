@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
       title: 'Projects Archiving',
       routerDelegate: AutoRouterDelegate(appRouter),
       routeInformationParser: appRouter.defaultRouteParser(),
-      theme: ThemeData(primarySwatch: Colors.orange),
+      theme: ThemeData(primarySwatch: Colors.orange, fontFamily: 'notoKufi'),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
