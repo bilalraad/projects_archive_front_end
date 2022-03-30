@@ -1,1 +1,1 @@
-enum Level { phD, master, bachelor, unKnown }
+enum Level { phD, master, bachelor }

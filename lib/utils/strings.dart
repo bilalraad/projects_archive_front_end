@@ -14,7 +14,8 @@ class Strings {
   static const selectYear = "اختر السنة";
   static const abstract = 'نبذة مختصرة';
   static const optionalWithBrackets = ' ( اختياري ) ';
-
+  static const pleaseFillProjectInfo =
+      'الرجاء ملئ الحقول بالمعلومات الظرورية والتاكد منها قبل الاضافة';
   static String count(String? count) {
     return "العدد: ${count ?? 0}";
   }

@@ -32,13 +32,13 @@ class AppButton extends StatelessWidget {
         ? Theme.of(context).colorScheme.surface
         : Theme.of(context).colorScheme.primary;
 
-    final buttonBgColor = isPrimary
-        ? Theme.of(context).colorScheme.primary
-        : Theme.of(context).colorScheme.background;
+    final buttonBgColor =
+        isPrimary ? Theme.of(context).colorScheme.primary : Colors.transparent;
     return ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
             primary: backroundColor ?? buttonBgColor,
+            elevation: !isPrimary ? 0 : null,
             shape: RoundedRectangleBorder(
                 side: isPrimary
                     ? BorderSide.none
