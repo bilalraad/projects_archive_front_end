@@ -1,13 +1,12 @@
-import 'package:desktop_drop/desktop_drop.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projects_archiving/view/project/add_project/file_picker_widget.dart';
+import 'package:projects_archiving/view/widgets/keywords_widget.dart';
+import 'package:projects_archiving/view/widgets/level_drop_dropdown.dart';
+import 'package:projects_archiving/view/widgets/year_picker.dart';
 import 'package:provider/provider.dart';
 
 import 'package:projects_archiving/blocs/add_project/add_project_bloc.dart';
-import 'package:projects_archiving/models/app_file.dart';
-import 'package:projects_archiving/utils/app_utils.dart';
-import 'package:projects_archiving/utils/enums.dart';
 import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
 import 'package:projects_archiving/view/widgets/app_text_feild.dart';
@@ -24,7 +23,6 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       _strudentNameController,
       _supervisorNameController,
       _studentPhoneNumberController,
-      _keyWordController,
       _abstractController;
 
   late AddProjectBloc _pBloc;
@@ -37,7 +35,6 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
     _strudentNameController = TextEditingController();
     _supervisorNameController = TextEditingController();
     _abstractController = TextEditingController();
-    _keyWordController = TextEditingController();
     _studentPhoneNumberController = TextEditingController();
     super.initState();
   }
@@ -134,98 +131,26 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                 style: Theme.of(context).textTheme.subtitle1,
                               ),
                               const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 3,
-                                    child: AppTextField(
-                                      lableText: 'مثال: تطبيق هاتف',
-                                      controller: _keyWordController,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    flex: 1,
-                                    child: AppButton(
-                                        text: 'اضافة',
-                                        buttonType: ButtonType.secondary,
-                                        onPressed: () {
-                                          if (_keyWordController
-                                              .text.isNotEmpty) {
-                                            var nkw = _pBloc.state.keywords!
-                                              ..add(_keyWordController.text);
-                                            _pBloc.add(
-                                                AddProjectEvent.updateProject(
-                                                    _pBloc.state.copyWith(
-                                                        keywords: nkw)));
-                                          }
-                                        }),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              BlocListener<AddProjectBloc, AddProjectState>(
-                                listener: (context, state) {},
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: Theme.of(context).dividerColor),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  height: 200,
-                                  width: double.infinity,
-                                  child: GridView.count(
-                                    crossAxisCount: 2,
-                                    childAspectRatio: 30 / 10,
-                                    children: _pBloc.state.keywords!
-                                        .map((e) => Container(
-                                              margin: const EdgeInsets.all(5),
-                                              decoration: BoxDecoration(
-                                                color: Theme.of(context)
-                                                    .primaryColor
-                                                    .withOpacity(.4),
-                                                border: Border.all(
-                                                    color: Theme.of(context)
-                                                        .primaryColor),
-                                                borderRadius:
-                                                    BorderRadius.circular(5),
-                                              ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(e),
-                                                  ),
-                                                  const Spacer(),
-                                                  IconButton(
-                                                      onPressed: () {
-                                                        if (_keyWordController
-                                                            .text.isNotEmpty) {
-                                                          var nkw = _pBloc
-                                                              .state.keywords!
-                                                            ..remove(e);
-                                                          _pBloc.add(AddProjectEvent
-                                                              .updateProject(_pBloc
-                                                                  .state
-                                                                  .copyWith(
-                                                                      keywords:
-                                                                          nkw)));
-                                                        }
-                                                      },
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              0),
-                                                      icon: const Icon(
-                                                          Icons.delete))
-                                                ],
-                                              ),
-                                            ))
-                                        .toList(),
-                                  ),
-                                ),
+                              BlocBuilder<AddProjectBloc, AddProjectState>(
+                                builder: (context, state) {
+                                  return KeyWordsWidget(
+                                    keywords: state.keywords ?? [],
+                                    onKeyWordAdded: (kw) {
+                                      var nkws = _pBloc.state.keywords!
+                                        ..add(kw);
+                                      _pBloc.add(AddProjectEvent.updateProject(
+                                          _pBloc.state
+                                              .copyWith(keywords: nkws)));
+                                    },
+                                    onkeyWordDeleted: (kw) {
+                                      var kws = _pBloc.state.keywords!
+                                        ..remove(kw);
+                                      _pBloc.add(AddProjectEvent.updateProject(
+                                          _pBloc.state
+                                              .copyWith(keywords: kws)));
+                                    },
+                                  );
+                                },
                               ),
                               const SizedBox(height: 10),
                               BlocBuilder<AddProjectBloc, AddProjectState>(
@@ -236,134 +161,25 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        InkWell(
-                                          onTap: () async {
-                                            showDatePicker(
-                                                    context: context,
-                                                    initialDatePickerMode:
-                                                        DatePickerMode.year,
-                                                    initialDate:
-                                                        state.graduationYear ??
-                                                            DateTime.now(),
-                                                    firstDate: DateTime(1800),
-                                                    lastDate: DateTime.now())
-                                                .then((sd) {
-                                              if (sd != null) {
-                                                _pBloc.add(AddProjectEvent
-                                                    .updateProject(
-                                                        state.copyWith(
-                                                            graduationYear:
-                                                                sd)));
-                                              }
-                                            });
+                                        AppYearPicker(
+                                          selectedDate: state.graduationYear,
+                                          onYearSelected: (y) {
+                                            if (y != null) {
+                                              _pBloc.add(
+                                                  AddProjectEvent.updateProject(
+                                                      state.copyWith(
+                                                          graduationYear: y)));
+                                            }
                                           },
-                                          child: Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 10),
-                                            width: 150,
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: Theme.of(context)
-                                                        .dividerColor),
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.calendar_month_rounded,
-                                                  color: Theme.of(context)
-                                                      .primaryColor,
-                                                ),
-                                                const SizedBox(width: 10),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    const Text(
-                                                        Strings.graduationYear),
-                                                    Text(
-                                                      state.graduationYear?.year
-                                                              .toString() ??
-                                                          Strings
-                                                              .graduationYear,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .subtitle1
-                                                          ?.copyWith(
-                                                              color: Theme.of(
-                                                                      context)
-                                                                  .primaryColor),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-                                          ),
                                         ),
                                         const SizedBox(width: 10),
-                                        BlocBuilder<AddProjectBloc,
-                                            AddProjectState>(
-                                          builder: (context, state) {
-                                            return Container(
-                                              width: 160,
-                                              height: 70,
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(
-                                                      color: Theme.of(context)
-                                                          .dividerColor),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  const Text(Strings.level),
-                                                  DropdownButtonFormField<
-                                                          Level>(
-                                                      isDense: true,
-                                                      icon: const SizedBox
-                                                          .shrink(),
-                                                      decoration:
-                                                          const InputDecoration
-                                                              .collapsed(
-                                                        hintText: '',
-                                                        border:
-                                                            InputBorder.none,
-                                                      ),
-                                                      items: Level.values
-                                                          .map((e) =>
-                                                              DropdownMenuItem<
-                                                                      Level>(
-                                                                  child: Text(
-                                                                    Strings
-                                                                        .translateLevel(
-                                                                            e),
-                                                                    style: Theme.of(
-                                                                            context)
-                                                                        .textTheme
-                                                                        .subtitle1
-                                                                        ?.copyWith(
-                                                                            color:
-                                                                                Theme.of(context).primaryColor),
-                                                                  ),
-                                                                  value: e))
-                                                          .toList(),
-                                                      value: state.level,
-                                                      onChanged: (lvl) {
-                                                        _pBloc.add(AddProjectEvent
-                                                            .updateProject(_pBloc
-                                                                .state
-                                                                .copyWith(
-                                                                    level:
-                                                                        lvl!)));
-                                                      }),
-                                                ],
-                                              ),
-                                            );
+                                        AppLevelDropDown(
+                                          selectedLevel: state.level!,
+                                          onLevelChanged: (lvl) {
+                                            _pBloc.add(
+                                                AddProjectEvent.updateProject(
+                                                    _pBloc.state.copyWith(
+                                                        level: lvl!)));
                                           },
                                         )
                                       ],
@@ -408,128 +224,6 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                   ],
                 ),
               )),
-        ),
-      ),
-    );
-  }
-}
-
-class PickedFileCard extends StatelessWidget {
-  const PickedFileCard(
-      {Key? key, required this.file, required this.onDeletePressed})
-      : super(key: key);
-
-  final AppFile file;
-  final VoidCallback onDeletePressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 500),
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      file.name,
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                    Text(
-                      getFileSize(file.bytes.length, 2),
-                      style: Theme.of(context).textTheme.caption,
-                    ),
-                  ],
-                ),
-              ),
-              IconButton(
-                  onPressed: onDeletePressed,
-                  icon: const Icon(Icons.delete, color: Colors.red)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class FilePickerWidget extends StatelessWidget {
-  final List<AppFile>? pickedFiles;
-  final Function(AppFile) onFilesPicked;
-
-  const FilePickerWidget(
-      {Key? key, this.pickedFiles, required this.onFilesPicked})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return DropTarget(
-      onDragDone: pickedFiles!.length >= 2
-          ? null
-          : (detail) async {
-              final files = detail.files;
-              for (final xfile in files) {
-                if ((xfile.mimeType?.endsWith('/pdf') ?? false) ||
-                    (xfile.mimeType?.endsWith('/msword') ?? false) ||
-                    (xfile.mimeType?.endsWith(
-                            '/vnd.openxmlformats-officedocument.wordprocessingml.document') ??
-                        false)) {
-                  final file = AppFile(
-                      bytes: await xfile.readAsBytes(), name: xfile.name);
-                  onFilesPicked(file);
-                }
-              }
-            },
-      child: Container(
-        decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).dividerColor),
-            borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 5),
-        constraints: const BoxConstraints(maxWidth: 1000),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Icon(Icons.cloud_upload_outlined, size: 80),
-            Center(
-              child: Text(
-                Strings.dropFilesHere,
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Center(
-              child: AppButton(
-                  width: 200,
-                  buttonType: ButtonType.secondary,
-                  onPressed: pickedFiles!.length >= 2
-                      ? null
-                      : () async {
-                          FilePickerResult? result = await FilePicker.platform
-                              .pickFiles(
-                                  allowMultiple: true,
-                                  type: FileType.custom,
-                                  withData: true,
-                                  allowedExtensions: ['pdf', 'doc', 'docx']);
-
-                          if (result != null) {
-                            for (var file in result.files) {
-                              final appfile =
-                                  AppFile(bytes: file.bytes!, name: file.name);
-                              onFilesPicked(appfile);
-                            }
-                          } else {
-                            // User canceled the picker
-                          }
-                        },
-                  text: 'تصفح الملفات'),
-            )
-          ],
         ),
       ),
     );
