@@ -5,6 +5,7 @@ import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/models/project.dart';
+import 'package:projects_archiving/view/widgets/app_button.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyHomeScreen extends StatelessWidget {
@@ -85,29 +86,116 @@ class MyHomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 10),
               Expanded(
                 child: SizedBox(
                   child: projectsP.state.whenOrNull(
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
+                      error: (e) => Text(e.raw.toString()),
                       loaded: (ps) {
                         return SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: DataTable(
-                            border: const TableBorder(
-                              horizontalInside: borderSide,
-                              verticalInside: borderSide,
-                            ),
-                            columns: columns,
-                            rows: ps.results
-                                .map((e) => DataRow(cells: projectRow(e)))
+                          child: Wrap(
+                            children: ps.results
+                                .map((p) => ProjectCard(p: p))
                                 .toList(),
                           ),
                         );
-                      },
-                      error: (e) => Text(e.raw.toString())),
+                      }),
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProjectCard extends StatelessWidget {
+  final Project p;
+  const ProjectCard({Key? key, required this.p}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final pSubtitleStyle =
+        Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.grey);
+    final pSubtitleValueStyle = Theme.of(context).textTheme.bodyText1;
+    return SizedBox(
+      width: 400,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                p.name,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                            text: TextSpan(
+                                text: "${Strings.studentName}\n",
+                                style: pSubtitleStyle,
+                                children: [
+                              TextSpan(
+                                  text: p.studentName,
+                                  style: pSubtitleValueStyle)
+                            ])),
+                        RichText(
+                            text: TextSpan(
+                                text: "${Strings.graduationYear}\n",
+                                style: pSubtitleStyle,
+                                children: [
+                              TextSpan(
+                                  text: p.graduationYear.year.toString(),
+                                  style: pSubtitleValueStyle)
+                            ])),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        RichText(
+                            text: TextSpan(
+                                text: "${Strings.supervisorName}\n",
+                                style: pSubtitleStyle,
+                                children: [
+                              TextSpan(
+                                  text: p.supervisorName,
+                                  style: pSubtitleValueStyle)
+                            ])),
+                        RichText(
+                            text: TextSpan(
+                                text: "${Strings.keywords}\n",
+                                style: pSubtitleStyle,
+                                children: [
+                              TextSpan(
+                                  text: p.keywords
+                                      .toString()
+                                      .replaceAll('[', '')
+                                      .replaceAll(']', ''),
+                                  style: pSubtitleValueStyle)
+                            ])),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              AppButton(
+                  onPressed: () {},
+                  width: 120,
+                  backroundColor: Colors.black,
+                  text: 'عرض التفاصيل'),
             ],
           ),
         ),

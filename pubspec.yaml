@@ -29,10 +29,10 @@ dependencies:
   url_launcher: ^6.0.20
   flutter_expandable_table: ^1.0.2
   auto_route: ^3.2.4
-  flutter_dropzone: ^3.0.5
   desktop_drop: ^0.3.3
   equatable: ^2.0.3
   mime: ^1.0.1
+  file_picker: ^4.5.1
 
 dev_dependencies:
   flutter_test:

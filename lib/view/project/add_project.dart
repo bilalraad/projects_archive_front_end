@@ -1,7 +1,6 @@
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dropzone/flutter_dropzone.dart';
 import 'package:mime/mime.dart';
 import 'package:projects_archiving/blocs/add_project/add_project_bloc.dart';
 import 'package:projects_archiving/utils/enums.dart';
@@ -25,7 +24,6 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       _keyWordController,
       _abstractController;
 
-  late DropzoneViewController dropzoneController;
   late AddProjectBloc _pBloc;
 
   final _formKey = GlobalKey<FormState>();
