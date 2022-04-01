@@ -1,4 +1,8 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:desktop_drop/desktop_drop.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mime/mime.dart';
@@ -374,66 +378,11 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    SizedBox(
-                      height: 250,
-                      child: Stack(
-                        children: [
-                          DropTarget(
-                            onDragDone: (detail) async {
-                              final files = detail.files;
-                              for (final file in files) {
-                                print((lookupMimeType(file.path)
-                                            ?.endsWith('/pdf') ??
-                                        false) ||
-                                    (lookupMimeType(file.path)
-                                            ?.endsWith('/msword') ??
-                                        false) ||
-                                    (lookupMimeType(file.path)?.endsWith(
-                                            '/vnd.openxmlformats-officedocument.wordprocessingml.document') ??
-                                        false));
-                                if ((lookupMimeType(file.path)
-                                            ?.endsWith('/pdf') ??
-                                        false) ||
-                                    (lookupMimeType(file.path)
-                                            ?.endsWith('/msword') ??
-                                        false) ||
-                                    (lookupMimeType(file.path)?.endsWith(
-                                            '/vnd.openxmlformats-officedocument.wordprocessingml.document') ??
-                                        false)) {
-                                  _pBloc.add(AddProjectEvent.addFile(
-                                      await file.readAsBytes()));
-                                }
-                              }
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      color: Theme.of(context).dividerColor),
-                                  borderRadius: BorderRadius.circular(10)),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 100, vertical: 5),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(Icons.cloud_upload_outlined,
-                                      size: 80),
-                                  const Text(
-                                    'قم بأسقاط الملفات هنا',
-                                    style: TextStyle(fontSize: 24),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  AppButton(
-                                      width: 300,
-                                      buttonType: ButtonType.secondary,
-                                      onPressed: () async {},
-                                      text: 'اختر ملف')
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    FilePickerWidget(onFilesPicked: (f) async {
+                      print(f.path);
+                      _pBloc
+                          .add(AddProjectEvent.addFile(await f.readAsBytes()));
+                    }),
                     BlocBuilder<AddProjectBloc, AddProjectState>(
                       builder: (context, state) {
                         return Column(
@@ -453,6 +402,89 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                 ),
               )),
         ),
+      ),
+    );
+  }
+}
+
+class FilePickerWidget extends StatelessWidget {
+  final List<File>? pickedFiles;
+  final Function(File) onFilesPicked;
+
+  const FilePickerWidget(
+      {Key? key, this.pickedFiles, required this.onFilesPicked})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 250,
+      child: Stack(
+        children: [
+          DropTarget(
+            onDragDone: (detail) async {
+              final files = detail.files;
+              for (final xfile in files) {
+                print(xfile.mimeType);
+                if ((xfile.mimeType?.endsWith('/pdf') ?? false) ||
+                    (xfile.mimeType?.endsWith('/msword') ?? false) ||
+                    (xfile.mimeType?.endsWith(
+                            '/vnd.openxmlformats-officedocument.wordprocessingml.document') ??
+                        false)) {
+                  final file = File(xfile.path);
+                  onFilesPicked(file);
+                }
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(color: Theme.of(context).dividerColor),
+                  borderRadius: BorderRadius.circular(10)),
+              padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 5),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.cloud_upload_outlined, size: 80),
+                  const Text(
+                    'قم بأسقاط الملفات هنا',
+                    style: TextStyle(fontSize: 24),
+                  ),
+                  const SizedBox(height: 16),
+                  AppButton(
+                      width: 300,
+                      buttonType: ButtonType.secondary,
+                      onPressed: () async {
+                        FilePickerResult? result = await FilePicker.platform
+                            .pickFiles(
+                                allowMultiple: true,
+                                type: FileType.custom,
+                                allowedExtensions: ['pdf', 'doc', 'docx']);
+
+                        if (result != null) {
+                          for (var file in result.files) {
+                            print('x');
+                            print(file.bytes!.length);
+
+                            final encryptedBase64EncodedString =
+                                latin1.decode(file.bytes!.toList());
+                            print('y');
+
+                            final decoded =
+                                base64.decode(encryptedBase64EncodedString);
+                            print('z');
+
+                            onFilesPicked(File.fromRawPath(decoded));
+                          }
+                        } else {
+                          // User canceled the picker
+                        }
+                      },
+                      text: 'اختر ملف')
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
