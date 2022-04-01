@@ -272,27 +272,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.2"
-  flutter_dropzone:
-    dependency: "direct main"
-    description:
-      name: flutter_dropzone
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.5"
-  flutter_dropzone_platform_interface:
-    dependency: transitive
-    description:
-      name: flutter_dropzone_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.5"
-  flutter_dropzone_web:
-    dependency: transitive
-    description:
-      name: flutter_dropzone_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.8"
   flutter_expandable_table:
     dependency: "direct main"
     description:
@@ -477,7 +456,7 @@ packages:
     source: hosted
     version: "1.7.0"
   mime:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: mime
       url: "https://pub.dartlang.org"

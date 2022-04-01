@@ -9,7 +9,7 @@ class AddProjectState {
   final String? abstract;
   final List<String>? keywords;
   final Level? level;
-  final List<Uint8List>? files;
+  final List<AppFile>? files;
   AddProjectState({
     this.name,
     this.graduationYear,
@@ -31,7 +31,7 @@ class AddProjectState {
     String? abstract,
     List<String>? keywords,
     Level? level,
-    List<Uint8List>? files,
+    List<AppFile>? files,
   }) {
     return AddProjectState(
       name: name ?? this.name,

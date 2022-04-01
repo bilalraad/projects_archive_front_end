@@ -5,6 +5,7 @@ import 'package:projects_archiving/data/api/dio_client.dart';
 import 'package:projects_archiving/data/api/helper/endpoints.dart';
 import 'package:projects_archiving/data/api/helper/res_with_count.dart';
 import 'package:projects_archiving/data/shared_pref_helper.dart';
+import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/project.dart';
 
 class ProjectsApi {
@@ -39,11 +40,12 @@ class ProjectsApi {
 
   Future<void> addProject({
     required AddProject newProject,
-    required List<Uint8List> files,
+    required List<AppFile> files,
   }) async {
     final formData = FormData.fromMap(newProject.toJson());
     for (var file in files) {
-      formData.files.add(MapEntry("images", MultipartFile.fromBytes(file)));
+      formData.files
+          .add(MapEntry("images", MultipartFile.fromBytes(file.bytes)));
     }
     try {
       var response = await _dioClient.post(Endpoint.projects, data: formData);

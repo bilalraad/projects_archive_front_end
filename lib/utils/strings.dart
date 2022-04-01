@@ -16,6 +16,7 @@ class Strings {
   static const optionalWithBrackets = ' ( اختياري ) ';
   static const pleaseFillProjectInfo =
       'الرجاء ملئ الحقول بالمعلومات الظرورية والتاكد منها قبل الاضافة';
+  static const dropFilesHere = 'قم بأسقاط الملفات هنا';
   static String count(String? count) {
     return "العدد: ${count ?? 0}";
   }

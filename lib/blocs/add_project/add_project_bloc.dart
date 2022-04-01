@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:projects_archiving/data/api/projects_api.dart';
+import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/utils/enums.dart';
 
