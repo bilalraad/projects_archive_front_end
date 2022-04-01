@@ -47,13 +47,10 @@ class AppButton extends StatelessWidget {
                         color: Theme.of(context).colorScheme.primary,
                       ),
                 borderRadius: BorderRadius.circular(5))),
-        child: Stack(
-          alignment: Alignment.centerRight,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Positioned(
-              right: 10,
-              child: icon ?? const SizedBox(),
-            ),
+            icon ?? const SizedBox.shrink(),
             Container(
               width: width,
               height: 50,
