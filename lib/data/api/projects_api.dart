@@ -45,7 +45,7 @@ class ProjectsApi {
     final formData = FormData.fromMap(newProject.toJson());
     for (var file in files) {
       formData.files
-          .add(MapEntry("images", MultipartFile.fromBytes(file.bytes)));
+          .add(MapEntry("files", MultipartFile.fromBytes(file.bytes)));
     }
     try {
       var response = await _dioClient.post(Endpoint.projects, data: formData);
