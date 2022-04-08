@@ -49,9 +49,10 @@ class ProjectCard extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        titleWithValue(Strings.keywords, p.supervisorName),
                         titleWithValue(
-                            Strings.supervisorName,
+                            Strings.supervisorName, p.supervisorName),
+                        titleWithValue(
+                            Strings.keywords,
                             p.keywords
                                 .toString()
                                 .replaceAll('[', '')
