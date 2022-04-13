@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:projects_archiving/models/app_file_with_url.dart';
 import 'package:projects_archiving/utils/enums.dart';
 
 part 'project.freezed.dart';
@@ -13,8 +14,8 @@ class Project with _$Project {
     @JsonKey(name: 'student_phone_no') required String studentPhoneNo,
     @JsonKey(name: 'supervisor_name') required String supervisorName,
     @JsonKey(name: 'abstract') required String abstract,
-    @JsonKey(name: 'pdf_url') required String pdfUrl,
-    @JsonKey(name: 'doc_url') required String docUrl,
+    @JsonKey(name: 'files', defaultValue: [])
+        required List<AppFileWithUrl> files,
     @JsonKey(name: 'key_words', defaultValue: [])
         required List<String> keywords,
     @JsonKey(name: 'level') required Level level,
@@ -22,18 +23,6 @@ class Project with _$Project {
 
   factory Project.fromJson(Map<String, dynamic> json) =>
       _$ProjectFromJson(json);
-
-  factory Project.empty() => Project(
-      name: '',
-      graduationYear: DateTime.now(),
-      studentName: '',
-      studentPhoneNo: '',
-      supervisorName: '',
-      abstract: '',
-      pdfUrl: '',
-      docUrl: '',
-      keywords: [],
-      level: Level.bachelor);
 
   static Project fromJsonModel(dynamic json) => Project.fromJson(json);
 }
