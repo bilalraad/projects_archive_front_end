@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:projects_archiving/data/api/dio_client.dart';
 import 'package:projects_archiving/data/api/helper/endpoints.dart';
@@ -40,13 +42,19 @@ class ProjectsApi {
     required AddProject newProject,
     required List<AppFile> files,
   }) async {
-    final formData = FormData.fromMap(newProject.toJson());
-    for (var file in files) {
-      formData.files
-          .add(MapEntry("files", MultipartFile.fromBytes(file.bytes)));
-    }
     try {
-      var response = await _dioClient.post(Endpoint.projects, data: formData);
+      final response =
+          await _dioClient.post(Endpoint.projects, data: newProject.toJson());
+      List<MultipartFile> multipartArray = [];
+
+      for (var f in files) {
+        multipartArray.add(MultipartFile.fromBytes(f.bytes, filename: f.name));
+      }
+      final formData = FormData.fromMap({
+        'project_id': response.data['id'],
+        "files": multipartArray,
+      }, ListFormat.multiCompatible);
+      await _dioClient.post('/files', data: formData);
     } catch (e) {
       rethrow;
     }

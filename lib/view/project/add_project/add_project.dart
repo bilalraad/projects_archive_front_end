@@ -218,7 +218,9 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                     const SizedBox(height: 10),
                     AppButton(
                         width: 300,
-                        onPressed: () async {},
+                        onPressed: () async {
+                          await _pBloc.submitProject(_pBloc.state);
+                        },
                         text: Strings.addProject),
                     const SizedBox(height: 10),
                   ],
