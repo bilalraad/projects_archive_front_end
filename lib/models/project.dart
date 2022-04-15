@@ -11,9 +11,9 @@ class Project with _$Project {
     @JsonKey(name: 'name') required String name,
     @JsonKey(name: 'graduation_year') required DateTime graduationYear,
     @JsonKey(name: 'student_name') required String studentName,
-    @JsonKey(name: 'student_phone_no') required String studentPhoneNo,
+    @JsonKey(name: 'student_phone_no') required String? studentPhoneNo,
     @JsonKey(name: 'supervisor_name') required String supervisorName,
-    @JsonKey(name: 'abstract') required String abstract,
+    @JsonKey(name: 'abstract') required String? abstract,
     @JsonKey(name: 'files', defaultValue: [])
         required List<AppFileWithUrl> files,
     @JsonKey(name: 'key_words', defaultValue: [])

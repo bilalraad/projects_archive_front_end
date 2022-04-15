@@ -14,7 +14,7 @@ class AppYearPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () async {
+      onTap: () {
         showDatePicker(
                 context: context,
                 initialDatePickerMode: DatePickerMode.year,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projects_archiving/utils/snack_bar.dart';
+import 'package:projects_archiving/utils/validation_builder.dart';
 import 'package:projects_archiving/view/project/add_project/file_picker_widget.dart';
 import 'package:projects_archiving/view/widgets/keywords_widget.dart';
 import 'package:projects_archiving/view/widgets/level_drop_dropdown.dart';
@@ -78,6 +80,10 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                               AppTextField(
                                 controller: _projectNameController,
                                 lableText: Strings.projectName,
+                                validator: ValidationBuilder()
+                                    .maxLength(255)
+                                    .required()
+                                    .build(),
                                 onChanged: (v) => _pBloc.add(
                                     AddProjectEvent.updateProject(
                                         _pBloc.state.copyWith(name: v))),
@@ -86,6 +92,10 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                               AppTextField(
                                 controller: _strudentNameController,
                                 lableText: Strings.studentName,
+                                validator: ValidationBuilder()
+                                    .maxLength(255)
+                                    .required()
+                                    .build(),
                                 onChanged: (v) => _pBloc.add(
                                     AddProjectEvent.updateProject(
                                         _pBloc.state.copyWith(studentName: v))),
@@ -94,6 +104,10 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                               AppTextField(
                                 controller: _supervisorNameController,
                                 lableText: Strings.supervisorName,
+                                validator: ValidationBuilder()
+                                    .maxLength(255)
+                                    .required()
+                                    .build(),
                                 onChanged: (v) => _pBloc.add(
                                     AddProjectEvent.updateProject(_pBloc.state
                                         .copyWith(supervisorName: v))),
@@ -102,13 +116,21 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                               AppTextField(
                                 controller: _studentPhoneNumberController,
                                 lableText: Strings.studentPhoneNumber,
+                                validator: ValidationBuilder(isOptional: true)
+                                    .phone()
+                                    .build(),
                                 onChanged: (v) => _pBloc.add(
                                     AddProjectEvent.updateProject(_pBloc.state
-                                        .copyWith(studentPhoneNo: v))),
+                                        .copyWith(
+                                            studentPhoneNo:
+                                                ValidationBuilder().a2e(v)))),
                               ),
                               const SizedBox(height: 10),
                               AppTextField(
                                 controller: _abstractController,
+                                validator: ValidationBuilder(isOptional: true)
+                                    .minLength(20)
+                                    .build(),
                                 lableText: Strings.abstract +
                                     Strings.optionalWithBrackets,
                                 minLines: 5,
@@ -219,6 +241,17 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                     AppButton(
                         width: 300,
                         onPressed: () async {
+                          if (!_formKey.currentState!.validate()) return;
+                          if (_pBloc.state.files!.isEmpty) {
+                            context.showSnackBar('الرجاء رفع تقرير المشروع',
+                                isError: true);
+                            return;
+                          }
+                          if (_pBloc.state.graduationYear == null) {
+                            context.showSnackBar('الرجاء اختيار سنة التخرج',
+                                isError: true);
+                            return;
+                          }
                           await _pBloc.submitProject(_pBloc.state);
                         },
                         text: Strings.addProject),
