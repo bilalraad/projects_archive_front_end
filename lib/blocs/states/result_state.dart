@@ -1,0 +1,12 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:projects_archiving/utils/app_error.dart';
+
+part 'result_state.freezed.dart';
+
+@freezed
+abstract class BlocsState<T> with _$BlocsState<T> {
+  const factory BlocsState.initial() = Initial;
+  const factory BlocsState.loading() = Loading;
+  const factory BlocsState.data(T results) = Data;
+  const factory BlocsState.failure(AppError error) = Failure;
+}

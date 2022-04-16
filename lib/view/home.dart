@@ -37,7 +37,7 @@ class MyHomeScreen extends StatelessWidget {
                     ),
                     Text(
                       Strings.count(projectsP.state
-                          .whenOrNull(loaded: (r) => r.count.toString())),
+                          .whenOrNull(data: (r) => r.count.toString())),
                     )
                   ],
                 ),
@@ -48,8 +48,8 @@ class MyHomeScreen extends StatelessWidget {
                   child: projectsP.state.whenOrNull(
                       loading: () =>
                           const Center(child: CircularProgressIndicator()),
-                      error: (e) => Text(e.raw.toString()),
-                      loaded: (ps) {
+                      failure: (e) => Text(e.raw.toString()),
+                      data: (ps) {
                         return SingleChildScrollView(
                           child: Wrap(
                             children: ps.results

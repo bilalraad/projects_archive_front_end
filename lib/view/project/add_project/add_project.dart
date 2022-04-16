@@ -50,6 +50,9 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(_pBloc.submitResponse);
+    print('_pBloc.submitResponse');
+
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -153,7 +156,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                 style: Theme.of(context).textTheme.subtitle1,
                               ),
                               const SizedBox(height: 10),
-                              BlocBuilder<AddProjectBloc, AddProjectState>(
+                              BlocBuilder<AddProjectBloc, ProjectFormState>(
                                 builder: (context, state) {
                                   return KeyWordsWidget(
                                     keywords: state.keywords ?? [],
@@ -175,7 +178,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                 },
                               ),
                               const SizedBox(height: 10),
-                              BlocBuilder<AddProjectBloc, AddProjectState>(
+                              BlocBuilder<AddProjectBloc, ProjectFormState>(
                                 builder: (context, state) {
                                   return SizedBox(
                                     height: 70,
@@ -221,16 +224,14 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                         _pBloc.add(AddProjectEvent.addFile(f));
                       },
                     ),
-                    BlocBuilder<AddProjectBloc, AddProjectState>(
+                    BlocBuilder<AddProjectBloc, ProjectFormState>(
                       builder: (context, state) {
                         return Column(
                           children: state.files!
                               .map((e) => PickedFileCard(
                                     file: e,
                                     onDeletePressed: () {
-                                      _pBloc.add(AddProjectEvent.updateProject(
-                                          _pBloc.state.copyWith(
-                                              files: state.files!..remove(e))));
+                                      _pBloc.add(AddProjectEvent.removeFile(e));
                                     },
                                   ))
                               .toList(),
@@ -241,6 +242,12 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                     AppButton(
                         width: 300,
                         onPressed: () async {
+                          await _pBloc.submitProject(_pBloc.state);
+                          _pBloc.submitResponse.whenOrNull(data: (_) {
+                            print('s');
+                          }, failure: (e) {
+                            print('eerrrrr');
+                          });
                           if (!_formKey.currentState!.validate()) return;
                           if (_pBloc.state.files!.isEmpty) {
                             context.showSnackBar('الرجاء رفع تقرير المشروع',

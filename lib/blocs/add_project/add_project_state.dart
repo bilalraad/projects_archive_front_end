@@ -1,6 +1,6 @@
 part of 'add_project_bloc.dart';
 
-class AddProjectState {
+class ProjectFormState {
   final String? name;
   final DateTime? graduationYear;
   final String? studentName;
@@ -10,7 +10,7 @@ class AddProjectState {
   final List<String>? keywords;
   final Level? level;
   final List<AppFile>? files;
-  AddProjectState({
+  ProjectFormState({
     this.name,
     this.graduationYear,
     this.studentName,
@@ -22,7 +22,7 @@ class AddProjectState {
     this.files,
   });
 
-  AddProjectState copyWith({
+  ProjectFormState copyWith({
     String? name,
     DateTime? graduationYear,
     String? studentName,
@@ -33,7 +33,7 @@ class AddProjectState {
     Level? level,
     List<AppFile>? files,
   }) {
-    return AddProjectState(
+    return ProjectFormState(
       name: name ?? this.name,
       graduationYear: graduationYear ?? this.graduationYear,
       studentName: studentName ?? this.studentName,

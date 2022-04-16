@@ -47,7 +47,7 @@ class ProjectsFilter with _$ProjectsFilter {
 class AddProject with _$AddProject {
   factory AddProject({
     @JsonKey(name: 'name') required String name,
-    @JsonKey(name: 'graduation_year') required DateTime graduationYear,
+    @JsonKey(name: 'graduation_year') required DateTime? graduationYear,
     @JsonKey(name: 'student_name') required String studentName,
     @JsonKey(name: 'student_phone_no') required String studentPhoneNo,
     @JsonKey(name: 'supervisor_name') required String supervisorName,
@@ -62,7 +62,7 @@ class AddProject with _$AddProject {
 
   factory AddProject.empty() => AddProject(
       name: '',
-      graduationYear: DateTime.now(),
+      graduationYear: null,
       studentName: '',
       studentPhoneNo: '',
       supervisorName: '',
