@@ -1,4 +1,6 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
@@ -9,15 +11,17 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pSubtitleStyle =
-        Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.grey);
-    final pSubtitleValueStyle = Theme.of(context).textTheme.bodyText1;
     Widget titleWithValue(String? title, String? value) {
       return RichText(
           text: TextSpan(
               text: "$title\n",
-              style: pSubtitleStyle,
-              children: [TextSpan(text: value, style: pSubtitleValueStyle)]));
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  ?.copyWith(color: Colors.grey),
+              children: [
+            TextSpan(text: value, style: Theme.of(context).textTheme.bodyText1)
+          ]));
     }
 
     return SizedBox(
@@ -63,7 +67,10 @@ class ProjectCard extends StatelessWidget {
                 ],
               ),
               AppButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    AutoRouter.of(context)
+                        .push(ProjectDetailsRoute(projectId: p.id));
+                  },
                   width: 120,
                   backroundColor: Colors.black,
                   text: 'عرض التفاصيل'),

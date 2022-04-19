@@ -8,6 +8,7 @@ part 'project.g.dart';
 @freezed
 class Project with _$Project {
   factory Project({
+    @JsonKey(name: 'id') required int id,
     @JsonKey(name: 'name') required String name,
     @JsonKey(name: 'graduation_year') required DateTime graduationYear,
     @JsonKey(name: 'student_name') required String studentName,

@@ -15,7 +15,10 @@ class MyHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final projectsP = BlocProvider.of<ProjectsBloc>(context, listen: true);
     return Scaffold(
-      appBar: AppBar(),
+      // appBar: AppBar(
+      // To hide the back button from the app bar
+      //   leading: const SizedBox.shrink(),
+      // ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Center(

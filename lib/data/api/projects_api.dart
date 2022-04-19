@@ -65,4 +65,12 @@ class ProjectsApi {
         await _dioClient.post(Endpoint.projects, data: newProject.toJson());
     await uploadFiles(files, response.data['id'].toString());
   }
+
+  Future<Project> getProject({
+    required int projectId,
+  }) async {
+    final response =
+        await _dioClient.get(Endpoint.project + projectId.toString());
+    return Project.fromJson(response.data);
+  }
 }

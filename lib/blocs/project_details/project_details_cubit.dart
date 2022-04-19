@@ -1,20 +1,21 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:projects_archiving/blocs/states/result_state.dart';
 import 'package:projects_archiving/data/api/projects_api.dart';
-import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/project.dart';
 
-class AddProjectBloc extends Cubit<BlocsState> with ChangeNotifier {
+class ProjectDetailsBloc extends Cubit<BlocsState<Project>> {
   final ProjectsApi _projectsRepo;
-  AddProjectBloc(ProjectsApi projectsRepo)
+  ProjectDetailsBloc(ProjectsApi projectsRepo)
       : _projectsRepo = projectsRepo,
         super(const BlocsState.initial());
 
-  Future<void> submitProject(AddProject project, List<AppFile> files) async {
-    await apiCallsWrapper(
-            _projectsRepo.addProject(newProject: project, files: files))
+  Future<void> getProject(int id) async {
+    await apiCallsWrapper<Project>(_projectsRepo.getProject(projectId: id))
         .listen((event) => emit(event))
         .asFuture();
+  }
+
+  void dispose() {
+    emit(const BlocsState.initial());
   }
 }
