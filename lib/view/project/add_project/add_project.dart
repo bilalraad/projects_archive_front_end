@@ -231,7 +231,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                             context.showSnackBar('تم رفع المشروع بنجاح');
                             AutoRouter.of(context).replace(const MyHomeRoute());
                           }, failure: (e) {
-                            context.showSnackBar('حدث خطا غير معروف',
+                            context.showSnackBar(e.readableMessage,
                                 isError: true);
                             return;
                           });

@@ -6,6 +6,7 @@ import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/project/projects_list/project_card.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
+import 'package:projects_archiving/view/widgets/error_widget.dart';
 
 class MyHomeScreen extends StatelessWidget {
   const MyHomeScreen({Key? key}) : super(key: key);
@@ -46,9 +47,13 @@ class MyHomeScreen extends StatelessWidget {
               Expanded(
                 child: SizedBox(
                   child: projectsP.state.whenOrNull(
-                      loading: () =>
-                          const Center(child: CircularProgressIndicator()),
-                      failure: (e) => Text(e.raw.toString()),
+                      loading: () => const Center(
+                          child: CircularProgressIndicator.adaptive()),
+                      failure: (e) => AppErrorWidget(
+                          errorMessage: e.readableMessage,
+                          onRefresh: () {
+                            projectsP.add(const ProjectsEvent.started());
+                          }),
                       data: (ps) {
                         return SingleChildScrollView(
                           child: Wrap(
