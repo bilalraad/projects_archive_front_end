@@ -38,13 +38,10 @@ class ProjectsApi {
     if (filter != null) {
       queryParameters.addAll(filter.toJson());
     }
-    try {
-      var response = await _dioClient.get(Endpoint.projects,
-          queryParameters: queryParameters);
-      return ResWithCount.fromJson(response.data, Project.fromJsonModel);
-    } catch (e) {
-      rethrow;
-    }
+
+    var response = await _dioClient.get(Endpoint.projects,
+        queryParameters: queryParameters);
+    return ResWithCount.fromJson(response.data, Project.fromJsonModel);
   }
 
   Future uploadFiles(List<AppFile> files, String projectId) async {
@@ -66,6 +63,6 @@ class ProjectsApi {
   }) async {
     final response =
         await _dioClient.post(Endpoint.projects, data: newProject.toJson());
-    await uploadFiles(files, response.data['id']);
+    await uploadFiles(files, response.data['id'].toString());
   }
 }

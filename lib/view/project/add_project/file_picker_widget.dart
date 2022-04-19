@@ -9,78 +9,98 @@ import 'package:projects_archiving/view/widgets/app_button.dart';
 class FilePickerWidget extends StatelessWidget {
   final List<AppFile>? pickedFiles;
   final Function(AppFile) onFilesPicked;
+  final Function(AppFile) onFileRemoved;
 
-  const FilePickerWidget(
-      {Key? key, this.pickedFiles, required this.onFilesPicked})
-      : super(key: key);
+  const FilePickerWidget({
+    Key? key,
+    this.pickedFiles,
+    required this.onFilesPicked,
+    required this.onFileRemoved,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return DropTarget(
-      onDragDone: pickedFiles!.length >= 2
-          ? null
-          : (detail) async {
-              final files = detail.files;
-              for (final xfile in files) {
-                if ((xfile.mimeType?.endsWith('/pdf') ?? false) ||
-                    (xfile.mimeType?.endsWith('/msword') ?? false) ||
-                    (xfile.mimeType?.endsWith(
-                            '/vnd.openxmlformats-officedocument.wordprocessingml.document') ??
-                        false)) {
-                  final file = AppFile(
-                      bytes: await xfile.readAsBytes(), name: xfile.name);
-                  onFilesPicked(file);
-                }
-              }
-            },
-      child: Container(
-        decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).dividerColor),
-            borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 5),
-        margin: const EdgeInsets.all(10),
-        constraints: const BoxConstraints(maxWidth: 990),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Icon(Icons.cloud_upload_outlined, size: 80),
-            Center(
-              child: Text(
-                Strings.dropFilesHere,
-                style: Theme.of(context).textTheme.titleSmall,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Center(
-              child: AppButton(
-                  width: 200,
-                  buttonType: ButtonType.secondary,
-                  onPressed: pickedFiles!.length >= 2
-                      ? null
-                      : () async {
-                          FilePickerResult? result = await FilePicker.platform
-                              .pickFiles(
-                                  allowMultiple: true,
-                                  type: FileType.custom,
-                                  withData: true,
-                                  allowedExtensions: ['pdf', 'doc', 'docx']);
+    return Column(
+      children: [
+        DropTarget(
+          onDragDone: pickedFiles!.length >= 2
+              ? null
+              : (detail) async {
+                  final files = detail.files;
+                  for (final xfile in files) {
+                    if ((xfile.mimeType?.endsWith('/pdf') ?? false) ||
+                        (xfile.mimeType?.endsWith('/msword') ?? false) ||
+                        (xfile.mimeType?.endsWith(
+                                '/vnd.openxmlformats-officedocument.wordprocessingml.document') ??
+                            false)) {
+                      final file = AppFile(
+                          bytes: await xfile.readAsBytes(), name: xfile.name);
+                      onFilesPicked(file);
+                    }
+                  }
+                },
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(color: Theme.of(context).dividerColor),
+                borderRadius: BorderRadius.circular(10)),
+            padding: const EdgeInsets.symmetric(horizontal: 100, vertical: 5),
+            margin: const EdgeInsets.all(10),
+            constraints: const BoxConstraints(maxWidth: 990),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const Icon(Icons.cloud_upload_outlined, size: 80),
+                Center(
+                  child: Text(
+                    Strings.dropFilesHere,
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Center(
+                  child: AppButton(
+                      width: 200,
+                      buttonType: ButtonType.secondary,
+                      onPressed: pickedFiles!.length >= 2
+                          ? null
+                          : () async {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles(
+                                      allowMultiple: true,
+                                      type: FileType.custom,
+                                      withData: true,
+                                      allowedExtensions: [
+                                    'pdf',
+                                    'doc',
+                                    'docx'
+                                  ]);
 
-                          if (result != null) {
-                            for (var file in result.files) {
-                              final appfile =
-                                  AppFile(bytes: file.bytes!, name: file.name);
-                              onFilesPicked(appfile);
-                            }
-                          } else {
-                            // User canceled the picker
-                          }
-                        },
-                  text: 'تصفح الملفات'),
-            )
-          ],
+                              if (result != null) {
+                                for (var file in result.files) {
+                                  final appfile = AppFile(
+                                      bytes: file.bytes!, name: file.name);
+                                  onFilesPicked(appfile);
+                                }
+                              } else {
+                                // User canceled the picker
+                              }
+                            },
+                      text: 'تصفح الملفات'),
+                )
+              ],
+            ),
+          ),
         ),
-      ),
+        Column(
+          children: pickedFiles!
+              .map((e) => PickedFileCard(
+                    file: e,
+                    onDeletePressed: () => onFileRemoved(e),
+                  ))
+              .toList(),
+        )
+      ],
     );
   }
 }

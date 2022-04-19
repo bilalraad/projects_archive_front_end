@@ -13,6 +13,7 @@ class AppButton extends StatelessWidget {
   final Color? textColor;
   final Color? backroundColor;
   final ButtonType buttonType;
+  final bool isLoading;
 
   const AppButton(
       {Key? key,
@@ -22,6 +23,7 @@ class AppButton extends StatelessWidget {
       this.width,
       this.textColor,
       this.backroundColor,
+      this.isLoading = false,
       this.icon})
       : super(key: key);
 
@@ -35,7 +37,7 @@ class AppButton extends StatelessWidget {
     final buttonBgColor =
         isPrimary ? Theme.of(context).colorScheme.primary : Colors.transparent;
     return ElevatedButton(
-        onPressed: onPressed,
+        onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
             primary: backroundColor ?? buttonBgColor,
             elevation: !isPrimary ? 0 : null,
@@ -63,6 +65,9 @@ class AppButton extends StatelessWidget {
                     .copyWith(color: textColor ?? defaultTextColor),
               ),
             ),
+            isLoading
+                ? const CircularProgressIndicator.adaptive()
+                : const SizedBox.shrink(),
           ],
         ));
   }

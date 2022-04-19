@@ -1,5 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projects_archiving/app_router.gr.dart';
+import 'package:projects_archiving/models/app_file.dart';
+import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/utils/snack_bar.dart';
 import 'package:projects_archiving/utils/validation_builder.dart';
 import 'package:projects_archiving/view/project/add_project/file_picker_widget.dart';
@@ -22,19 +25,21 @@ class AddProjectScreen extends StatefulWidget {
 
 class _AddProjectScreenState extends State<AddProjectScreen> {
   late TextEditingController _projectNameController,
-      _strudentNameController,
+      _studentNameController,
       _supervisorNameController,
       _studentPhoneNumberController,
       _abstractController;
 
   late AddProjectBloc _pBloc;
+  AddProject project = AddProject.empty();
+  List<AppFile> files = [];
 
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     _projectNameController = TextEditingController();
-    _strudentNameController = TextEditingController();
+    _studentNameController = TextEditingController();
     _supervisorNameController = TextEditingController();
     _abstractController = TextEditingController();
     _studentPhoneNumberController = TextEditingController();
@@ -42,17 +47,23 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   }
 
   @override
+  void dispose() {
+    _projectNameController.dispose();
+    _studentNameController.dispose();
+    _supervisorNameController.dispose();
+    _abstractController.dispose();
+    _studentPhoneNumberController.dispose();
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     _pBloc = Provider.of<AddProjectBloc>(context);
-
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
-    print(_pBloc.submitResponse);
-    print('_pBloc.submitResponse');
-
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
@@ -83,63 +94,56 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                               AppTextField(
                                 controller: _projectNameController,
                                 lableText: Strings.projectName,
+                                onChanged: (v) =>
+                                    project = project.copyWith(name: v),
                                 validator: ValidationBuilder()
                                     .maxLength(255)
                                     .required()
                                     .build(),
-                                onChanged: (v) => _pBloc.add(
-                                    AddProjectEvent.updateProject(
-                                        _pBloc.state.copyWith(name: v))),
                               ),
                               const SizedBox(height: 10),
                               AppTextField(
-                                controller: _strudentNameController,
+                                controller: _studentNameController,
+                                onChanged: (v) =>
+                                    project = project.copyWith(studentName: v),
                                 lableText: Strings.studentName,
                                 validator: ValidationBuilder()
                                     .maxLength(255)
                                     .required()
                                     .build(),
-                                onChanged: (v) => _pBloc.add(
-                                    AddProjectEvent.updateProject(
-                                        _pBloc.state.copyWith(studentName: v))),
                               ),
                               const SizedBox(height: 10),
                               AppTextField(
                                 controller: _supervisorNameController,
+                                onChanged: (v) => project =
+                                    project.copyWith(supervisorName: v),
                                 lableText: Strings.supervisorName,
                                 validator: ValidationBuilder()
                                     .maxLength(255)
                                     .required()
                                     .build(),
-                                onChanged: (v) => _pBloc.add(
-                                    AddProjectEvent.updateProject(_pBloc.state
-                                        .copyWith(supervisorName: v))),
                               ),
                               const SizedBox(height: 10),
                               AppTextField(
                                 controller: _studentPhoneNumberController,
+                                onChanged: (v) => project = project.copyWith(
+                                    studentPhoneNo: ValidationBuilder().a2e(v)),
                                 lableText: Strings.studentPhoneNumber,
                                 validator: ValidationBuilder(isOptional: true)
                                     .phone()
                                     .build(),
-                                onChanged: (v) => _pBloc.add(
-                                    AddProjectEvent.updateProject(_pBloc.state
-                                        .copyWith(
-                                            studentPhoneNo:
-                                                ValidationBuilder().a2e(v)))),
                               ),
                               const SizedBox(height: 10),
                               AppTextField(
                                 controller: _abstractController,
+                                onChanged: (v) =>
+                                    project = project.copyWith(abstract: v),
                                 validator: ValidationBuilder(isOptional: true)
                                     .minLength(20)
                                     .build(),
                                 lableText: Strings.abstract +
                                     Strings.optionalWithBrackets,
                                 minLines: 5,
-                                onChanged: (v) => _pBloc.add(
-                                    AddProjectEvent.updateProject(
-                                        _pBloc.state.copyWith(abstract: v))),
                               ),
                             ],
                           ),
@@ -156,110 +160,81 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                 style: Theme.of(context).textTheme.subtitle1,
                               ),
                               const SizedBox(height: 10),
-                              BlocBuilder<AddProjectBloc, ProjectFormState>(
-                                builder: (context, state) {
-                                  return KeyWordsWidget(
-                                    keywords: state.keywords ?? [],
-                                    onKeyWordAdded: (kw) {
-                                      var nkws = _pBloc.state.keywords!
-                                        ..add(kw);
-                                      _pBloc.add(AddProjectEvent.updateProject(
-                                          _pBloc.state
-                                              .copyWith(keywords: nkws)));
-                                    },
-                                    onkeyWordDeleted: (kw) {
-                                      var kws = _pBloc.state.keywords!
-                                        ..remove(kw);
-                                      _pBloc.add(AddProjectEvent.updateProject(
-                                          _pBloc.state
-                                              .copyWith(keywords: kws)));
-                                    },
-                                  );
-                                },
-                              ),
+                              StatefulBuilder(builder: (context, setState) {
+                                return KeyWordsWidget(
+                                  keywords: project.keywords,
+                                  onKeyWordAdded: (kw) =>
+                                      setState(() => project.keywords.add(kw)),
+                                  onkeyWordDeleted: (kw) => setState(
+                                      () => project.keywords.remove(kw)),
+                                );
+                              }),
                               const SizedBox(height: 10),
-                              BlocBuilder<AddProjectBloc, ProjectFormState>(
-                                builder: (context, state) {
-                                  return SizedBox(
-                                    height: 70,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        AppYearPicker(
-                                          selectedDate: state.graduationYear,
-                                          onYearSelected: (y) {
-                                            if (y != null) {
-                                              _pBloc.add(
-                                                  AddProjectEvent.updateProject(
-                                                      state.copyWith(
-                                                          graduationYear: y)));
-                                            }
-                                          },
-                                        ),
-                                        const SizedBox(width: 10),
-                                        AppLevelDropDown(
-                                          selectedLevel: state.level!,
-                                          onLevelChanged: (lvl) {
-                                            _pBloc.add(
-                                                AddProjectEvent.updateProject(
-                                                    _pBloc.state.copyWith(
-                                                        level: lvl!)));
-                                          },
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
+                              StatefulBuilder(builder: (context, setState) {
+                                return SizedBox(
+                                  height: 70,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      AppYearPicker(
+                                        selectedDate: project.graduationYear,
+                                        onYearSelected: (y) {
+                                          if (y != null) {
+                                            setState(() => project = project
+                                                .copyWith(graduationYear: y));
+                                          }
+                                        },
+                                      ),
+                                      const SizedBox(width: 10),
+                                      AppLevelDropDown(
+                                        selectedLevel: project.level,
+                                        onLevelChanged: (lvl) => setState(() =>
+                                            project =
+                                                project.copyWith(level: lvl!)),
+                                      )
+                                    ],
+                                  ),
+                                );
+                              }),
                             ],
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 10),
-                    FilePickerWidget(
-                      pickedFiles: _pBloc.state.files,
-                      onFilesPicked: (f) {
-                        _pBloc.add(AddProjectEvent.addFile(f));
-                      },
-                    ),
-                    BlocBuilder<AddProjectBloc, ProjectFormState>(
-                      builder: (context, state) {
-                        return Column(
-                          children: state.files!
-                              .map((e) => PickedFileCard(
-                                    file: e,
-                                    onDeletePressed: () {
-                                      _pBloc.add(AddProjectEvent.removeFile(e));
-                                    },
-                                  ))
-                              .toList(),
-                        );
-                      },
-                    ),
+                    StatefulBuilder(builder: (context, setState) {
+                      return FilePickerWidget(
+                        pickedFiles: files,
+                        onFileRemoved: (f) => setState(() => files.remove(f)),
+                        onFilesPicked: (f) => setState(() => files.add(f)),
+                      );
+                    }),
                     const SizedBox(height: 10),
                     AppButton(
                         width: 300,
+                        isLoading: _pBloc.state.maybeWhen(
+                            loading: () => true, orElse: () => false),
                         onPressed: () async {
-                          await _pBloc.submitProject(_pBloc.state);
-                          _pBloc.submitResponse.whenOrNull(data: (_) {
-                            print('s');
-                          }, failure: (e) {
-                            print('eerrrrr');
-                          });
                           if (!_formKey.currentState!.validate()) return;
-                          if (_pBloc.state.files!.isEmpty) {
+                          if (files.isEmpty) {
                             context.showSnackBar('الرجاء رفع تقرير المشروع',
                                 isError: true);
                             return;
                           }
-                          if (_pBloc.state.graduationYear == null) {
+                          if (project.graduationYear == null) {
                             context.showSnackBar('الرجاء اختيار سنة التخرج',
                                 isError: true);
                             return;
                           }
-                          await _pBloc.submitProject(_pBloc.state);
+                          await _pBloc.submitProject(project, files);
+                          _pBloc.state.whenOrNull(data: (results) {
+                            context.showSnackBar('تم رفع المشروع بنجاح');
+                            AutoRouter.of(context).replace(const MyHomeRoute());
+                          }, failure: (e) {
+                            context.showSnackBar('حدث خطا غير معروف',
+                                isError: true);
+                            return;
+                          });
                         },
                         text: Strings.addProject),
                     const SizedBox(height: 10),
