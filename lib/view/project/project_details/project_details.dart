@@ -36,6 +36,8 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
     super.dispose();
   }
 
+  late TextStyle? titleTextTheme;
+
   Widget titleWithValue(String? title, String? value) {
     return RichText(
         text: TextSpan(
@@ -54,19 +56,19 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    titleTextTheme =
+        Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.grey);
     return Scaffold(
       body: Center(
         child: projectP.state.whenOrNull(
           loading: () => const CircularProgressIndicator.adaptive(),
           failure: (e) => AppErrorWidget(
               errorMessage: e.readableMessage,
-              onRefresh: () {
-                projectP.getProject(widget.projectId);
-              }),
+              onRefresh: () => projectP.getProject(widget.projectId)),
           data: (p) {
             return SingleChildScrollView(
               child: Container(
-                constraints: const BoxConstraints(maxWidth: 800),
+                constraints: const BoxConstraints(maxWidth: 1000),
                 margin: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -106,7 +108,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(Strings.keywords),
+                              Text(Strings.keywords, style: titleTextTheme),
                               Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -115,43 +117,50 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                 ),
                                 height: 200,
                                 width: double.infinity,
-                                child: GridView.count(
-                                  crossAxisCount: 2,
-                                  childAspectRatio: 30 / 10,
-                                  children: p.keywords.map((e) {
-                                    return Container(
-                                      margin: const EdgeInsets.all(5),
-                                      decoration: BoxDecoration(
-                                        color: Theme.of(context)
-                                            .primaryColor
-                                            .withOpacity(.4),
-                                        border: Border.all(
-                                            color:
-                                                Theme.of(context).primaryColor),
-                                        borderRadius: BorderRadius.circular(5),
+                                child: p.keywords.isNotEmpty
+                                    ? GridView.count(
+                                        crossAxisCount: 2,
+                                        childAspectRatio: 30 / 10,
+                                        children: p.keywords.map((e) {
+                                          return Container(
+                                            margin: const EdgeInsets.all(5),
+                                            decoration: BoxDecoration(
+                                              color: Theme.of(context)
+                                                  .primaryColor
+                                                  .withOpacity(.4),
+                                              border: Border.all(
+                                                  color: Theme.of(context)
+                                                      .primaryColor),
+                                              borderRadius:
+                                                  BorderRadius.circular(5),
+                                            ),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Center(
+                                                  child: Text(
+                                                e,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodyLarge,
+                                              )),
+                                            ),
+                                          );
+                                        }).toList(),
+                                      )
+                                    : const Align(
+                                        alignment: Alignment.center,
+                                        child: Text('لا يوجد كلمات دالة'),
                                       ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Center(
-                                            child: Text(
-                                          e,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyLarge,
-                                        )),
-                                      ),
-                                    );
-                                  }).toList(),
-                                ),
                               ),
                             ],
                           ),
                         )
                       ],
                     ),
-                    const Align(
+                    Align(
                       alignment: Alignment.centerRight,
-                      child: Text(Strings.abstract),
+                      child: Text(Strings.abstract, style: titleTextTheme),
                     ),
                     Container(
                       decoration: BoxDecoration(
@@ -166,26 +175,62 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                         readOnly: true,
                         decoration:
                             const InputDecoration(border: InputBorder.none),
-                        initialValue: p.abstract,
+                        initialValue: p.abstract ?? 'لم يتم اضافة نبذة مختصرة',
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Align(
+                    Align(
                       alignment: Alignment.centerRight,
-                      child: Text('التقرير النهائي'),
+                      child: Text('التقرير النهائي', style: titleTextTheme),
                     ),
-                    Row(
-                      children: p.files
-                          .map((e) => Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: AppButton(
-                                    backroundColor: e.fileType == FileType.word
-                                        ? Colors.black
-                                        : null,
-                                    onPressed: () => downLoadUrl(e.path),
-                                    text: e.fileType.name),
-                              ))
-                          .toList(),
+                    SizedBox(
+                      height: 60,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          p.files.isNotEmpty
+                              ? Row(
+                                  children: p.files
+                                      .map((e) => Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5),
+                                            child: AppButton(
+                                                width: 150,
+                                                backroundColor:
+                                                    e.fileType == FileType.word
+                                                        ? Colors.black
+                                                        : null,
+                                                onPressed: () =>
+                                                    downLoadUrl(e.path),
+                                                text: e.fileType.name),
+                                          ))
+                                      .toList(),
+                                )
+                              : const Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text('لم يتم رفع تقرير لهذا المشروع'),
+                                ),
+                          const VerticalDivider(),
+                          const Spacer(),
+                          AppButton(
+                              width: 150,
+                              backroundColor: Colors.black,
+                              buttonType: ButtonType.secondary,
+                              onPressed: () {
+                                //TODO: IMPLEMENT PROEJCT EDIT
+                              },
+                              text: 'تعديل المشروع'),
+                          const SizedBox(width: 10),
+                          AppButton(
+                              width: 150,
+                              backroundColor: Colors.red,
+                              buttonType: ButtonType.secondary,
+                              onPressed: () {
+                                //TODO: IMPLEMENT PROJECT DELET
+                              },
+                              text: 'حذف المشروع'),
+                        ],
+                      ),
                     ),
                   ],
                 ),

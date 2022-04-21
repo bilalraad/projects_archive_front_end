@@ -6,6 +6,7 @@ import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/utils/snack_bar.dart';
 import 'package:projects_archiving/utils/validation_builder.dart';
 import 'package:projects_archiving/view/project/add_project/file_picker_widget.dart';
+import 'package:projects_archiving/view/project/project_details/project_details.dart';
 import 'package:projects_archiving/view/widgets/keywords_widget.dart';
 import 'package:projects_archiving/view/widgets/level_drop_dropdown.dart';
 import 'package:projects_archiving/view/widgets/year_picker.dart';
@@ -65,182 +66,223 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Form(
-              key: _formKey,
-              child: Scrollbar(
-                child: Column(
-                  children: [
-                    Text(
-                      Strings.addProject,
-                      style: Theme.of(context)
-                          .textTheme
-                          .displayMedium
-                          ?.copyWith(color: Colors.black),
-                    ),
-                    Text(Strings.pleaseFillProjectInfo,
-                        style: Theme.of(context).textTheme.headline6),
-                    Wrap(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(8.0),
-                          constraints: const BoxConstraints(maxWidth: 500),
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 1000),
+          margin: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            children: [
+              const AppBackButton(),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Form(
+                        key: _formKey,
+                        child: Scrollbar(
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const SizedBox(height: 20),
-                              AppTextField(
-                                controller: _projectNameController,
-                                lableText: Strings.projectName,
-                                onChanged: (v) =>
-                                    project = project.copyWith(name: v),
-                                validator: ValidationBuilder()
-                                    .maxLength(255)
-                                    .required()
-                                    .build(),
-                              ),
-                              const SizedBox(height: 10),
-                              AppTextField(
-                                controller: _studentNameController,
-                                onChanged: (v) =>
-                                    project = project.copyWith(studentName: v),
-                                lableText: Strings.studentName,
-                                validator: ValidationBuilder()
-                                    .maxLength(255)
-                                    .required()
-                                    .build(),
-                              ),
-                              const SizedBox(height: 10),
-                              AppTextField(
-                                controller: _supervisorNameController,
-                                onChanged: (v) => project =
-                                    project.copyWith(supervisorName: v),
-                                lableText: Strings.supervisorName,
-                                validator: ValidationBuilder()
-                                    .maxLength(255)
-                                    .required()
-                                    .build(),
-                              ),
-                              const SizedBox(height: 10),
-                              AppTextField(
-                                controller: _studentPhoneNumberController,
-                                onChanged: (v) => project = project.copyWith(
-                                    studentPhoneNo: ValidationBuilder().a2e(v)),
-                                lableText: Strings.studentPhoneNumber,
-                                validator: ValidationBuilder(isOptional: true)
-                                    .phone()
-                                    .build(),
-                              ),
-                              const SizedBox(height: 10),
-                              AppTextField(
-                                controller: _abstractController,
-                                onChanged: (v) =>
-                                    project = project.copyWith(abstract: v),
-                                validator: ValidationBuilder(isOptional: true)
-                                    .minLength(20)
-                                    .build(),
-                                lableText: Strings.abstract +
-                                    Strings.optionalWithBrackets,
-                                minLines: 5,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(8.0),
-                          constraints: const BoxConstraints(maxWidth: 500),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 10),
                               Text(
-                                Strings.keywords + Strings.optionalWithBrackets,
-                                style: Theme.of(context).textTheme.subtitle1,
+                                Strings.addProject,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .displayMedium
+                                    ?.copyWith(color: Colors.black),
+                              ),
+                              Text(Strings.pleaseFillProjectInfo,
+                                  style: Theme.of(context).textTheme.headline6),
+                              Wrap(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    constraints:
+                                        const BoxConstraints(maxWidth: 500),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 20),
+                                        AppTextField(
+                                          controller: _projectNameController,
+                                          lableText: Strings.projectName,
+                                          onChanged: (v) => project =
+                                              project.copyWith(name: v),
+                                          validator: ValidationBuilder()
+                                              .maxLength(255)
+                                              .required()
+                                              .build(),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        AppTextField(
+                                          controller: _studentNameController,
+                                          onChanged: (v) => project =
+                                              project.copyWith(studentName: v),
+                                          lableText: Strings.studentName,
+                                          validator: ValidationBuilder()
+                                              .maxLength(255)
+                                              .required()
+                                              .build(),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        AppTextField(
+                                          controller: _supervisorNameController,
+                                          onChanged: (v) => project = project
+                                              .copyWith(supervisorName: v),
+                                          lableText: Strings.supervisorName,
+                                          validator: ValidationBuilder()
+                                              .maxLength(255)
+                                              .required()
+                                              .build(),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        AppTextField(
+                                          controller:
+                                              _studentPhoneNumberController,
+                                          onChanged: (v) => project =
+                                              project.copyWith(
+                                                  studentPhoneNo:
+                                                      ValidationBuilder()
+                                                          .a2e(v)),
+                                          lableText: Strings.studentPhoneNumber,
+                                          validator: ValidationBuilder(
+                                                  isOptional: true)
+                                              .phone()
+                                              .build(),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        AppTextField(
+                                          controller: _abstractController,
+                                          onChanged: (v) => project =
+                                              project.copyWith(abstract: v),
+                                          validator: ValidationBuilder(
+                                                  isOptional: true)
+                                              .minLength(20)
+                                              .build(),
+                                          lableText: Strings.abstract +
+                                              Strings.optionalWithBrackets,
+                                          minLines: 5,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    constraints:
+                                        const BoxConstraints(maxWidth: 500),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          Strings.keywords +
+                                              Strings.optionalWithBrackets,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .subtitle1,
+                                        ),
+                                        const SizedBox(height: 10),
+                                        StatefulBuilder(
+                                            builder: (context, setState) {
+                                          return KeyWordsWidget(
+                                            keywords: project.keywords,
+                                            onKeyWordAdded: (kw) => setState(
+                                                () => project.keywords.add(kw)),
+                                            onkeyWordDeleted: (kw) => setState(
+                                                () => project.keywords
+                                                    .remove(kw)),
+                                          );
+                                        }),
+                                        const SizedBox(height: 10),
+                                        StatefulBuilder(
+                                            builder: (context, setState) {
+                                          return SizedBox(
+                                            height: 70,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                AppYearPicker(
+                                                  selectedDate:
+                                                      project.graduationYear,
+                                                  onYearSelected: (y) {
+                                                    if (y != null) {
+                                                      setState(() => project =
+                                                          project.copyWith(
+                                                              graduationYear:
+                                                                  y));
+                                                    }
+                                                  },
+                                                ),
+                                                const SizedBox(width: 10),
+                                                AppLevelDropDown(
+                                                  selectedLevel: project.level,
+                                                  onLevelChanged: (lvl) =>
+                                                      setState(() => project =
+                                                          project.copyWith(
+                                                              level: lvl!)),
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        }),
+                                      ],
+                                    ),
+                                  ),
+                                ],
                               ),
                               const SizedBox(height: 10),
                               StatefulBuilder(builder: (context, setState) {
-                                return KeyWordsWidget(
-                                  keywords: project.keywords,
-                                  onKeyWordAdded: (kw) =>
-                                      setState(() => project.keywords.add(kw)),
-                                  onkeyWordDeleted: (kw) => setState(
-                                      () => project.keywords.remove(kw)),
+                                return FilePickerWidget(
+                                  pickedFiles: files,
+                                  onFileRemoved: (f) =>
+                                      setState(() => files.remove(f)),
+                                  onFilesPicked: (f) =>
+                                      setState(() => files.add(f)),
                                 );
                               }),
                               const SizedBox(height: 10),
-                              StatefulBuilder(builder: (context, setState) {
-                                return SizedBox(
-                                  height: 70,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      AppYearPicker(
-                                        selectedDate: project.graduationYear,
-                                        onYearSelected: (y) {
-                                          if (y != null) {
-                                            setState(() => project = project
-                                                .copyWith(graduationYear: y));
-                                          }
-                                        },
-                                      ),
-                                      const SizedBox(width: 10),
-                                      AppLevelDropDown(
-                                        selectedLevel: project.level,
-                                        onLevelChanged: (lvl) => setState(() =>
-                                            project =
-                                                project.copyWith(level: lvl!)),
-                                      )
-                                    ],
-                                  ),
-                                );
-                              }),
+                              AppButton(
+                                  width: 300,
+                                  isLoading: _pBloc.state.maybeWhen(
+                                      loading: () => true, orElse: () => false),
+                                  onPressed: () async {
+                                    if (!_formKey.currentState!.validate()) {
+                                      return;
+                                    }
+                                    if (files.isEmpty) {
+                                      context.showSnackBar(
+                                          'الرجاء رفع تقرير المشروع',
+                                          isError: true);
+                                      return;
+                                    }
+                                    if (project.graduationYear == null) {
+                                      context.showSnackBar(
+                                          'الرجاء اختيار سنة التخرج',
+                                          isError: true);
+                                      return;
+                                    }
+                                    await _pBloc.submitProject(project, files);
+                                    _pBloc.state.whenOrNull(data: (results) {
+                                      context
+                                          .showSnackBar('تم رفع المشروع بنجاح');
+                                      AutoRouter.of(context)
+                                          .replace(const MyHomeRoute());
+                                    }, failure: (e) {
+                                      context.showSnackBar(e.readableMessage,
+                                          isError: true);
+                                      return;
+                                    });
+                                  },
+                                  text: Strings.addProject),
+                              const SizedBox(height: 10),
                             ],
                           ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    StatefulBuilder(builder: (context, setState) {
-                      return FilePickerWidget(
-                        pickedFiles: files,
-                        onFileRemoved: (f) => setState(() => files.remove(f)),
-                        onFilesPicked: (f) => setState(() => files.add(f)),
-                      );
-                    }),
-                    const SizedBox(height: 10),
-                    AppButton(
-                        width: 300,
-                        isLoading: _pBloc.state.maybeWhen(
-                            loading: () => true, orElse: () => false),
-                        onPressed: () async {
-                          if (!_formKey.currentState!.validate()) return;
-                          if (files.isEmpty) {
-                            context.showSnackBar('الرجاء رفع تقرير المشروع',
-                                isError: true);
-                            return;
-                          }
-                          if (project.graduationYear == null) {
-                            context.showSnackBar('الرجاء اختيار سنة التخرج',
-                                isError: true);
-                            return;
-                          }
-                          await _pBloc.submitProject(project, files);
-                          _pBloc.state.whenOrNull(data: (results) {
-                            context.showSnackBar('تم رفع المشروع بنجاح');
-                            AutoRouter.of(context).replace(const MyHomeRoute());
-                          }, failure: (e) {
-                            context.showSnackBar(e.readableMessage,
-                                isError: true);
-                            return;
-                          });
-                        },
-                        text: Strings.addProject),
-                    const SizedBox(height: 10),
-                  ],
+                        )),
+                  ),
                 ),
-              )),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -32,14 +32,15 @@ class AppButton extends StatelessWidget {
     final isPrimary = buttonType == ButtonType.primary;
     final defaultTextColor = isPrimary
         ? Theme.of(context).colorScheme.surface
-        : Theme.of(context).colorScheme.primary;
+        : backroundColor ?? Theme.of(context).colorScheme.primary;
 
-    final buttonBgColor =
-        isPrimary ? Theme.of(context).colorScheme.primary : Colors.transparent;
+    final buttonBgColor = isPrimary
+        ? backroundColor ?? Theme.of(context).colorScheme.primary
+        : Colors.transparent;
     return ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-            primary: backroundColor ?? buttonBgColor,
+            primary: buttonBgColor,
             elevation: !isPrimary ? 0 : null,
             shadowColor: !isPrimary ? Colors.transparent : null,
             shape: RoundedRectangleBorder(
@@ -47,7 +48,8 @@ class AppButton extends StatelessWidget {
                     ? BorderSide.none
                     : BorderSide(
                         width: 2,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: backroundColor ??
+                            Theme.of(context).colorScheme.primary,
                       ),
                 borderRadius: BorderRadius.circular(5))),
         child: Row(
