@@ -67,11 +67,16 @@ class ProjectsApi {
     await uploadFiles(files, response.data['id'].toString());
   }
 
-  Future<Project> getProject({
+  Future<Project?> getProject({
     required int projectId,
   }) async {
     final response =
         await _dioClient.get(Endpoint.project + projectId.toString());
     return Project.fromJson(response.data);
+  }
+
+  Future<Project?> deleteProject({required int projectId}) async {
+    await _dioClient.delete(Endpoint.project + projectId.toString());
+    return null;
   }
 }

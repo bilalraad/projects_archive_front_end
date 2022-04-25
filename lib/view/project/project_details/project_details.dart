@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:projects_archiving/blocs/project_details/project_details_cubit.dart';
+import 'package:projects_archiving/blocs/states/result_state.dart';
 import 'package:projects_archiving/utils/enums.dart';
+import 'package:projects_archiving/utils/snack_bar.dart';
 import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
 import 'package:projects_archiving/view/widgets/error_widget.dart';
@@ -23,6 +25,13 @@ class ProjectDetailsScreen extends StatefulWidget {
 class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   late ProjectDetailsBloc projectP;
   @override
+  void initState() {
+    projectP = BlocProvider.of<ProjectDetailsBloc>(context, listen: false);
+    projectP.getProject(widget.projectId);
+    super.initState();
+  }
+
+  @override
   void didChangeDependencies() {
     projectP = BlocProvider.of<ProjectDetailsBloc>(context, listen: true);
     projectP.state
@@ -32,7 +41,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
 
   @override
   void dispose() {
-    projectP.dispose();
+    projectP.reset();
     super.dispose();
   }
 
@@ -75,7 +84,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: SelectableText(
-                        p.name,
+                        p!.name,
                         style: Theme.of(context)
                             .textTheme
                             .displaySmall
@@ -226,7 +235,12 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                               backroundColor: Colors.red,
                               buttonType: ButtonType.secondary,
                               onPressed: () {
-                                //TODO: IMPLEMENT PROJECT DELET
+                                projectP.deleteProject(widget.projectId);
+
+                                projectP.state.whenOrNull(data: (_) {
+                                  context.showSnackBar('تم حذف المشروع بنجاح');
+                                  AutoRouter.of(context).replaceNamed('/');
+                                });
                               },
                               text: 'حذف المشروع'),
                         ],
