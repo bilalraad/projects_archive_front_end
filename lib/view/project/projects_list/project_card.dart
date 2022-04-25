@@ -12,14 +12,13 @@ class ProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget titleWithValue(String? title, String? value) {
-      return RichText(
-          text: TextSpan(
-              text: "$title\n",
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2
-                  ?.copyWith(color: Colors.grey),
-              children: [
+      return SelectableText.rich(TextSpan(
+          text: "$title\n",
+          style: Theme.of(context)
+              .textTheme
+              .bodyText2
+              ?.copyWith(color: Colors.grey),
+          children: [
             TextSpan(text: value, style: Theme.of(context).textTheme.bodyText1)
           ]));
     }
@@ -32,7 +31,7 @@ class ProjectCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              SelectableText(
                 p.name,
                 style: Theme.of(context).textTheme.titleLarge,
               ),

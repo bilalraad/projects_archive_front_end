@@ -39,14 +39,11 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   late TextStyle? titleTextTheme;
 
   Widget titleWithValue(String? title, String? value) {
-    return RichText(
-        text: TextSpan(
-            text: "$title\n",
-            style: Theme.of(context)
-                .textTheme
-                .bodyText2
-                ?.copyWith(color: Colors.grey),
-            children: [
+    return SelectableText.rich(TextSpan(
+        text: "$title\n",
+        style:
+            Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.grey),
+        children: [
           TextSpan(
               text: value,
               style:
@@ -77,7 +74,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                     const SizedBox(height: 20),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text(
+                      child: SelectableText(
                         p.name,
                         style: Theme.of(context)
                             .textTheme
@@ -100,6 +97,8 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                   Strings.supervisorName, p.supervisorName),
                               titleWithValue(Strings.graduationYear,
                                   p.graduationYear.year.toString()),
+                              titleWithValue(Strings.level,
+                                  Strings.translateLevel(p.level)),
                             ],
                           ),
                         ),
@@ -108,7 +107,8 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(Strings.keywords, style: titleTextTheme),
+                              SelectableText(Strings.keywords,
+                                  style: titleTextTheme),
                               Container(
                                 decoration: BoxDecoration(
                                   border: Border.all(
@@ -138,7 +138,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: Center(
-                                                  child: Text(
+                                                  child: SelectableText(
                                                 e,
                                                 style: Theme.of(context)
                                                     .textTheme
