@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:projects_archiving/blocs/states/result_state.dart';
 import 'package:projects_archiving/data/api/dio_client.dart';
 import 'package:projects_archiving/data/api/helper/endpoints.dart';
+import 'package:projects_archiving/data/api/helper/map_utils.dart';
 import 'package:projects_archiving/data/api/helper/res_with_count.dart';
 import 'package:projects_archiving/data/shared_pref_helper.dart';
 import 'package:projects_archiving/models/app_file.dart';
@@ -36,7 +37,7 @@ class ProjectsApi {
       Endpoint.query: searchQuery,
     };
     if (filter != null) {
-      queryParameters.addAll(filter.toJson());
+      queryParameters.addAll(filter.toJson().cleanUpValues());
     }
 
     var response = await _dioClient.get(Endpoint.projects,
@@ -61,8 +62,8 @@ class ProjectsApi {
     required AddProject newProject,
     required List<AppFile> files,
   }) async {
-    final response =
-        await _dioClient.post(Endpoint.projects, data: newProject.toJson());
+    final response = await _dioClient.post(Endpoint.projects,
+        data: newProject.toJson().cleanUpValues());
     await uploadFiles(files, response.data['id'].toString());
   }
 

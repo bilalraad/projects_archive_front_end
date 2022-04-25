@@ -7,6 +7,7 @@ import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/add_project/add_project_bloc.dart';
 import 'package:projects_archiving/blocs/project_details/project_details_cubit.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
+import 'package:projects_archiving/blocs/projects_filter/projects_filter_bloc.dart';
 import 'package:projects_archiving/data/api/dio_client.dart';
 import 'package:projects_archiving/data/api/helper/network.dart';
 import 'package:projects_archiving/data/api/projects_api.dart';
@@ -49,13 +50,14 @@ Future<Widget> configureInjections(Widget child) async {
   var _dio = Network.provideDio(_sharedPreferenceHelper);
   var _dioClient = DioClient(_dio);
   var _projectsRepo = ProjectsApi(_dioClient, _sharedPreferenceHelper);
-
+  var filter = ProjectsFilterBloc();
   return MultiBlocProvider(
     providers: [
+      BlocProvider(create: (_) => filter),
       BlocProvider(
-          lazy: false,
-          create: (context) =>
-              ProjectsBloc(_projectsRepo)..add(const ProjectsEvent.started())),
+          // lazy: false,
+          create: (context) => ProjectsBloc(_projectsRepo, filter)
+            ..add(const ProjectsEvent.started())),
       BlocProvider(create: (_) => AddProjectBloc(_projectsRepo)),
       BlocProvider(create: (_) => ProjectDetailsBloc(_projectsRepo)),
     ],
