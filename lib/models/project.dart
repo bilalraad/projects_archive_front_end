@@ -31,13 +31,13 @@ class Project with _$Project {
 @freezed
 class ProjectsFilter with _$ProjectsFilter {
   factory ProjectsFilter({
-    @JsonKey(name: 'name') required String name,
-    @JsonKey(name: 'graduation_year') required DateTime graduationYear,
-    @JsonKey(name: 'student_name') required String studentName,
-    @JsonKey(name: 'supervisor_name') required String supervisorName,
-    @JsonKey(name: 'abstract') required String abstract,
-    @JsonKey(name: 'keywords', defaultValue: []) required List<String> keywords,
-    @JsonKey(name: 'level') required Level level,
+    @JsonKey(name: 'name') String? name,
+    @JsonKey(name: 'graduation_year') String? graduationYear,
+    @JsonKey(name: 'student_name') String? studentName,
+    @JsonKey(name: 'supervisor_name') String? supervisorName,
+    @JsonKey(name: 'abstract') String? abstract,
+    @JsonKey(name: 'keywords', defaultValue: []) List<String>? keywords,
+    @JsonKey(name: 'level') Level? level,
   }) = _ProjectsFilter;
 
   factory ProjectsFilter.fromJson(Map<String, dynamic> json) =>

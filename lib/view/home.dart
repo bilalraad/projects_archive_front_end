@@ -7,6 +7,7 @@ import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/project/projects_list/project_card.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
 import 'package:projects_archiving/view/widgets/error_widget.dart';
+import 'package:projects_archiving/view/widgets/projects_filter_dilaog.dart';
 
 class MyHomeScreen extends StatelessWidget {
   const MyHomeScreen({Key? key}) : super(key: key);
@@ -15,10 +16,6 @@ class MyHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final projectsP = BlocProvider.of<ProjectsBloc>(context, listen: true);
     return Scaffold(
-      // appBar: AppBar(
-      // To hide the back button from the app bar
-      //   leading: const SizedBox.shrink(),
-      // ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Center(
@@ -42,7 +39,18 @@ class MyHomeScreen extends StatelessWidget {
                     Text(
                       Strings.count(projectsP.state
                           .whenOrNull(data: (r) => r.count.toString())),
-                    )
+                    ),
+                    AppButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => const FilterDialog());
+                      },
+                      buttonType: ButtonType.secondary,
+                      text: 'فلترة',
+                      textColor: Colors.black,
+                      icon: const Icon(Icons.filter_alt),
+                    ),
                   ],
                 ),
               ),

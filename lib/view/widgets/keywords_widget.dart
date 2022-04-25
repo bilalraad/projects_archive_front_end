@@ -10,8 +10,8 @@ class KeyWordsWidget extends StatelessWidget {
       required this.keywords})
       : super(key: key);
 
-  final Function(String) onKeyWordAdded;
-  final Function(String) onkeyWordDeleted;
+  final void Function(String) onKeyWordAdded;
+  final void Function(String) onkeyWordDeleted;
   final List<String> keywords;
 
   @override

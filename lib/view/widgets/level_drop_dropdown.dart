@@ -7,7 +7,7 @@ class AppLevelDropDown extends StatelessWidget {
       {Key? key, required this.selectedLevel, required this.onLevelChanged})
       : super(key: key);
 
-  final Level selectedLevel;
+  final Level? selectedLevel;
   final Function(Level?) onLevelChanged;
 
   @override
