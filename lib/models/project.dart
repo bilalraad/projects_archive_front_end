@@ -73,3 +73,23 @@ class AddProject with _$AddProject {
 
   static AddProject fromJsonModel(dynamic json) => AddProject.fromJson(json);
 }
+
+@freezed
+class EditProject with _$EditProject {
+  factory EditProject({
+    @JsonKey(name: 'name') required String? name,
+    @JsonKey(name: 'graduation_year') required DateTime? graduationYear,
+    @JsonKey(name: 'student_name') required String? studentName,
+    @JsonKey(name: 'student_phone_no') required String? studentPhoneNo,
+    @JsonKey(name: 'supervisor_name') required String? supervisorName,
+    @JsonKey(name: 'abstract') required String? abstract,
+    @JsonKey(name: 'key_words', defaultValue: [])
+        required List<String>? keywords,
+    @JsonKey(name: 'level') required Level? level,
+  }) = _EditProject;
+
+  factory EditProject.fromJson(Map<String, dynamic> json) =>
+      _$EditProjectFromJson(json);
+
+  static EditProject fromJsonModel(dynamic json) => EditProject.fromJson(json);
+}

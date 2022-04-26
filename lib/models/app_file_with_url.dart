@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:path/path.dart' as p;
 import 'package:projects_archiving/utils/enums.dart';
@@ -25,5 +27,10 @@ class AppFileWithUrl {
     } else {
       return FileType.unKnown;
     }
+  }
+
+  bool get isTmepFile => path == 'temp';
+  static AppFileWithUrl createTempFile(String name) {
+    return AppFileWithUrl(Random().nextInt(100), name, 'temp');
   }
 }

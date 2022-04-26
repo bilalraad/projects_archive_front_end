@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/project_details/project_details_cubit.dart';
-import 'package:projects_archiving/blocs/states/result_state.dart';
 import 'package:projects_archiving/utils/enums.dart';
 import 'package:projects_archiving/utils/snack_bar.dart';
 import 'package:projects_archiving/utils/strings.dart';
@@ -226,7 +226,8 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                               backroundColor: Colors.black,
                               buttonType: ButtonType.secondary,
                               onPressed: () {
-                                //TODO: IMPLEMENT PROEJCT EDIT
+                                AutoRouter.of(context)
+                                    .push(EditProjectRoute(project: p));
                               },
                               text: 'تعديل المشروع'),
                           const SizedBox(width: 10),

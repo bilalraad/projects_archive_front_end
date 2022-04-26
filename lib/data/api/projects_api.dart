@@ -6,6 +6,7 @@ import 'package:projects_archiving/data/api/helper/map_utils.dart';
 import 'package:projects_archiving/data/api/helper/res_with_count.dart';
 import 'package:projects_archiving/data/shared_pref_helper.dart';
 import 'package:projects_archiving/models/app_file.dart';
+import 'package:projects_archiving/models/app_file_with_url.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/utils/app_error.dart';
 
@@ -58,6 +59,10 @@ class ProjectsApi {
     await _dioClient.post('/files', data: formData);
   }
 
+  Future<void> removeFile(AppFileWithUrl file) async {
+    await _dioClient.delete('/' + file.path);
+  }
+
   Future<void> addProject({
     required AddProject newProject,
     required List<AppFile> files,
@@ -65,6 +70,12 @@ class ProjectsApi {
     final response = await _dioClient.post(Endpoint.projects,
         data: newProject.toJson().cleanUpValues());
     await uploadFiles(files, response.data['id'].toString());
+  }
+
+  Future<void> editProject(
+      {required EditProject project, required String projectId}) async {
+    await _dioClient.put(Endpoint.project + projectId,
+        data: project.toJson().cleanUpValues());
   }
 
   Future<Project?> getProject({

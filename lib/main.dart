@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/add_project/add_project_bloc.dart';
+import 'package:projects_archiving/blocs/edit_project/edit_project_bloc.dart';
 import 'package:projects_archiving/blocs/project_details/project_details_cubit.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/blocs/projects_filter/projects_filter_bloc.dart';
@@ -59,6 +60,7 @@ Future<Widget> configureInjections(Widget child) async {
           create: (context) => ProjectsBloc(_projectsRepo, filter)
             ..add(const ProjectsEvent.started())),
       BlocProvider(create: (_) => AddProjectBloc(_projectsRepo)),
+      BlocProvider(create: (_) => EditProjectBloc(_projectsRepo)),
       BlocProvider(create: (_) => ProjectDetailsBloc(_projectsRepo)),
     ],
     child: child,
