@@ -1,12 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:projects_archiving/blocs/states/result_state.dart';
 import 'package:projects_archiving/data/api/projects_api.dart';
+import 'package:projects_archiving/data/shared_pref_helper.dart';
 
 class UserCubit extends Cubit<BlocsState> {
   final ProjectsApi _projectsRepo;
+  final SharedPreferenceHelper _prefHelper;
 
-  UserCubit(ProjectsApi projectsRepo)
+  UserCubit(ProjectsApi projectsRepo, SharedPreferenceHelper prefHelper)
       : _projectsRepo = projectsRepo,
+        _prefHelper = prefHelper,
         super(const BlocsState.initial());
 
   Future<void> logIn({required String email, required String password}) async {
@@ -15,6 +18,14 @@ class UserCubit extends Cubit<BlocsState> {
         .listen((event) => emit(event))
         .asFuture();
   }
+
+  Future<void> logOut() async {
+    await _prefHelper.removeAuthToken();
+    await _prefHelper.removeUser();
+    emit(const BlocsState.data(null));
+  }
+
+  bool get isLoggedIn => _prefHelper.user != null;
 
   //TODO: ADD ROLE LATER
   Future<void> createUser(

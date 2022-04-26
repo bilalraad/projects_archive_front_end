@@ -4,6 +4,7 @@ class Strings {
   static const addProject = 'إضافة مشروع';
   static const save = 'حفظ';
   static const logIn = 'تسجيل الدخول';
+  static const logOut = 'تسجيل الخروج';
   static const projectName = 'اسم المشروع';
   static const graduationYear = 'سنة التخرج';
   static const studentName = 'اسم الطالب';

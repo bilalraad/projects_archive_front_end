@@ -48,10 +48,10 @@ class MyApp extends StatelessWidget {
 Future<Widget> configureInjections(Widget child) async {
   await dotenv.load(fileName: "assets/.env");
   var _sharedPreference = await SharedPreferences.getInstance();
-  var _sharedPreferenceHelper = SharedPreferenceHelper(_sharedPreference);
-  var _dio = Network.provideDio(_sharedPreferenceHelper);
+  var _sharedPrefHelper = SharedPreferenceHelper(_sharedPreference);
+  var _dio = Network.provideDio(_sharedPrefHelper);
   var _dioClient = DioClient(_dio);
-  var _projectsRepo = ProjectsApi(_dioClient, _sharedPreferenceHelper);
+  var _projectsRepo = ProjectsApi(_dioClient, _sharedPrefHelper);
   var filter = ProjectsFilterBloc();
   return MultiBlocProvider(
     providers: [
@@ -63,7 +63,7 @@ Future<Widget> configureInjections(Widget child) async {
       BlocProvider(create: (_) => AddProjectBloc(_projectsRepo)),
       BlocProvider(create: (_) => EditProjectBloc(_projectsRepo)),
       BlocProvider(create: (_) => ProjectDetailsBloc(_projectsRepo)),
-      BlocProvider(create: (_) => UserCubit(_projectsRepo)),
+      BlocProvider(create: (_) => UserCubit(_projectsRepo, _sharedPrefHelper)),
     ],
     child: child,
   );

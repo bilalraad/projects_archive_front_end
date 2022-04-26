@@ -63,10 +63,10 @@ class AppRouter extends _i6.RootStackRouter {
         _i6.RouteConfig(AddProjectRoute.name, path: '/projects/add'),
         _i6.RouteConfig(ProjectDetailsRoute.name, path: '/projects/:id'),
         _i6.RouteConfig(EditProjectRoute.name, path: '/edit-project-screen'),
-        _i6.RouteConfig('/#redirect',
-            path: '/', redirectTo: '/projects', fullMatch: true),
         _i6.RouteConfig('*#redirect',
-            path: '*', redirectTo: '/projects', fullMatch: true)
+            path: '*', redirectTo: '/projects', fullMatch: true),
+        _i6.RouteConfig('/#redirect',
+            path: '/', redirectTo: '/projects', fullMatch: true)
       ];
 }
 

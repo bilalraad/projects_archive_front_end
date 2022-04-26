@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/project_details/project_details_cubit.dart';
+import 'package:projects_archiving/blocs/user/user_cubit.dart';
 import 'package:projects_archiving/utils/enums.dart';
 import 'package:projects_archiving/utils/snack_bar.dart';
 import 'package:projects_archiving/utils/strings.dart';
@@ -24,16 +25,20 @@ class ProjectDetailsScreen extends StatefulWidget {
 
 class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   late ProjectDetailsBloc projectP;
-  @override
-  void initState() {
-    projectP = BlocProvider.of<ProjectDetailsBloc>(context, listen: false);
-    projectP.getProject(widget.projectId);
-    super.initState();
-  }
+  late UserCubit _userB;
+
+  // @override
+  // void initState() {
+  //   projectP = BlocProvider.of<ProjectDetailsBloc>(context, listen: false);
+  //   projectP.getProject(widget.projectId);
+  //   super.initState();
+  // }
 
   @override
   void didChangeDependencies() {
     projectP = BlocProvider.of<ProjectDetailsBloc>(context, listen: true);
+    _userB = BlocProvider.of<UserCubit>(context, listen: false);
+
     projectP.state
         .whenOrNull(initial: () => projectP.getProject(widget.projectId));
     super.didChangeDependencies();
@@ -221,29 +226,32 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                 ),
                           const VerticalDivider(),
                           const Spacer(),
-                          AppButton(
-                              width: 150,
-                              backroundColor: Colors.black,
-                              buttonType: ButtonType.secondary,
-                              onPressed: () {
-                                AutoRouter.of(context)
-                                    .push(EditProjectRoute(project: p));
-                              },
-                              text: 'تعديل المشروع'),
+                          if (_userB.isLoggedIn)
+                            AppButton(
+                                width: 150,
+                                backroundColor: Colors.black,
+                                buttonType: ButtonType.secondary,
+                                onPressed: () {
+                                  AutoRouter.of(context)
+                                      .push(EditProjectRoute(project: p));
+                                },
+                                text: 'تعديل المشروع'),
                           const SizedBox(width: 10),
-                          AppButton(
-                              width: 150,
-                              backroundColor: Colors.red,
-                              buttonType: ButtonType.secondary,
-                              onPressed: () {
-                                projectP.deleteProject(widget.projectId);
+                          if (_userB.isLoggedIn)
+                            AppButton(
+                                width: 150,
+                                backroundColor: Colors.red,
+                                buttonType: ButtonType.secondary,
+                                onPressed: () {
+                                  projectP.deleteProject(widget.projectId);
 
-                                projectP.state.whenOrNull(data: (_) {
-                                  context.showSnackBar('تم حذف المشروع بنجاح');
-                                  AutoRouter.of(context).replaceNamed('/');
-                                });
-                              },
-                              text: 'حذف المشروع'),
+                                  projectP.state.whenOrNull(data: (_) {
+                                    context
+                                        .showSnackBar('تم حذف المشروع بنجاح');
+                                    AutoRouter.of(context).replaceNamed('/');
+                                  });
+                                },
+                                text: 'حذف المشروع'),
                         ],
                       ),
                     ),

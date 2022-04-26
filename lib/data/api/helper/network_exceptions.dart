@@ -85,8 +85,7 @@ extension NetworkErrorHandler on NetworkExceptions {
               .errors
               .first
               .message;
-        }
-        if (response.statusCode == 404) {
+        } else if (response.statusCode == 404 || response.statusCode == 401) {
           errorMessage = response.data;
         } else {
           errorMessage = 'حدث خطأ غير متوقع';
