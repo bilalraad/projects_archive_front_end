@@ -14,6 +14,7 @@ import 'package:projects_archiving/data/api/dio_client.dart';
 import 'package:projects_archiving/data/api/helper/network.dart';
 import 'package:projects_archiving/data/api/projects_api.dart';
 import 'package:projects_archiving/data/shared_pref_helper.dart';
+import 'package:projects_archiving/utils/app_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -33,7 +34,9 @@ class MyApp extends StatelessWidget {
       title: 'Projects Archiving',
       routerDelegate: AutoRouterDelegate(appRouter),
       routeInformationParser: appRouter.defaultRouteParser(),
-      theme: ThemeData(primarySwatch: Colors.orange, fontFamily: 'notoKufi'),
+      theme: ThemeData(
+          primarySwatch: buildMaterialColor(const Color(0xFFF95F05)),
+          fontFamily: 'notoKufi'),
       debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

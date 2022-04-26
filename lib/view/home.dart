@@ -37,7 +37,6 @@ class MyHomeScreen extends StatelessWidget {
                           AutoRouter.of(context).push(const AddProjectRoute());
                         },
                         text: Strings.addProject,
-                        textColor: Colors.black,
                         icon: const Icon(Icons.add),
                       ),
                     Text(
@@ -53,7 +52,10 @@ class MyHomeScreen extends StatelessWidget {
                       buttonType: ButtonType.secondary,
                       text: 'فلترة',
                       textColor: Colors.black,
-                      icon: const Icon(Icons.filter_alt),
+                      icon: Icon(
+                        Icons.filter_alt,
+                        color: Theme.of(context).primaryColor,
+                      ),
                     ),
                     if (_userB.isLoggedIn)
                       AppButton(
@@ -62,7 +64,6 @@ class MyHomeScreen extends StatelessWidget {
                           AutoRouter.of(context).replace(const LogInRoute());
                         },
                         text: Strings.logOut,
-                        textColor: Colors.black,
                         icon: const Icon(Icons.logout),
                       ),
                     if (!_userB.isLoggedIn)
@@ -71,7 +72,6 @@ class MyHomeScreen extends StatelessWidget {
                           AutoRouter.of(context).replace(const LogInRoute());
                         },
                         text: Strings.logIn,
-                        textColor: Colors.black,
                         icon: const Icon(Icons.login),
                       ),
                   ],

@@ -139,7 +139,8 @@ class _LogInScreenState extends State<LogInScreen> {
                   : MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
                   border: Border.all(
-                      color: Colors.orange.withOpacity(0.5), width: 20),
+                      color: Theme.of(context).primaryColor.withOpacity(0.5),
+                      width: 20),
                   image: const DecorationImage(
                       image: AssetImage(Assets.zipImage))),
               alignment: Alignment.centerLeft,
