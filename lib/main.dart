@@ -9,6 +9,7 @@ import 'package:projects_archiving/blocs/edit_project/edit_project_bloc.dart';
 import 'package:projects_archiving/blocs/project_details/project_details_cubit.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/blocs/projects_filter/projects_filter_bloc.dart';
+import 'package:projects_archiving/blocs/user/user_cubit.dart';
 import 'package:projects_archiving/data/api/dio_client.dart';
 import 'package:projects_archiving/data/api/helper/network.dart';
 import 'package:projects_archiving/data/api/projects_api.dart';
@@ -56,12 +57,13 @@ Future<Widget> configureInjections(Widget child) async {
     providers: [
       BlocProvider(create: (_) => filter),
       BlocProvider(
-          // lazy: false,
+          lazy: false,
           create: (context) => ProjectsBloc(_projectsRepo, filter)
             ..add(const ProjectsEvent.started())),
       BlocProvider(create: (_) => AddProjectBloc(_projectsRepo)),
       BlocProvider(create: (_) => EditProjectBloc(_projectsRepo)),
       BlocProvider(create: (_) => ProjectDetailsBloc(_projectsRepo)),
+      BlocProvider(create: (_) => UserCubit(_projectsRepo)),
     ],
     child: child,
   );

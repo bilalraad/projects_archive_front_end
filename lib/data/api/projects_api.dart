@@ -4,10 +4,12 @@ import 'package:projects_archiving/data/api/dio_client.dart';
 import 'package:projects_archiving/data/api/helper/endpoints.dart';
 import 'package:projects_archiving/data/api/helper/map_utils.dart';
 import 'package:projects_archiving/data/api/helper/res_with_count.dart';
+import 'package:projects_archiving/data/api/helper/token.dart';
 import 'package:projects_archiving/data/shared_pref_helper.dart';
 import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/app_file_with_url.dart';
 import 'package:projects_archiving/models/project.dart';
+import 'package:projects_archiving/models/user.dart';
 import 'package:projects_archiving/utils/app_error.dart';
 
 Stream<BlocsState<T>> apiCallsWrapper<T>(Future<T> action) async* {
@@ -25,6 +27,26 @@ class ProjectsApi {
   final SharedPreferenceHelper sharedPreference;
 
   const ProjectsApi(this._dioClient, this.sharedPreference);
+
+  Future logIn({required String email, required String password}) async {
+    final response = await _dioClient
+        .post(Endpoint.logIn, data: {"email": email, "password": password});
+
+    await sharedPreference
+        .saveAuthToken(Token(access: response.data['access_token']));
+    await sharedPreference.saveUser(User.fromJson(response.data['user']));
+  }
+
+  Future<void> createUser(
+      {required String email,
+      required String password,
+      required String name}) async {
+    await _dioClient.post(Endpoint.createUser, data: {
+      "email": email,
+      "password": password,
+      "name": name,
+    });
+  }
 
   Future<ResWithCount<Project>> getProjects({
     int? skip,
