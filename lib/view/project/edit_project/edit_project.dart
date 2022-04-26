@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/edit_project/edit_project_bloc.dart';
+import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/app_file_with_url.dart';
 import 'package:projects_archiving/models/project.dart';
@@ -56,6 +57,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
     files.addAll(widget.project.files);
     keyWords.addAll(widget.project.keywords);
     graduationYear = widget.project.graduationYear;
+    level = widget.project.level;
     super.initState();
   }
 
@@ -289,7 +291,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                                     }
 
                                     // Submit Edit
-                                    _editBloc.editProject(
+                                    await _editBloc.editProject(
                                         EditProject(
                                             name: _pNameC.text,
                                             graduationYear: graduationYear,
@@ -303,6 +305,8 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                                             level: level),
                                         widget.project.id.toString());
                                     _editBloc.state.whenOrNull(data: (_) {
+                                      ProjectsBloc.of(context)
+                                          .add(const ProjectsEvent.started());
                                       context.showSnackBar(
                                           'تم تعديل المشروع بنجاح');
                                       AutoRouter.of(context)

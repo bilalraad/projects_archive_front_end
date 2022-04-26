@@ -12,15 +12,20 @@ class ProjectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget titleWithValue(String? title, String? value) {
-      return SelectableText.rich(TextSpan(
-          text: "$title\n",
-          style: Theme.of(context)
-              .textTheme
-              .bodyText2
-              ?.copyWith(color: Colors.grey),
-          children: [
-            TextSpan(text: value, style: Theme.of(context).textTheme.bodyText1)
-          ]));
+      return SelectableText.rich(
+        TextSpan(
+            text: "$title\n",
+            style: Theme.of(context)
+                .textTheme
+                .bodyText2
+                ?.copyWith(color: Colors.grey),
+            children: [
+              TextSpan(
+                  text: value, style: Theme.of(context).textTheme.bodyText1)
+            ]),
+        maxLines: 2,
+        style: const TextStyle(overflow: TextOverflow.ellipsis),
+      );
     }
 
     return SizedBox(
@@ -34,6 +39,7 @@ class ProjectCard extends StatelessWidget {
               SelectableText(
                 p.name,
                 style: Theme.of(context).textTheme.titleLarge,
+                maxLines: 2,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,

@@ -46,7 +46,8 @@ class AppRouter extends _i6.RootStackRouter {
       return _i6.MaterialPageX<dynamic>(
           routeData: routeData,
           child: _i4.ProjectDetailsScreen(
-              key: args.key, projectId: args.projectId));
+              key: args.key, projectId: args.projectId),
+          maintainState: false);
     },
     EditProjectRoute.name: (routeData) {
       final args = routeData.argsAs<EditProjectRouteArgs>();

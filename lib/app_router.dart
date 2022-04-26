@@ -9,7 +9,8 @@ import 'package:projects_archiving/view/project/project_details/project_details.
   AutoRoute(page: MyHomeScreen, initial: true),
   AutoRoute(page: LogInScreen, path: '/login'),
   AutoRoute(page: AddProjectScreen, path: '/projects/add'),
-  AutoRoute(page: ProjectDetailsScreen, path: '/projects/:id'),
+  AutoRoute(
+      page: ProjectDetailsScreen, path: '/projects/:id', maintainState: false),
   AutoRoute(page: EditProjectScreen),
   RedirectRoute(path: '*', redirectTo: '/projects'),
   RedirectRoute(path: '/', redirectTo: '/projects'),

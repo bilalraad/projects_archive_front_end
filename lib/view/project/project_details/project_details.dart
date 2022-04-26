@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/project_details/project_details_cubit.dart';
+import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/blocs/user/user_cubit.dart';
 import 'package:projects_archiving/utils/enums.dart';
 import 'package:projects_archiving/utils/snack_bar.dart';
@@ -26,13 +27,6 @@ class ProjectDetailsScreen extends StatefulWidget {
 class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   late ProjectDetailsBloc projectP;
   late UserCubit _userB;
-
-  // @override
-  // void initState() {
-  //   projectP = BlocProvider.of<ProjectDetailsBloc>(context, listen: false);
-  //   projectP.getProject(widget.projectId);
-  //   super.initState();
-  // }
 
   @override
   void didChangeDependencies() {
@@ -246,8 +240,11 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                   projectP.deleteProject(widget.projectId);
 
                                   projectP.state.whenOrNull(data: (_) {
+                                    ProjectsBloc.of(context)
+                                        .add(const ProjectsEvent.started());
                                     context
                                         .showSnackBar('تم حذف المشروع بنجاح');
+
                                     AutoRouter.of(context).replaceNamed('/');
                                   });
                                 },
