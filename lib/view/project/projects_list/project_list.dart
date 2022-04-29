@@ -14,13 +14,13 @@ import 'package:projects_archiving/view/widgets/error_widget.dart';
 import 'package:projects_archiving/view/widgets/projects_filter_dilaog.dart';
 
 extension PagingUtils on PagingController {
-  void addItems<T>(ResWithCount<T> data, int pageKey, [int limitSize = 25]) {
-    final isLastPage = (itemList?.length ?? 0) + limitSize >= data.count;
+  void addItems<T>(ResWithCount<T> data, [int limitSize = 25]) {
+    final nextPageKey = (itemList?.length ?? 0) + limitSize;
 
+    final isLastPage = nextPageKey >= data.count;
     if (isLastPage) {
       appendLastPage(data.results);
     } else {
-      final nextPageKey = pageKey + data.results.length;
       appendPage(data.results, nextPageKey);
     }
   }
@@ -39,14 +39,20 @@ class _ProjectsListState extends State<ProjectsList> {
   final PagingController<int, Project> _pagingController =
       PagingController(firstPageKey: 0);
 
-  late StreamSubscription projectsStream;
+  late StreamSubscription<BlocsState<ResWithCount<Project>>> projectsStream;
 
   @override
   void initState() {
     _projectsP = BlocProvider.of<ProjectsBloc>(context, listen: false);
 
     _pagingController.addPageRequestListener((pageKey) {
-      _fetchPage(pageKey);
+      _projectsP.add(ProjectsEvent.loadProjects(pageKey));
+    });
+    projectsStream = _projectsP.stream.listen((event) {
+      event.whenOrNull(
+        data: (results) => _pagingController.addItems(results),
+        failure: (e) => _pagingController.error = e.readableMessage,
+      );
     });
     super.initState();
   }
@@ -55,16 +61,6 @@ class _ProjectsListState extends State<ProjectsList> {
   void dispose() {
     projectsStream.cancel();
     super.dispose();
-  }
-
-  Future<void> _fetchPage(int pageKey) async {
-    _projectsP.add(ProjectsEvent.loadProjects(pageKey));
-    projectsStream = _projectsP.stream.listen((event) {
-      event.whenOrNull(
-        data: (results) => _pagingController.addItems(results, pageKey),
-        failure: (e) => _pagingController.error = e.readableMessage,
-      );
-    });
   }
 
   @override
@@ -120,10 +116,6 @@ class _ProjectsListState extends State<ProjectsList> {
                     mainAxisExtent: 280,
                   ),
                   builderDelegate: PagedChildBuilderDelegate<Project>(
-                    firstPageProgressIndicatorBuilder: (_) =>
-                        const CircularProgressIndicator.adaptive(),
-                    newPageProgressIndicatorBuilder: (_) =>
-                        const CircularProgressIndicator.adaptive(),
                     animateTransitions: false,
                     noItemsFoundIndicatorBuilder: (_) => Center(
                       child: Column(

@@ -35,11 +35,11 @@ class ProjectsBloc
     on<_LoadProjects>((event, emit) async {
       await apiCallsWrapper<ResWithCount<Project>>(_projectsRepo.getProjects(
               filter: filterBloc.state.filter, skip: event.skip))
-          .listen((event) {
-        emit(event);
-      }).asFuture();
+          .listen((event) => emit(event))
+          .asFuture();
     });
   }
+
   @override
   Future<void> close() {
     filterSubscription.cancel();
