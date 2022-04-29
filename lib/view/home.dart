@@ -2,22 +2,18 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_archiving/app_router.gr.dart';
-import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/blocs/user/user_cubit.dart';
 import 'package:projects_archiving/utils/strings.dart';
-import 'package:projects_archiving/view/project/projects_list/project_card.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
-import 'package:projects_archiving/view/widgets/error_widget.dart';
-import 'package:projects_archiving/view/widgets/projects_filter_dilaog.dart';
+
+import 'project/projects_list/project_list.dart';
 
 class MyHomeScreen extends StatelessWidget {
   const MyHomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final projectsP = BlocProvider.of<ProjectsBloc>(context, listen: true);
     final _userB = BlocProvider.of<UserCubit>(context, listen: false);
-
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -29,7 +25,6 @@ class MyHomeScreen extends StatelessWidget {
               Container(
                 constraints: const BoxConstraints(maxWidth: double.infinity),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     if (_userB.isLoggedIn)
                       AppButton(
@@ -39,24 +34,7 @@ class MyHomeScreen extends StatelessWidget {
                         text: Strings.addProject,
                         icon: const Icon(Icons.add),
                       ),
-                    Text(
-                      Strings.count(projectsP.state
-                          .whenOrNull(data: (r) => r.count.toString())),
-                    ),
-                    AppButton(
-                      onPressed: () {
-                        showDialog(
-                            context: context,
-                            builder: (context) => const FilterDialog());
-                      },
-                      buttonType: ButtonType.secondary,
-                      text: 'فلترة',
-                      textColor: Colors.black,
-                      icon: Icon(
-                        Icons.filter_alt,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
+                    const Spacer(),
                     if (_userB.isLoggedIn)
                       AppButton(
                         onPressed: () async {
@@ -64,7 +42,9 @@ class MyHomeScreen extends StatelessWidget {
                           AutoRouter.of(context).replace(const LogInRoute());
                         },
                         text: Strings.logOut,
-                        icon: const Icon(Icons.logout),
+                        buttonType: ButtonType.secondary,
+                        icon: Icon(Icons.logout,
+                            color: Theme.of(context).primaryColor),
                       ),
                     if (!_userB.isLoggedIn)
                       AppButton(
@@ -78,29 +58,7 @@ class MyHomeScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              Expanded(
-                child: SizedBox(
-                  child: projectsP.state.whenOrNull(
-                      loading: () => const Center(
-                          child: CircularProgressIndicator.adaptive()),
-                      failure: (e) => AppErrorWidget(
-                          errorMessage: e.readableMessage,
-                          onRefresh: () {
-                            projectsP.add(const ProjectsEvent.started());
-                          }),
-                      data: (ps) {
-                        return SingleChildScrollView(
-                          child: Center(
-                            child: Wrap(
-                              children: ps.results
-                                  .map((p) => ProjectCard(p: p))
-                                  .toList(),
-                            ),
-                          ),
-                        );
-                      }),
-                ),
-              ),
+              const ProjectsList(),
             ],
           ),
         ),

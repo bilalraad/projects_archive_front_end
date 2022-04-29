@@ -29,12 +29,12 @@ class ProjectsBloc
     });
     filterSubscription = filterBloc.stream.listen((state) {
       state.whenOrNull(changed: (filter) {
-        add(_LoadProjects(0, filter));
+        add(const _LoadProjects(0));
       });
     });
     on<_LoadProjects>((event, emit) async {
-      await apiCallsWrapper<ResWithCount<Project>>(
-              _projectsRepo.getProjects(filter: event.filter, skip: event.skip))
+      await apiCallsWrapper<ResWithCount<Project>>(_projectsRepo.getProjects(
+              filter: filterBloc.state.filter, skip: event.skip))
           .listen((event) {
         emit(event);
       }).asFuture();

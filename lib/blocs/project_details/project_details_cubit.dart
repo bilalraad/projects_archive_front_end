@@ -22,7 +22,6 @@ class ProjectDetailsBloc extends Cubit<BlocsState<Project?>> {
   }
 
   void reset() {
-    print('object');
     emit(const BlocsState.initial());
   }
 }

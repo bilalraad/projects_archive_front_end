@@ -14,7 +14,10 @@ import 'package:projects_archiving/view/widgets/level_drop_dropdown.dart';
 class FilterDialog extends StatefulWidget {
   const FilterDialog({
     Key? key,
+    required this.onFilterChange,
   }) : super(key: key);
+
+  final VoidCallback onFilterChange;
 
   @override
   State<FilterDialog> createState() => _FilterDialogState();
@@ -119,6 +122,8 @@ class _FilterDialogState extends State<FilterDialog> {
                         supervisorName: supervisorNameC.text,
                         level: level,
                       ));
+                      widget.onFilterChange();
+
                       AutoRouter.of(context).pop();
                     },
                     text: 'حفظ الفلتر',
@@ -139,6 +144,7 @@ class _FilterDialogState extends State<FilterDialog> {
                   AppButton(
                     onPressed: () {
                       projectsF.updateFilter(projectsF.state.filter);
+                      widget.onFilterChange();
                       AutoRouter.of(context).pop();
                     },
                     text: "الغاء",

@@ -61,8 +61,7 @@ Future<Widget> configureInjections(Widget child) async {
       BlocProvider(create: (_) => filter),
       BlocProvider(
           lazy: false,
-          create: (context) => ProjectsBloc(_projectsRepo, filter)
-            ..add(const ProjectsEvent.started())),
+          create: (context) => ProjectsBloc(_projectsRepo, filter)),
       BlocProvider(create: (_) => AddProjectBloc(_projectsRepo)),
       BlocProvider(create: (_) => EditProjectBloc(_projectsRepo)),
       BlocProvider(create: (_) => ProjectDetailsBloc(_projectsRepo)),

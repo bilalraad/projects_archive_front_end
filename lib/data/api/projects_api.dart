@@ -51,13 +51,11 @@ class ProjectsApi {
   Future<ResWithCount<Project>> getProjects({
     int? skip,
     int? limit = 25,
-    String? searchQuery,
     ProjectsFilter? filter,
   }) async {
     Map<String, dynamic> queryParameters = {
       Endpoint.skip: skip,
       Endpoint.limit: limit,
-      Endpoint.query: searchQuery,
     };
     if (filter != null) {
       queryParameters.addAll(filter.toJson().cleanUpValues());

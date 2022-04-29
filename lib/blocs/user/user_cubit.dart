@@ -27,14 +27,19 @@ class UserCubit extends Cubit<BlocsState> {
 
   bool get isLoggedIn => _prefHelper.user != null;
 
-  //TODO: ADD ROLE LATER
   Future<void> createUser(
       {required String email,
       required String password,
+      required Role role,
       required String name}) async {
     await apiCallsWrapper<void>(_projectsRepo.createUser(
             email: email, password: password, name: name))
         .listen((event) => emit(event))
         .asFuture();
   }
+}
+
+enum Role {
+  admin,
+  superAdmin,
 }
