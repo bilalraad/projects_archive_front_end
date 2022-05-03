@@ -203,10 +203,10 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                                 horizontal: 5),
                                             child: AppButton(
                                                 width: 150,
-                                                backroundColor:
-                                                    e.fileType == FileType.word
-                                                        ? Colors.black
-                                                        : null,
+                                                backroundColor: e.fileType ==
+                                                        ReportFileType.word
+                                                    ? Colors.black
+                                                    : null,
                                                 onPressed: () =>
                                                     downLoadFile(e.path),
                                                 text: e.fileType.name),

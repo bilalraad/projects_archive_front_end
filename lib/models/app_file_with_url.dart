@@ -17,15 +17,15 @@ class AppFileWithUrl {
   factory AppFileWithUrl.fromJson(Map<String, dynamic> json) =>
       _$AppFileWithUrlFromJson(json);
 
-  FileType get fileType {
+  ReportFileType get fileType {
     // final path = '/some/path/to/file/file.dart';
     final extension = p.extension(path); // '.dart'
     if (extension.contains('pdf')) {
-      return FileType.pdf;
+      return ReportFileType.pdf;
     } else if (extension.contains('doc') || extension.contains('docx')) {
-      return FileType.word;
+      return ReportFileType.word;
     } else {
-      return FileType.unKnown;
+      return ReportFileType.unKnown;
     }
   }
 

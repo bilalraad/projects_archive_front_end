@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/project.dart';
@@ -10,7 +11,6 @@ import 'package:projects_archiving/view/project/project_details/project_details.
 import 'package:projects_archiving/view/widgets/keywords_widget.dart';
 import 'package:projects_archiving/view/widgets/level_drop_dropdown.dart';
 import 'package:projects_archiving/view/widgets/year_picker.dart';
-import 'package:provider/provider.dart';
 
 import 'package:projects_archiving/blocs/add_project/add_project_bloc.dart';
 import 'package:projects_archiving/utils/strings.dart';
@@ -59,7 +59,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
 
   @override
   void didChangeDependencies() {
-    _pBloc = Provider.of<AddProjectBloc>(context);
+    _pBloc = BlocProvider.of<AddProjectBloc>(context);
     super.didChangeDependencies();
   }
 

@@ -17,4 +17,10 @@ class AddProjectBloc extends Cubit<BlocsState> with ChangeNotifier {
         .listen((event) => emit(event))
         .asFuture();
   }
+
+  Future<void> projectsUpload(AppFile excelFile) async {
+    await apiCallsWrapper(_projectsRepo.projectsUpload(excelFile))
+        .listen((event) => emit(event))
+        .asFuture();
+  }
 }

@@ -2,6 +2,8 @@ import 'package:projects_archiving/utils/enums.dart';
 
 class Strings {
   static const addProject = 'إضافة مشروع';
+  static const addProjects = 'إضافة عنطريق ملف اكسل';
+  static const add = 'إضافة';
   static const save = 'حفظ';
   static const logIn = 'تسجيل الدخول';
   static const logOut = 'تسجيل الخروج';

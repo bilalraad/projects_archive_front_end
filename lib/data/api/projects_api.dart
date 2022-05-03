@@ -81,6 +81,14 @@ class ProjectsApi {
     await _dioClient.post('/files', data: formData);
   }
 
+  Future projectsUpload(AppFile excelFile) async {
+    final formData = FormData.fromMap({
+      "file":
+          MultipartFile.fromBytes(excelFile.bytes, filename: excelFile.name),
+    });
+    await _dioClient.post('/projects/import', data: formData);
+  }
+
   Future<void> removeFile(AppFileWithUrl file) async {
     await _dioClient.delete('/' + file.path);
   }

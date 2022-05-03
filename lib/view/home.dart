@@ -38,6 +38,14 @@ class MyHomeScreen extends StatelessWidget {
                   ),
                 if (_userB.isLoggedIn)
                   SideBarItem(
+                    icon: const Icon(Icons.file_upload_outlined),
+                    onPressed: () {
+                      AutoRouter.of(context).replace(const BulkUploadRoute());
+                    },
+                    title: Strings.addProjects,
+                  ),
+                if (_userB.isLoggedIn)
+                  SideBarItem(
                     icon: const Icon(Icons.person_add),
                     onPressed: () {
                       AutoRouter.of(context).replace(const AddAdminRoute());
@@ -88,7 +96,7 @@ class SideBarItem extends StatelessWidget {
         child: Column(
           children: [
             icon,
-            Text(title ?? ''),
+            Text(title ?? '', textAlign: TextAlign.center),
           ],
         ),
       ),

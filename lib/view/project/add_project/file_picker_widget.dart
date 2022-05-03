@@ -3,19 +3,31 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/utils/app_utils.dart';
+import 'package:projects_archiving/utils/enums.dart';
+import 'package:projects_archiving/utils/snack_bar.dart';
 import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
 
+typedef FilePickerCallback = void Function(AppFile);
+
 class FilePickerWidget extends StatelessWidget {
   final List<AppFile>? pickedFiles;
-  final Function(AppFile) onFilesPicked;
-  final Function(AppFile) onFileRemoved;
+  final int filesLimit;
+  final List<PickerFileTypes> fileTypes;
+  final FilePickerCallback onFilesPicked;
+  final FilePickerCallback onFileRemoved;
 
   const FilePickerWidget({
     Key? key,
     this.pickedFiles,
     required this.onFilesPicked,
     required this.onFileRemoved,
+    this.fileTypes = const [
+      PickerFileTypes.doc,
+      PickerFileTypes.docx,
+      PickerFileTypes.pdf
+    ],
+    this.filesLimit = 2,
   }) : super(key: key);
 
   @override
@@ -23,21 +35,14 @@ class FilePickerWidget extends StatelessWidget {
     return Column(
       children: [
         DropTarget(
-          onDragDone: pickedFiles!.length >= 2
+          onDragDone: pickedFiles!.length >= filesLimit
               ? null
               : (detail) async {
-                  final files = detail.files;
-                  for (final xfile in files) {
-                    if ((xfile.mimeType?.endsWith('/pdf') ?? false) ||
-                        (xfile.mimeType?.endsWith('/msword') ?? false) ||
-                        (xfile.mimeType?.endsWith(
-                                '/vnd.openxmlformats-officedocument.wordprocessingml.document') ??
-                            false)) {
-                      final file = AppFile(
-                          bytes: await xfile.readAsBytes(), name: xfile.name);
-                      onFilesPicked(file);
-                    }
-                  }
+                  await dragedFileTypeValidation(
+                      filesDetails: detail,
+                      selectedTypes: fileTypes,
+                      onFileValidated: onFilesPicked,
+                      context: context);
                 },
           child: Container(
             decoration: BoxDecoration(
@@ -62,7 +67,7 @@ class FilePickerWidget extends StatelessWidget {
                   child: AppButton(
                       width: 200,
                       buttonType: ButtonType.secondary,
-                      onPressed: pickedFiles!.length >= 2
+                      onPressed: pickedFiles!.length >= filesLimit
                           ? null
                           : () async {
                               FilePickerResult? result =
@@ -70,11 +75,9 @@ class FilePickerWidget extends StatelessWidget {
                                       allowMultiple: true,
                                       type: FileType.custom,
                                       withData: true,
-                                      allowedExtensions: [
-                                    'pdf',
-                                    'doc',
-                                    'docx'
-                                  ]);
+                                      allowedExtensions: fileTypes
+                                          .map((e) => e.name)
+                                          .toList());
 
                               if (result != null) {
                                 for (var file in result.files) {
@@ -146,5 +149,47 @@ class PickedFileCard extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+// enum PickerFileTypes {
+//   pdf,
+//   word,
+//   xlsx
+// }
+
+Future<void> dragedFileTypeValidation({
+  required DropDoneDetails filesDetails,
+  required List<PickerFileTypes> selectedTypes,
+  required FilePickerCallback onFileValidated,
+  required BuildContext context,
+}) async {
+  final files = filesDetails.files;
+  for (var xfile in files) {
+    print('xfile.mimeType');
+
+    print(xfile.mimeType);
+    final check =
+        //pdf check
+        (selectedTypes.contains(PickerFileTypes.pdf) &&
+                (xfile.mimeType?.endsWith('/pdf') ?? false)) ||
+            //word check
+            ((selectedTypes.contains(PickerFileTypes.doc) ||
+                    selectedTypes.contains(PickerFileTypes.docx)) &&
+                ((xfile.mimeType?.endsWith('/msword') ?? false) ||
+                    (xfile.mimeType?.endsWith(
+                            '/vnd.openxmlformats-officedocument.wordprocessingml.document') ??
+                        false))) ||
+            (selectedTypes.contains(PickerFileTypes.xlsx) &&
+                (xfile.mimeType?.endsWith(
+                        'vnd.openxmlformats-officedocument.spreadsheetml.sheet') ??
+                    false));
+
+    if (check) {
+      final file = AppFile(bytes: await xfile.readAsBytes(), name: xfile.name);
+      onFileValidated(file);
+    } else {
+      context.showSnackBar('الملف غير متوافق', isError: true);
+    }
   }
 }
