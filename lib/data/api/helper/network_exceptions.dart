@@ -85,7 +85,11 @@ extension NetworkErrorHandler on NetworkExceptions {
               .errors
               .first
               .message;
-        } else if (response.statusCode == 404 || response.statusCode == 401) {
+        } else if (response.statusCode == 404 /*Not found*/ ||
+                response.statusCode == 401 /*Wrong credential*/ ||
+                response.statusCode == 409 /*Email taken*/ ||
+                response.statusCode == 403 /*Not Authorized*/
+            ) {
           errorMessage = response.data;
         } else {
           errorMessage = 'حدث خطأ غير متوقع';

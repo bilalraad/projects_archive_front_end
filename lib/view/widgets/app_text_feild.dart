@@ -17,6 +17,7 @@ class AppTextField extends StatelessWidget {
   final TextInputAction textInputAction;
   final ValueChanged<String>? onFieldSubmitted;
   final double? width;
+  final TextAlign textAlign;
 
   const AppTextField({
     Key? key,
@@ -35,6 +36,7 @@ class AppTextField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.onFieldSubmitted,
     this.width,
+    this.textAlign = TextAlign.start,
   }) : super(key: key);
 
   @override
@@ -67,6 +69,7 @@ class AppTextField extends StatelessWidget {
         onChanged: onChanged,
         inputFormatters: inputFormatters,
         keyboardType: keyboardType,
+        textAlign: textAlign,
         onFieldSubmitted: onFieldSubmitted,
         textInputAction: textInputAction,
         // style: AppTextStyles.inputStyle(),

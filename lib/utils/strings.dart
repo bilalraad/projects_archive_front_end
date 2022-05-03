@@ -36,4 +36,15 @@ class Strings {
         return 'بكالريوس';
     }
   }
+
+  static String translateRole(Role? role) {
+    switch (role) {
+      case Role.admin:
+        return 'ادمن';
+      case Role.superAdmin:
+        return 'سوبر ادمن';
+      default:
+        return 'ادمن';
+    }
+  }
 }

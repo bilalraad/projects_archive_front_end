@@ -77,12 +77,14 @@ class _LogInScreenState extends State<LogInScreen> {
                           AppTextField(
                             lableText: 'البريد الالكتروني',
                             controller: emailC,
+                            textAlign: TextAlign.left,
                           ),
                           const SizedBox(height: 10),
                           AppTextField(
                             lableText: 'كلمة السر',
                             controller: passwordC,
                             obscureText: isObscure,
+                            textAlign: TextAlign.left,
                             suffixIcon: InkWell(
                               onTap: () =>
                                   setState(() => isObscure = !isObscure),

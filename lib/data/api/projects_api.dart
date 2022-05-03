@@ -40,11 +40,13 @@ class ProjectsApi {
   Future<void> createUser(
       {required String email,
       required String password,
+      required String role,
       required String name}) async {
     await _dioClient.post(Endpoint.createUser, data: {
       "email": email,
       "password": password,
       "name": name,
+      "role": role,
     });
   }
 

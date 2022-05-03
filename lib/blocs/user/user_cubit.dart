@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:projects_archiving/blocs/states/result_state.dart';
 import 'package:projects_archiving/data/api/projects_api.dart';
 import 'package:projects_archiving/data/shared_pref_helper.dart';
+import 'package:projects_archiving/utils/enums.dart';
 
 class UserCubit extends Cubit<BlocsState> {
   final ProjectsApi _projectsRepo;
@@ -33,13 +34,8 @@ class UserCubit extends Cubit<BlocsState> {
       required Role role,
       required String name}) async {
     await apiCallsWrapper<void>(_projectsRepo.createUser(
-            email: email, password: password, name: name))
+            email: email, password: password, name: name, role: role.name))
         .listen((event) => emit(event))
         .asFuture();
   }
-}
-
-enum Role {
-  admin,
-  superAdmin,
 }
