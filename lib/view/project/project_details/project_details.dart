@@ -1,17 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/project_details/project_details_cubit.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/blocs/user/user_cubit.dart';
+import 'package:projects_archiving/utils/download.dart';
 import 'package:projects_archiving/utils/enums.dart';
 import 'package:projects_archiving/utils/snack_bar.dart';
 import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
 import 'package:projects_archiving/view/widgets/error_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class ProjectDetailsScreen extends StatefulWidget {
   final int projectId;
@@ -209,7 +208,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                                         ? Colors.black
                                                         : null,
                                                 onPressed: () =>
-                                                    downLoadUrl(e.path),
+                                                    downLoadFile(e.path),
                                                 text: e.fileType.name),
                                           ))
                                       .toList(),
@@ -261,10 +260,6 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
       ),
     );
   }
-}
-
-downLoadUrl(String path) {
-  launch(dotenv.env['BASE_URL']! + "/$path");
 }
 
 class AppBackButton extends StatelessWidget {

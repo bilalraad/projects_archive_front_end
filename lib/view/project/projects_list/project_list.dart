@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
+import 'package:projects_archiving/blocs/projects_filter/projects_filter_bloc.dart';
 import 'package:projects_archiving/blocs/states/result_state.dart';
 import 'package:projects_archiving/data/api/helper/res_with_count.dart';
 import 'package:projects_archiving/models/project.dart';
+import 'package:projects_archiving/utils/download.dart';
 import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/project/projects_list/project_card.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
@@ -35,6 +37,7 @@ class ProjectsList extends StatefulWidget {
 
 class _ProjectsListState extends State<ProjectsList> {
   late ProjectsBloc _projectsP;
+  late ProjectsFilterBloc projectsF;
 
   final PagingController<int, Project> _pagingController =
       PagingController(firstPageKey: 0);
@@ -43,7 +46,8 @@ class _ProjectsListState extends State<ProjectsList> {
 
   @override
   void initState() {
-    _projectsP = BlocProvider.of<ProjectsBloc>(context, listen: false);
+    _projectsP = ProjectsBloc.of(context);
+    projectsF = BlocProvider.of<ProjectsFilterBloc>(context, listen: false);
 
     _pagingController.addPageRequestListener((pageKey) {
       _projectsP.add(ProjectsEvent.loadProjects(pageKey));
@@ -69,19 +73,21 @@ class _ProjectsListState extends State<ProjectsList> {
       child: Center(
         child: Column(
           children: [
+            const SizedBox(height: 10),
             Container(
               constraints: const BoxConstraints(maxWidth: double.infinity),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   BlocBuilder<ProjectsBloc, BlocsState>(
                     builder: (context, state) {
                       return Text(
-                        Strings.count(_projectsP.state
-                            .whenOrNull(data: (r) => r.count.toString())),
+                        Strings.count(_projectsP.state.whenOrNull(
+                            data: (r) => r.count.toString(),
+                            loading: () => 'تحميل...')),
                       );
                     },
                   ),
+                  const Spacer(),
                   AppButton(
                     onPressed: () {
                       showDialog(
@@ -97,6 +103,17 @@ class _ProjectsListState extends State<ProjectsList> {
                     textColor: Colors.black,
                     icon: Icon(
                       Icons.filter_alt,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  AppButton(
+                    onPressed: () => downLoadExcel(projectsF.state.filter),
+                    buttonType: ButtonType.secondary,
+                    text: 'تحميل البيانات',
+                    textColor: Colors.black,
+                    icon: Icon(
+                      Icons.download,
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
