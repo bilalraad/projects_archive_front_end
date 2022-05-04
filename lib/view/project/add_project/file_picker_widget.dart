@@ -166,9 +166,6 @@ Future<void> dragedFileTypeValidation({
 }) async {
   final files = filesDetails.files;
   for (var xfile in files) {
-    print('xfile.mimeType');
-
-    print(xfile.mimeType);
     final check =
         //pdf check
         (selectedTypes.contains(PickerFileTypes.pdf) &&

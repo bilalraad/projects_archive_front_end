@@ -8,6 +8,7 @@ import 'package:projects_archiving/data/api/helper/token.dart';
 import 'package:projects_archiving/data/shared_pref_helper.dart';
 import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/app_file_with_url.dart';
+import 'package:projects_archiving/models/backup.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/models/user.dart';
 import 'package:projects_archiving/utils/app_error.dart';
@@ -118,6 +119,35 @@ class ProjectsApi {
 
   Future<Project?> deleteProject({required int projectId}) async {
     await _dioClient.delete(Endpoint.project + projectId.toString());
+    return null;
+  }
+
+//Backups section
+  Future<T?> createBackup<T>({required String name}) async {
+    await _dioClient.post(Endpoint.backup, data: {"name": name});
+    return null;
+  }
+
+  Future<ResWithCount<Backup>> getAllBackups() async {
+    final response = await _dioClient.get(Endpoint.backup);
+    return ResWithCount.fromJson(response.data, Backup.fromJsonModel);
+  }
+
+  Future<T?> restorBackupWithFile<T>(AppFile zipFile) async {
+    final formData = FormData.fromMap({
+      "file": MultipartFile.fromBytes(zipFile.bytes, filename: zipFile.name),
+    });
+    await _dioClient.post(Endpoint.backup + '/restore', data: formData);
+    return null;
+  }
+
+  Future<T?> restorBackupWithKey<T>(String key) async {
+    await _dioClient.post(Endpoint.backup + '/restore', data: {'key': key});
+    return null;
+  }
+
+  Future<T?> deleteBackup<T>(String key) async {
+    await _dioClient.delete(Endpoint.backup + '/destroy', data: {'key': key});
     return null;
   }
 }

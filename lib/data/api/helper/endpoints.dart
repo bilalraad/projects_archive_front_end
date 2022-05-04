@@ -7,4 +7,5 @@ class Endpoint {
   static const String limit = 'take';
   static const String query = 'query';
   static const String refreshToken = '/refresh-token';
+  static const String backup = '/backups';
 }

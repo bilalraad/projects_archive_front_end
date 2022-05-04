@@ -14,3 +14,11 @@ void downLoadExcel(ProjectsFilter filter) {
 
   launch(uri.toString());
 }
+
+void downLoadDBackup(String key) {
+  launch(dotenv.env['BASE_URL']! + "/backups/download/database/$key");
+}
+
+void downLoadStorageBackup(String key) {
+  launch(dotenv.env['BASE_URL']! + "/backups/download/storage/$key");
+}
