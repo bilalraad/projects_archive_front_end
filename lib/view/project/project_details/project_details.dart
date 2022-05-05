@@ -7,7 +7,7 @@ import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/blocs/user/user_cubit.dart';
 import 'package:projects_archiving/utils/download.dart';
 import 'package:projects_archiving/utils/enums.dart';
-import 'package:projects_archiving/utils/snack_bar.dart';
+import 'package:projects_archiving/utils/context_extentions.dart';
 import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
 import 'package:projects_archiving/view/widgets/error_widget.dart';

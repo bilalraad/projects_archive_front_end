@@ -63,6 +63,7 @@ class AppButton extends StatelessWidget {
               alignment: Alignment.center,
               child: Text(
                 text,
+                overflow: TextOverflow.clip,
                 style: const TextStyle()
                     .copyWith(color: textColor ?? defaultTextColor),
               ),

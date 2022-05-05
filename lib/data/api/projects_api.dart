@@ -123,8 +123,9 @@ class ProjectsApi {
   }
 
 //Backups section
-  Future<T?> createBackup<T>({required String name}) async {
-    await _dioClient.post(Endpoint.backup, data: {"name": name});
+  Future<T?> createBackup<T>({required String? name}) async {
+    await _dioClient.post(Endpoint.backup,
+        data: {"name": name}.cleanUpValues());
     return null;
   }
 

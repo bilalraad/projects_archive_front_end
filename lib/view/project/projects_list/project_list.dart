@@ -69,107 +69,105 @@ class _ProjectsListState extends State<ProjectsList> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Center(
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            Container(
-              constraints: const BoxConstraints(maxWidth: double.infinity),
-              child: Row(
-                children: [
-                  BlocBuilder<ProjectsBloc, BlocsState>(
-                    builder: (context, state) {
-                      return Text(
-                        Strings.count(_projectsP.state.whenOrNull(
-                            data: (r) => r.count.toString(),
-                            loading: () => 'تحميل...')),
-                      );
-                    },
+    return Center(
+      child: Column(
+        children: [
+          const SizedBox(height: 10),
+          Container(
+            constraints: const BoxConstraints(maxWidth: double.infinity),
+            child: Row(
+              children: [
+                BlocBuilder<ProjectsBloc, BlocsState>(
+                  builder: (context, state) {
+                    return Text(
+                      Strings.count(_projectsP.state.whenOrNull(
+                          data: (r) => r.count.toString(),
+                          loading: () => 'تحميل...')),
+                    );
+                  },
+                ),
+                const Spacer(),
+                AppButton(
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) => FilterDialog(
+                              onFilterChange: () {
+                                _pagingController.refresh();
+                              },
+                            ));
+                  },
+                  buttonType: ButtonType.secondary,
+                  text: 'فلترة',
+                  textColor: Colors.black,
+                  icon: Icon(
+                    Icons.filter_alt,
+                    color: Theme.of(context).primaryColor,
                   ),
-                  const Spacer(),
-                  AppButton(
-                    onPressed: () {
-                      showDialog(
-                          context: context,
-                          builder: (context) => FilterDialog(
-                                onFilterChange: () {
-                                  _pagingController.refresh();
-                                },
-                              ));
-                    },
-                    buttonType: ButtonType.secondary,
-                    text: 'فلترة',
-                    textColor: Colors.black,
-                    icon: Icon(
-                      Icons.filter_alt,
-                      color: Theme.of(context).primaryColor,
-                    ),
+                ),
+                const SizedBox(width: 10),
+                AppButton(
+                  onPressed: () => downLoadExcel(projectsF.state.filter),
+                  buttonType: ButtonType.secondary,
+                  text: 'تحميل البيانات',
+                  textColor: Colors.black,
+                  icon: Icon(
+                    Icons.download,
+                    color: Theme.of(context).primaryColor,
                   ),
-                  const SizedBox(width: 10),
-                  AppButton(
-                    onPressed: () => downLoadExcel(projectsF.state.filter),
-                    buttonType: ButtonType.secondary,
-                    text: 'تحميل البيانات',
-                    textColor: Colors.black,
-                    icon: Icon(
-                      Icons.download,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: LayoutBuilder(builder: (context, c) {
-                final cac = (c.maxWidth ~/ 400).toInt();
-                return PagedGridView<int, Project>(
-                  pagingController: _pagingController,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: cac == 0 ? 1 : cac,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
-                    mainAxisExtent: 280,
-                  ),
-                  builderDelegate: PagedChildBuilderDelegate<Project>(
-                    animateTransitions: false,
-                    noItemsFoundIndicatorBuilder: (_) => Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'لا يوجد مشاريع',
-                            style: Theme.of(context).textTheme.headline6,
-                          ),
-                          const SizedBox(height: 10),
-                          TextButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (context) => FilterDialog(
-                                        onFilterChange: () {
-                                          _pagingController.refresh();
-                                        },
-                                      ));
-                            },
-                            child: const Text("تغيير الفلتر"),
-                          )
-                        ],
-                      ),
+          ),
+          const SizedBox(height: 10),
+          Expanded(
+            child: LayoutBuilder(builder: (context, c) {
+              final cac = (c.maxWidth ~/ 400).toInt();
+              return PagedGridView<int, Project>(
+                pagingController: _pagingController,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: cac == 0 ? 1 : cac,
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 10.0,
+                  mainAxisExtent: 280,
+                ),
+                builderDelegate: PagedChildBuilderDelegate<Project>(
+                  animateTransitions: false,
+                  noItemsFoundIndicatorBuilder: (_) => Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'لا يوجد مشاريع',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                        const SizedBox(height: 10),
+                        TextButton(
+                          onPressed: () {
+                            showDialog(
+                                context: context,
+                                builder: (context) => FilterDialog(
+                                      onFilterChange: () {
+                                        _pagingController.refresh();
+                                      },
+                                    ));
+                          },
+                          child: const Text("تغيير الفلتر"),
+                        )
+                      ],
                     ),
-                    firstPageErrorIndicatorBuilder: (context) => AppErrorWidget(
-                        errorMessage: _pagingController.error,
-                        onRefresh: () {
-                          _projectsP.add(const ProjectsEvent.started());
-                        }),
-                    itemBuilder: (context, item, index) => ProjectCard(p: item),
                   ),
-                );
-              }),
-            ),
-          ],
-        ),
+                  firstPageErrorIndicatorBuilder: (context) => AppErrorWidget(
+                      errorMessage: _pagingController.error,
+                      onRefresh: () {
+                        _projectsP.add(const ProjectsEvent.started());
+                      }),
+                  itemBuilder: (context, item, index) => ProjectCard(p: item),
+                ),
+              );
+            }),
+          ),
+        ],
       ),
     );
   }

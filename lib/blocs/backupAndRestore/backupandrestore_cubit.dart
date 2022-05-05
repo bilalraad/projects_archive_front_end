@@ -13,13 +13,13 @@ class BackupandrestoreCubit extends Cubit<BlocsState<ResWithCount<Backup>?>> {
       : _projectsRepo = projectsRepo,
         super(const BlocsState.initial());
 
-  Future<void> creatBackup(String name) async {
+  Future<void> creatBackup(String? name) async {
     await apiCallsWrapper<Null>(_projectsRepo.createBackup(name: name))
         .listen((event) => emit(event))
         .asFuture();
   }
 
-  Future<void> getAllBackups(String name) async {
+  Future<void> getAllBackups() async {
     await apiCallsWrapper(_projectsRepo.getAllBackups())
         .listen((event) => emit(event))
         .asFuture();

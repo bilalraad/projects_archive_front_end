@@ -19,7 +19,7 @@ class MyHomeScreen extends StatelessWidget {
           const Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Center(child: ProjectsList()),
+              child: ProjectsList(),
             ),
           ),
           Container(
@@ -51,6 +51,14 @@ class MyHomeScreen extends StatelessWidget {
                       AutoRouter.of(context).replace(const AddAdminRoute());
                     },
                     title: 'اضافة ادمن',
+                  ),
+                if (_userB.isLoggedIn)
+                  SideBarItem(
+                    icon: const Icon(Icons.backup_outlined),
+                    onPressed: () {
+                      AutoRouter.of(context).replace(const BackupRoute());
+                    },
+                    title: 'النسخ الاحتياطي والاستعادة',
                   ),
                 if (!_userB.isLoggedIn)
                   SideBarItem(

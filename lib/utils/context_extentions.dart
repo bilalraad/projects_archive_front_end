@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:projects_archiving/utils/confirm_dialog.dart';
 
-extension StatusSnackBar on BuildContext {
+extension BuildContextExtentions on BuildContext {
   ScaffoldFeatureController showSnackBar(
     String message, {
     bool isError = false,
@@ -16,5 +17,12 @@ extension StatusSnackBar on BuildContext {
           action: action,
           duration: duration,
         ),
+      );
+
+  void showConfirmDialog(VoidCallback onOkay,
+          {String title = 'هل انت متاكد؟'}) =>
+      showDialog(
+        context: this,
+        builder: (c) => ConfirmDialog(onOkay: onOkay, title: title),
       );
 }

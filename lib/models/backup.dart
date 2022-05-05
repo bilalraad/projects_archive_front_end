@@ -4,7 +4,7 @@ part 'backup.freezed.dart';
 part 'backup.g.dart';
 
 @freezed
-class Backup {
+class Backup with _$Backup {
   factory Backup({
     @JsonKey(name: 'name') required String name,
     @JsonKey(name: 'key') required String key,

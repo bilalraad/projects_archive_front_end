@@ -5,7 +5,7 @@ import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/add_project/add_project_bloc.dart';
 import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/utils/enums.dart';
-import 'package:projects_archiving/utils/snack_bar.dart';
+import 'package:projects_archiving/utils/context_extentions.dart';
 import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/project/add_project/file_picker_widget.dart';
 import 'package:projects_archiving/view/project/project_details/project_details.dart';

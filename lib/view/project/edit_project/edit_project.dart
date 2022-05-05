@@ -7,7 +7,7 @@ import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/app_file_with_url.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/utils/enums.dart';
-import 'package:projects_archiving/utils/snack_bar.dart';
+import 'package:projects_archiving/utils/context_extentions.dart';
 import 'package:projects_archiving/utils/validation_builder.dart';
 import 'package:projects_archiving/view/project/edit_project/file_picker_widget_edit.dart';
 import 'package:projects_archiving/view/project/project_details/project_details.dart';
@@ -267,54 +267,60 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                                           isError: true);
                                       return;
                                     }
-                                    //TODO: SHOW CONFIRM DIALOG
+                                    context.showConfirmDialog(() async {
+                                      // Remove files
+                                      for (var f in filesToBeRemoved) {
+                                        _editBloc.removeFile(f);
+                                        _editBloc.state.whenOrNull(
+                                            failure: (e) {
+                                          context.showSnackBar(
+                                              e.readableMessage,
+                                              isError: true);
+                                          return;
+                                        });
+                                      }
+                                      // Upload files
+                                      if (filesToBeUploaded.isNotEmpty) {
+                                        await _editBloc.uploadFiles(
+                                            filesToBeUploaded,
+                                            widget.project.id.toString());
+                                        _editBloc.state.whenOrNull(
+                                            failure: (e) {
+                                          context.showSnackBar(
+                                              e.readableMessage,
+                                              isError: true);
+                                          return;
+                                        });
+                                      }
 
-                                    // Remove files
-                                    for (var f in filesToBeRemoved) {
-                                      _editBloc.removeFile(f);
-                                      _editBloc.state.whenOrNull(failure: (e) {
-                                        context.showSnackBar(e.readableMessage,
-                                            isError: true);
-                                        return;
-                                      });
-                                    }
-                                    // Upload files
-                                    if (filesToBeUploaded.isNotEmpty) {
-                                      await _editBloc.uploadFiles(
-                                          filesToBeUploaded,
+                                      // Submit Edit
+                                      await _editBloc.editProject(
+                                          EditProject(
+                                              name: _pNameC.text,
+                                              graduationYear: graduationYear,
+                                              studentName: _studentNameC.text,
+                                              studentPhoneNo:
+                                                  ValidationBuilder().a2e(
+                                                      _studentPhoneNumberC
+                                                          .text),
+                                              supervisorName:
+                                                  _supervisorNameC.text,
+                                              abstract: _abstractC.text,
+                                              keywords: keyWords,
+                                              level: level),
                                           widget.project.id.toString());
-                                      _editBloc.state.whenOrNull(failure: (e) {
+                                      _editBloc.state.whenOrNull(data: (_) {
+                                        ProjectsBloc.of(context)
+                                            .add(const ProjectsEvent.started());
+                                        context.showSnackBar(
+                                            'تم تعديل المشروع بنجاح');
+                                        AutoRouter.of(context)
+                                            .replace(const MyHomeRoute());
+                                      }, failure: (e) {
                                         context.showSnackBar(e.readableMessage,
                                             isError: true);
                                         return;
                                       });
-                                    }
-
-                                    // Submit Edit
-                                    await _editBloc.editProject(
-                                        EditProject(
-                                            name: _pNameC.text,
-                                            graduationYear: graduationYear,
-                                            studentName: _studentNameC.text,
-                                            studentPhoneNo: ValidationBuilder()
-                                                .a2e(_studentPhoneNumberC.text),
-                                            supervisorName:
-                                                _supervisorNameC.text,
-                                            abstract: _abstractC.text,
-                                            keywords: keyWords,
-                                            level: level),
-                                        widget.project.id.toString());
-                                    _editBloc.state.whenOrNull(data: (_) {
-                                      ProjectsBloc.of(context)
-                                          .add(const ProjectsEvent.started());
-                                      context.showSnackBar(
-                                          'تم تعديل المشروع بنجاح');
-                                      AutoRouter.of(context)
-                                          .replace(const MyHomeRoute());
-                                    }, failure: (e) {
-                                      context.showSnackBar(e.readableMessage,
-                                          isError: true);
-                                      return;
                                     });
                                   },
                                   text: Strings.save),

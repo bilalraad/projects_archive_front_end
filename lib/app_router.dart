@@ -1,5 +1,6 @@
 import 'package:auto_route/annotations.dart';
 import 'package:projects_archiving/view/add_admin/add_admin.dart';
+import 'package:projects_archiving/view/backup/backup.dart';
 import 'package:projects_archiving/view/home.dart';
 import 'package:projects_archiving/view/login/login.dart';
 import 'package:projects_archiving/view/project/add_project/add_project.dart';
@@ -13,6 +14,7 @@ import 'package:projects_archiving/view/project/project_details/project_details.
   AutoRoute(page: AddAdminScreen, path: '/admins/add'),
   AutoRoute(page: AddProjectScreen, path: '/projects/add'),
   AutoRoute(page: BulkUploadScreen, path: '/projects/bulkUpload'),
+  AutoRoute(page: BackupScreen, path: '/projects/backup'),
   AutoRoute(
       page: ProjectDetailsScreen, path: '/projects/:id', maintainState: false),
   AutoRoute(page: EditProjectScreen),
