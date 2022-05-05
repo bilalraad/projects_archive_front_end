@@ -127,6 +127,16 @@ class _LogInScreenState extends State<LogInScreen> {
                                     .replace(const MyHomeRoute());
                               },
                               text: 'تصفح الموقع فقط'),
+                          const SizedBox(height: 10),
+                          AppButton(
+                              width: 300,
+                              buttonType: ButtonType.secondary,
+                              backroundColor: Colors.black,
+                              onPressed: () {
+                                AutoRouter.of(context)
+                                    .replace(const ForgotPasswordRoute());
+                              },
+                              text: 'نسيت كلمة المرور'),
                           const Spacer(),
                         ],
                       ),
