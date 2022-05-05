@@ -1,7 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:projects_archiving/app_router.gr.dart';
+import 'package:projects_archiving/blocs/password_manager/password_manager_cubit.dart';
+import 'package:projects_archiving/models/reset_password.dart';
+import 'package:projects_archiving/utils/context_extentions.dart';
 import 'package:projects_archiving/utils/validation_builder.dart';
-import 'package:projects_archiving/view/password_reset/forgot_password.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
 import 'package:projects_archiving/view/widgets/app_text_feild.dart';
 
@@ -21,6 +25,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   final _passwordC = TextEditingController();
   final _confirmPasswordC = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  late PasswordManagerCubit _forgetB;
 
   @override
   void dispose() {
@@ -32,6 +37,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _forgetB = BlocProvider.of<PasswordManagerCubit>(context, listen: true);
     return Scaffold(
       body: Center(
         child: Container(
@@ -69,15 +75,38 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 AppTextField(
                     lableText: 'تاكيد كلمة السر',
                     controller: _confirmPasswordC,
-                    validator: ValidationBuilder()
-                        .required()
-                        .equal(_passwordC.text, "كلمة السر")
-                        .build()),
+                    validator: (v) {
+                      return ValidationBuilder()
+                          .required()
+                          .equal(_passwordC.text, "كلمة السر")
+                          .build()
+                          .call(v);
+                    }),
                 const SizedBox(height: 10),
                 AppButton(
                   width: 300,
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {}
+                  isLoading: _forgetB.state
+                      .maybeWhen(loading: () => true, orElse: () => false),
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      await _forgetB.resetPassword(
+                          data: ResetPassword(
+                        email: _emailC.text,
+                        token: widget.token,
+                        password: _passwordC.text,
+                        passwordConfirmation: _confirmPasswordC.text,
+                      ));
+
+                      _forgetB.state.whenOrNull(data: (_) async {
+                        await context
+                            .showSnackBar("تم تغيير كلمة السر بنجاح")
+                            .closed;
+                        AutoRouter.of(context).replace(const LogInRoute());
+                      }, failure: (e) {
+                        context.showSnackBar(e.readableMessage, isError: true);
+                        return;
+                      });
+                    }
                   },
                   text: 'تغيير كلمة السر',
                 )

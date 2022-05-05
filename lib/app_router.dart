@@ -14,7 +14,10 @@ import 'package:projects_archiving/view/project/project_details/project_details.
   AutoRoute(page: MyHomeScreen, initial: true),
   AutoRoute(page: LogInScreen, path: '/admins/login'),
   AutoRoute(page: AddAdminScreen, path: '/admins/add'),
-  AutoRoute(page: ForgotPasswordScreen, path: '/admins/forgot-password'),
+  AutoRoute(
+      page: ForgotPasswordScreen,
+      path: '/admins/forgot-password',
+      maintainState: false),
   AutoRoute(page: ResetPasswordScreen, path: '/admins/reset-password/:token'),
   AutoRoute(page: AddProjectScreen, path: '/projects/add'),
   AutoRoute(page: BulkUploadScreen, path: '/projects/bulkUpload'),

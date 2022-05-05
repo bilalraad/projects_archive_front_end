@@ -45,7 +45,9 @@ class AppRouter extends _i11.RootStackRouter {
     },
     ForgotPasswordRoute.name: (routeData) {
       return _i11.MaterialPageX<dynamic>(
-          routeData: routeData, child: const _i4.ForgotPasswordScreen());
+          routeData: routeData,
+          child: const _i4.ForgotPasswordScreen(),
+          maintainState: false);
     },
     ResetPasswordRoute.name: (routeData) {
       final pathParams = routeData.inheritedPathParams;

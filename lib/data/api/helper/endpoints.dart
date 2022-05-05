@@ -8,4 +8,6 @@ class Endpoint {
   static const String query = 'query';
   static const String refreshToken = '/refresh-token';
   static const String backup = '/backups';
+  static const String forgotPassword = '/users/forgot-password';
+  static const String resetPassword = '/users/reset-password';
 }

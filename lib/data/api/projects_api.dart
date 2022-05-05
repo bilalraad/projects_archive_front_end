@@ -10,6 +10,7 @@ import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/app_file_with_url.dart';
 import 'package:projects_archiving/models/backup.dart';
 import 'package:projects_archiving/models/project.dart';
+import 'package:projects_archiving/models/reset_password.dart';
 import 'package:projects_archiving/models/user.dart';
 import 'package:projects_archiving/utils/app_error.dart';
 
@@ -149,6 +150,16 @@ class ProjectsApi {
 
   Future<T?> deleteBackup<T>(String key) async {
     await _dioClient.delete(Endpoint.backup + '/destroy', data: {'key': key});
+    return null;
+  }
+
+  Future sendForgotPasswordEmail(String email) async {
+    await _dioClient.post(Endpoint.forgotPassword, data: {'email': email});
+    return null;
+  }
+
+  Future resetPassword(ResetPassword data) async {
+    await _dioClient.post(Endpoint.resetPassword, data: data.toJson());
     return null;
   }
 }
