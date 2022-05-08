@@ -9,7 +9,9 @@
                 "-d",
                 "chrome",
                 "--web-port",
-                "8001"
+                "8001",
+                "--web-renderer",
+                "html"
             ],
         }
     ]
