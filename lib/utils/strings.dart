@@ -18,7 +18,7 @@ class Strings {
   static const doc = 'DOC';
   static const selectYear = "اختر السنة";
   static const abstract = 'نبذة مختصرة';
-  static const optionalWithBrackets = ' ( اختياري ) ';
+  static const optionalWithBrackets = ' ) اختياري ( ';
   static const pleaseFillProjectInfo =
       'الرجاء ملئ الحقول بالمعلومات الظرورية والتاكد منها قبل الاضافة';
   static const dropFilesHere = 'قم بأسقاط الملفات هنا';
