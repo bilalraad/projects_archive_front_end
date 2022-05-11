@@ -79,3 +79,58 @@ class AppTextField extends StatelessWidget {
     );
   }
 }
+
+class AppDropDownFormFeild<T> extends StatelessWidget {
+  const AppDropDownFormFeild({
+    Key? key,
+    required this.lableText,
+    required this.items,
+    this.dropIcon,
+    this.hintText,
+    this.icon,
+    this.onChanged,
+    this.validator,
+    this.suffixIcon,
+    this.width,
+  }) : super(key: key);
+  final String? hintText;
+  final String lableText;
+  final IconData? icon;
+  final ValueChanged<T?>? onChanged;
+  final FormFieldValidator<T>? validator;
+  final Widget? suffixIcon;
+  final double? width;
+  final List<DropdownMenuItem<T>>? items;
+  final Widget? dropIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    final inputDecoration = InputDecoration(
+      labelText: lableText,
+      icon: icon != null ? Icon(icon, size: 20) : null,
+      hintText: hintText,
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+        borderSide: BorderSide(color: Theme.of(context).dividerColor),
+      ),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: Theme.of(context).colorScheme.primary),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      suffixIcon: suffixIcon,
+    );
+    return SizedBox(
+      width: width ?? double.infinity,
+      child: DropdownButtonFormField<T>(
+        items: items,
+        icon: dropIcon,
+        validator: validator,
+        onChanged: onChanged,
+        decoration: inputDecoration,
+      ),
+    );
+  }
+}

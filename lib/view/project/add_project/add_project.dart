@@ -2,8 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_archiving/app_router.gr.dart';
+import 'package:projects_archiving/blocs/cubit/teachers_cubit.dart';
+import 'package:projects_archiving/blocs/states/result_state.dart';
+import 'package:projects_archiving/data/api/helper/res_with_count.dart';
 import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/project.dart';
+import 'package:projects_archiving/models/teacher.dart';
 import 'package:projects_archiving/utils/context_extentions.dart';
 import 'package:projects_archiving/utils/validation_builder.dart';
 import 'package:projects_archiving/view/project/add_project/file_picker_widget.dart';
@@ -32,6 +36,8 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       _abstractController;
 
   late AddProjectBloc _pBloc;
+  late TeachersCubit _teachersB;
+
   AddProject project = AddProject.empty();
   List<AppFile> files = [];
 
@@ -60,6 +66,8 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   @override
   void didChangeDependencies() {
     _pBloc = BlocProvider.of<AddProjectBloc>(context);
+    _teachersB = BlocProvider.of<TeachersCubit>(context);
+    _teachersB.teachers();
     super.didChangeDependencies();
   }
 
@@ -123,15 +131,38 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                               .build(),
                                         ),
                                         const SizedBox(height: 10),
-                                        AppTextField(
-                                          controller: _supervisorNameController,
-                                          onChanged: (v) => project = project
-                                              .copyWith(supervisorName: v),
-                                          lableText: Strings.supervisorName,
-                                          validator: ValidationBuilder()
-                                              .maxLength(255)
-                                              .required()
-                                              .build(),
+                                        BlocBuilder<TeachersCubit,
+                                            BlocsState<ResWithCount<Teacher>>>(
+                                          builder: (context, state) {
+                                            return AppDropDownFormFeild<String>(
+                                              items: state.whenOrNull<
+                                                  List<
+                                                      DropdownMenuItem<
+                                                          String>>?>(
+                                                data: (ts) => ts.results
+                                                    .map((e) =>
+                                                        DropdownMenuItem<
+                                                                String>(
+                                                            value: e.name,
+                                                            child:
+                                                                Text(e.name)))
+                                                    .toList(),
+                                              ),
+                                              validator: ValidationBuilder()
+                                                  .maxLength(255)
+                                                  .required()
+                                                  .build(),
+                                              dropIcon: state.whenOrNull(
+                                                loading: () =>
+                                                    const CircularProgressIndicator
+                                                        .adaptive(),
+                                              ),
+                                              onChanged: (v) => project =
+                                                  project.copyWith(
+                                                      supervisorName: v!),
+                                              lableText: 'اسم المدس',
+                                            );
+                                          },
                                         ),
                                         const SizedBox(height: 10),
                                         AppTextField(

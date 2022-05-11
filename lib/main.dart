@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/add_project/add_project_bloc.dart';
 import 'package:projects_archiving/blocs/backupAndRestore/backupandrestore_cubit.dart';
+import 'package:projects_archiving/blocs/cubit/teachers_cubit.dart';
 import 'package:projects_archiving/blocs/edit_project/edit_project_bloc.dart';
 import 'package:projects_archiving/blocs/password_manager/password_manager_cubit.dart';
 import 'package:projects_archiving/blocs/project_details/project_details_cubit.dart';
@@ -67,6 +68,7 @@ Future<Widget> configureInjections(Widget child) async {
       BlocProvider(create: (_) => UserCubit(_projectsRepo, _sharedPrefHelper)),
       BlocProvider(create: (_) => BackupandrestoreCubit(_projectsRepo)),
       BlocProvider(create: (_) => PasswordManagerCubit(_projectsRepo)),
+      BlocProvider(create: (_) => TeachersCubit(_projectsRepo)),
     ],
     child: child,
   );
