@@ -6,8 +6,8 @@ import 'package:projects_archiving/blocs/password_manager/password_manager_cubit
 import 'package:projects_archiving/utils/context_extentions.dart';
 import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/utils/validation_builder.dart';
-import 'package:projects_archiving/view/project/project_details/project_details.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
+import 'package:projects_archiving/view/widgets/app_header.dart';
 import 'package:projects_archiving/view/widgets/app_text_feild.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -84,24 +84,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               ],
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class AppHeader extends StatelessWidget {
-  final Widget child;
-  const AppHeader({Key? key, required this.child}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        constraints: const BoxConstraints(maxWidth: 1000),
-        child: Column(
-          children: [const AppBackButton(), Expanded(child: child)],
         ),
       ),
     );

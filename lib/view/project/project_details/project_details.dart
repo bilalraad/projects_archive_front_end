@@ -10,6 +10,7 @@ import 'package:projects_archiving/utils/enums.dart';
 import 'package:projects_archiving/utils/context_extentions.dart';
 import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
+import 'package:projects_archiving/view/widgets/app_header.dart';
 import 'package:projects_archiving/view/widgets/error_widget.dart';
 
 class ProjectDetailsScreen extends StatefulWidget {
@@ -63,22 +64,18 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
     titleTextTheme =
         Theme.of(context).textTheme.bodyText2?.copyWith(color: Colors.grey);
     return Scaffold(
-      body: Center(
-        child: projectP.state.whenOrNull(
-          loading: () => const CircularProgressIndicator.adaptive(),
-          failure: (e) => AppErrorWidget(
-              errorMessage: e.readableMessage,
-              onRefresh: () => projectP.getProject(widget.projectId)),
-          data: (p) {
-            return SingleChildScrollView(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 1000),
-                margin: const EdgeInsets.symmetric(horizontal: 20),
+      body: AppHeader(
+        child: SizedBox(
+          child: projectP.state.whenOrNull(
+            loading: () => const CircularProgressIndicator.adaptive(),
+            failure: (e) => AppErrorWidget(
+                errorMessage: e.readableMessage,
+                onRefresh: () => projectP.getProject(widget.projectId)),
+            data: (p) {
+              return SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const AppBackButton(),
-                    const SizedBox(height: 20),
                     Align(
                       alignment: Alignment.centerRight,
                       child: SelectableText(
@@ -252,42 +249,11 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                     ),
                   ],
                 ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-//TODO: MOVE THIS ELSEWHERE AND USE IT
-class AppBackButton extends StatelessWidget {
-  const AppBackButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 50),
-        Align(
-          alignment: Alignment.topRight,
-          child: InkWell(
-            onTap: () => AutoRouter.of(context).replaceNamed('/'),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(Icons.arrow_back_ios,
-                    color: Theme.of(context).primaryColor),
-                Text(Strings.back,
-                    style: TextStyle(color: Theme.of(context).primaryColor)),
-              ],
-            ),
+              );
+            },
           ),
         ),
-      ],
+      ),
     );
   }
 }

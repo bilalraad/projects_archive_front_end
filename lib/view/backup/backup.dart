@@ -13,8 +13,8 @@ import 'package:projects_archiving/models/backup.dart';
 import 'package:projects_archiving/utils/context_extentions.dart';
 import 'package:projects_archiving/utils/download.dart';
 import 'package:projects_archiving/utils/strings.dart';
-import 'package:projects_archiving/view/project/project_details/project_details.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
+import 'package:projects_archiving/view/widgets/app_header.dart';
 import 'package:projects_archiving/view/widgets/app_text_feild.dart';
 import 'package:projects_archiving/view/widgets/error_widget.dart';
 
@@ -46,119 +46,113 @@ class _BackupScreenState extends State<BackupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10),
-        constraints: const BoxConstraints(maxWidth: 1000),
-        child: Column(
-          children: [
-            const AppBackButton(),
-            Text(
-              Strings.backups,
-              style: Theme.of(context)
-                  .textTheme
-                  .displayMedium
-                  ?.copyWith(color: Colors.black),
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: AppTextField(
-                    lableText:
-                        Strings.backupName + Strings.optionalWithBrackets,
-                    controller: _backupNameC,
-                  ),
+      body: AppHeader(
+          child: Column(
+        children: [
+          Text(
+            Strings.backups,
+            style: Theme.of(context)
+                .textTheme
+                .displayMedium
+                ?.copyWith(color: Colors.black),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expanded(
+                flex: 3,
+                child: AppTextField(
+                  lableText: Strings.backupName + Strings.optionalWithBrackets,
+                  controller: _backupNameC,
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  flex: 1,
-                  child: AppButton(
-                      text: Strings.createBackup,
-                      buttonType: ButtonType.secondary,
-                      onPressed: () {
-                        _backupB.creatBackup(_backupNameC.text);
-                        _backupNameC.clear();
-                      }),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  flex: 2,
-                  child: AppButton(
-                      text: Strings.restoreFromFile,
-                      icon: const Icon(Icons.upload_file),
-                      onPressed: () async {
-                        FilePickerResult? result = await FilePicker.platform
-                            .pickFiles(
-                                allowMultiple: false,
-                                type: FileType.custom,
-                                withData: true,
-                                allowedExtensions: ['zip']);
-
-                        if (result != null) {
-                          for (var file in result.files) {
-                            final appfile =
-                                AppFile(bytes: file.bytes!, name: file.name);
-                            if (!mounted) return;
-                            context.showConfirmDialog(
-                              () => restoreAndLogout(
-                                  _backupB.restoreBackupWithFile(appfile)),
-                              title: Strings.mustLogOutWhenRestore,
-                            );
-                          }
-                        } else {
-                          // User canceled the picker
-                        }
-                      }),
-                ),
-              ],
-            ),
-            Expanded(
-              child: BlocBuilder<BackupandrestoreCubit,
-                  BlocsState<ResWithCount<Backup>?>>(
-                builder: (context, state) {
-                  return state.maybeWhen(
-                      data: (results) {
-                        if (results != null) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(Strings.count(results.count.toString())),
-                              Expanded(
-                                child: ListView.builder(
-                                  itemCount: results.results.length,
-                                  itemBuilder: (context, index) {
-                                    final b = results.results[index];
-                                    return BakcupItem(
-                                      backup: b,
-                                      onDeletePressed: () =>
-                                          _backupB.deleteBackup(b.key),
-                                      onRestorePressed: () {
-                                        restoreAndLogout(_backupB
-                                            .restoreBackupWithKey(b.key));
-                                      },
-                                    );
-                                  },
-                                ),
-                              ),
-                            ],
-                          );
-                        } else {
-                          _backupB.getAllBackups();
-                          return const SizedBox.shrink();
-                        }
-                      },
-                      failure: (e) => AppErrorWidget(
-                          errorMessage: e.readableMessage,
-                          onRefresh: _backupB.getAllBackups),
-                      loading: () => const CircularProgressIndicator.adaptive(),
-                      orElse: () => const SizedBox.shrink());
-                },
               ),
-            )
-          ],
-        ),
+              const SizedBox(width: 10),
+              Expanded(
+                flex: 1,
+                child: AppButton(
+                    text: Strings.createBackup,
+                    buttonType: ButtonType.secondary,
+                    onPressed: () {
+                      _backupB.creatBackup(_backupNameC.text);
+                      _backupNameC.clear();
+                    }),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                flex: 2,
+                child: AppButton(
+                    text: Strings.restoreFromFile,
+                    icon: const Icon(Icons.upload_file),
+                    onPressed: () async {
+                      FilePickerResult? result = await FilePicker.platform
+                          .pickFiles(
+                              allowMultiple: false,
+                              type: FileType.custom,
+                              withData: true,
+                              allowedExtensions: ['zip']);
+
+                      if (result != null) {
+                        for (var file in result.files) {
+                          final appfile =
+                              AppFile(bytes: file.bytes!, name: file.name);
+                          if (!mounted) return;
+                          context.showConfirmDialog(
+                            () => restoreAndLogout(
+                                _backupB.restoreBackupWithFile(appfile)),
+                            title: Strings.mustLogOutWhenRestore,
+                          );
+                        }
+                      } else {
+                        // User canceled the picker
+                      }
+                    }),
+              ),
+            ],
+          ),
+          Expanded(
+            child: BlocBuilder<BackupandrestoreCubit,
+                BlocsState<ResWithCount<Backup>?>>(
+              builder: (context, state) {
+                return state.maybeWhen(
+                    data: (results) {
+                      if (results != null) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(Strings.count(results.count.toString())),
+                            Expanded(
+                              child: ListView.builder(
+                                itemCount: results.results.length,
+                                itemBuilder: (context, index) {
+                                  final b = results.results[index];
+                                  return BakcupItem(
+                                    backup: b,
+                                    onDeletePressed: () =>
+                                        _backupB.deleteBackup(b.key),
+                                    onRestorePressed: () {
+                                      restoreAndLogout(
+                                          _backupB.restoreBackupWithKey(b.key));
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        );
+                      } else {
+                        _backupB.getAllBackups();
+                        return const SizedBox.shrink();
+                      }
+                    },
+                    failure: (e) => AppErrorWidget(
+                        errorMessage: e.readableMessage,
+                        onRefresh: _backupB.getAllBackups),
+                    loading: () => const CircularProgressIndicator.adaptive(),
+                    orElse: () => const SizedBox.shrink());
+              },
+            ),
+          )
+        ],
       )),
     );
   }
