@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
 import 'package:projects_archiving/view/widgets/app_text_feild.dart';
 
@@ -24,7 +25,7 @@ class KeyWordsWidget extends StatelessWidget {
             Expanded(
               flex: 3,
               child: AppTextField(
-                lableText: 'مثال: تطبيق هاتف',
+                lableText: Strings.keywordHint,
                 controller: keyWordController,
               ),
             ),
@@ -32,7 +33,7 @@ class KeyWordsWidget extends StatelessWidget {
             Expanded(
               flex: 1,
               child: AppButton(
-                  text: 'اضافة',
+                  text: Strings.add,
                   buttonType: ButtonType.secondary,
                   onPressed: () {
                     if (keyWordController.text.isNotEmpty) {

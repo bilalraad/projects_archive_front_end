@@ -136,7 +136,7 @@ class _FilterDialogState extends State<FilterDialog> {
                       await Future.delayed(const Duration(seconds: 1));
                       setState(() => reset());
                     },
-                    text: 'اعادة',
+                    text: Strings.filterReset,
                     backroundColor: Colors.black,
                     buttonType: ButtonType.secondary,
                   ),
@@ -147,7 +147,7 @@ class _FilterDialogState extends State<FilterDialog> {
                       widget.onFilterChange();
                       AutoRouter.of(context).pop();
                     },
-                    text: "الغاء",
+                    text: Strings.cancel,
                     buttonType: ButtonType.secondary,
                   ),
                 ],

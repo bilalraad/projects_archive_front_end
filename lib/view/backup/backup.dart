@@ -54,7 +54,7 @@ class _BackupScreenState extends State<BackupScreen> {
           children: [
             const AppBackButton(),
             Text(
-              'النسخ الاحتياطية',
+              Strings.backups,
               style: Theme.of(context)
                   .textTheme
                   .displayMedium
@@ -66,7 +66,8 @@ class _BackupScreenState extends State<BackupScreen> {
                 Expanded(
                   flex: 3,
                   child: AppTextField(
-                    lableText: 'اسم النسخة (اختياري)',
+                    lableText:
+                        Strings.backupName + Strings.optionalWithBrackets,
                     controller: _backupNameC,
                   ),
                 ),
@@ -74,7 +75,7 @@ class _BackupScreenState extends State<BackupScreen> {
                 Expanded(
                   flex: 1,
                   child: AppButton(
-                      text: 'انشاء نسخة',
+                      text: Strings.createBackup,
                       buttonType: ButtonType.secondary,
                       onPressed: () {
                         _backupB.creatBackup(_backupNameC.text);
@@ -85,7 +86,7 @@ class _BackupScreenState extends State<BackupScreen> {
                 Expanded(
                   flex: 2,
                   child: AppButton(
-                      text: 'استرجاع عنطريق ملف',
+                      text: Strings.restoreFromFile,
                       icon: const Icon(Icons.upload_file),
                       onPressed: () async {
                         FilePickerResult? result = await FilePicker.platform
@@ -103,8 +104,7 @@ class _BackupScreenState extends State<BackupScreen> {
                             context.showConfirmDialog(
                               () => restoreAndLogout(
                                   _backupB.restoreBackupWithFile(appfile)),
-                              title:
-                                  "يجب عليك تسجيل الدخول مرة اخرى بعد اتمام العملية",
+                              title: Strings.mustLogOutWhenRestore,
                             );
                           }
                         } else {
@@ -199,28 +199,28 @@ class BakcupItem extends StatelessWidget {
             AppButton(
               onPressed: () => context.showConfirmDialog(
                 onRestorePressed,
-                title: "يجب عليك تسجيل الدخول مرة اخرى بعد اتمام العملية",
+                title: Strings.mustLogOutWhenRestore,
               ),
-              text: 'استعادة',
+              text: Strings.restore,
               icon: const Icon(Icons.restore),
             ),
             const SizedBox(width: 10),
             AppButton(
                 onPressed: () => downLoadStorageBackup(backup.key),
-                text: 'تحميل الملفات',
+                text: Strings.downloadfiles,
                 icon: const Icon(Icons.storage),
                 backroundColor: Colors.green),
             const SizedBox(width: 10),
             AppButton(
               onPressed: () => downLoadDBackup(backup.key),
-              text: 'تحميل قاعدة البيانات',
+              text: Strings.downloadSQL,
               icon: const Icon(Icons.download_for_offline_outlined),
               backroundColor: Colors.blue,
             ),
             const SizedBox(width: 10),
             AppButton(
               onPressed: () => context.showConfirmDialog(onDeletePressed),
-              text: 'حذف',
+              text: Strings.delete,
               icon: const Icon(Icons.delete),
               backroundColor: Colors.red,
             ),

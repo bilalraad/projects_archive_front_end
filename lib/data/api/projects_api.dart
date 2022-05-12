@@ -90,7 +90,7 @@ class ProjectsApi {
       "file":
           MultipartFile.fromBytes(excelFile.bytes, filename: excelFile.name),
     });
-    await _dioClient.post('/projects/import', data: formData);
+    await _dioClient.post(Endpoint.importProjects, data: formData);
   }
 
   Future<void> removeFile(AppFileWithUrl file) async {
@@ -141,17 +141,17 @@ class ProjectsApi {
     final formData = FormData.fromMap({
       "file": MultipartFile.fromBytes(zipFile.bytes, filename: zipFile.name),
     });
-    await _dioClient.post('${Endpoint.backup}/restore', data: formData);
+    await _dioClient.post(Endpoint.restore, data: formData);
     return null;
   }
 
   Future<T?> restorBackupWithKey<T>(String key) async {
-    await _dioClient.post('${Endpoint.backup}/restore', data: {'key': key});
+    await _dioClient.post(Endpoint.restore, data: {'key': key});
     return null;
   }
 
   Future<T?> deleteBackup<T>(String key) async {
-    await _dioClient.delete('${Endpoint.backup}/destroy', data: {'key': key});
+    await _dioClient.delete(Endpoint.destroyBackup, data: {'key': key});
     return null;
   }
 

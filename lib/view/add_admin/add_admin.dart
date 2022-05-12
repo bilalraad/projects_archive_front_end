@@ -5,6 +5,7 @@ import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/user/user_cubit.dart';
 import 'package:projects_archiving/utils/enums.dart';
 import 'package:projects_archiving/utils/context_extentions.dart';
+import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/utils/validation_builder.dart';
 import 'package:projects_archiving/view/add_admin/role_dropdown.dart';
 import 'package:projects_archiving/view/project/project_details/project_details.dart';
@@ -53,7 +54,7 @@ class _AddAdminScreenState extends State<AddAdminScreen> {
             children: [
               const AppBackButton(),
               Text(
-                'اضافة ادمن جديد',
+                Strings.addAdmin,
                 style: Theme.of(context)
                     .textTheme
                     .displayMedium
@@ -68,13 +69,13 @@ class _AddAdminScreenState extends State<AddAdminScreen> {
                     children: [
                       const SizedBox(height: 10),
                       AppTextField(
-                        lableText: 'اسم الادمن',
+                        lableText: Strings.adminName,
                         controller: _adminNameC,
                         validator: ValidationBuilder().required().build(),
                       ),
                       const SizedBox(height: 10),
                       AppTextField(
-                        lableText: 'البريد الالكتروني',
+                        lableText: Strings.email,
                         controller: _adminEmailC,
                         textAlign: TextAlign.left,
                         validator:
@@ -82,7 +83,7 @@ class _AddAdminScreenState extends State<AddAdminScreen> {
                       ),
                       const SizedBox(height: 10),
                       AppTextField(
-                        lableText: 'كلمة السر',
+                        lableText: Strings.password,
                         textAlign: TextAlign.left,
                         controller: _adminPasswordC,
                         validator:
@@ -96,8 +97,7 @@ class _AddAdminScreenState extends State<AddAdminScreen> {
                               onRoleChanged: (r) => setState(() => _role = r!)),
                           const SizedBox(width: 10),
                           const Expanded(
-                            child: Text(
-                                'ملاحظة: فقط السوبر ادمن يمكه اضافه ادمن جديد'),
+                            child: Text(Strings.addAdminNote),
                           )
                         ],
                       ),
@@ -116,7 +116,7 @@ class _AddAdminScreenState extends State<AddAdminScreen> {
                                 role: _role,
                                 password: _adminPasswordC.text);
                             _userB.state.whenOrNull(data: (results) {
-                              context.showSnackBar('تم اضافة ادمن جديد بنجاح');
+                              context.showSnackBar(Strings.adminAddedSuccess);
                               AutoRouter.of(context)
                                   .replace(const MyHomeRoute());
                             }, failure: (e) {
@@ -125,7 +125,7 @@ class _AddAdminScreenState extends State<AddAdminScreen> {
                               return;
                             });
                           },
-                          text: 'اضافة ادمن جديد'),
+                          text: Strings.addAdmin),
                     ],
                   ),
                 ),

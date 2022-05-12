@@ -82,7 +82,7 @@ class _ProjectsListState extends State<ProjectsList> {
                     return Text(
                       Strings.count(_projectsP.state.whenOrNull(
                           data: (r) => r.count.toString(),
-                          loading: () => 'تحميل...')),
+                          loading: () => Strings.loading)),
                     );
                   },
                 ),
@@ -98,7 +98,7 @@ class _ProjectsListState extends State<ProjectsList> {
                             ));
                   },
                   buttonType: ButtonType.secondary,
-                  text: 'فلترة',
+                  text: Strings.filtering,
                   textColor: Colors.black,
                   icon: Icon(
                     Icons.filter_alt,
@@ -109,7 +109,7 @@ class _ProjectsListState extends State<ProjectsList> {
                 AppButton(
                   onPressed: () => downLoadExcel(projectsF.state.filter),
                   buttonType: ButtonType.secondary,
-                  text: 'تحميل البيانات',
+                  text: Strings.downloadData,
                   textColor: Colors.black,
                   icon: Icon(
                     Icons.download,
@@ -138,7 +138,7 @@ class _ProjectsListState extends State<ProjectsList> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'لا يوجد مشاريع',
+                          Strings.noProjects,
                           style: Theme.of(context).textTheme.headline6,
                         ),
                         const SizedBox(height: 10),
@@ -152,7 +152,7 @@ class _ProjectsListState extends State<ProjectsList> {
                                       },
                                     ));
                           },
-                          child: const Text("تغيير الفلتر"),
+                          child: const Text(Strings.changeFilter),
                         )
                       ],
                     ),

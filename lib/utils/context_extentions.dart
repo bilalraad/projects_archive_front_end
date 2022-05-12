@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projects_archiving/utils/confirm_dialog.dart';
+import 'package:projects_archiving/utils/strings.dart';
 
 extension BuildContextExtentions on BuildContext {
   ScaffoldFeatureController showSnackBar(
@@ -20,7 +21,7 @@ extension BuildContextExtentions on BuildContext {
       );
 
   void showConfirmDialog(VoidCallback onOkay,
-          {String title = 'هل انت متاكد؟'}) =>
+          {String title = Strings.areYouSure}) =>
       showDialog(
         context: this,
         builder: (c) => ConfirmDialog(onOkay: onOkay, title: title),

@@ -313,7 +313,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                                         ProjectsBloc.of(context)
                                             .add(const ProjectsEvent.started());
                                         context.showSnackBar(
-                                            'تم تعديل المشروع بنجاح');
+                                            Strings.projectEditeSuccess);
                                         AutoRouter.of(context)
                                             .replace(const MyHomeRoute());
                                       }, failure: (e) {

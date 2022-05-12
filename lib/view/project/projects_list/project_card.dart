@@ -78,7 +78,7 @@ class ProjectCard extends StatelessWidget {
                   },
                   width: 120,
                   backroundColor: Colors.black,
-                  text: 'عرض التفاصيل'),
+                  text: Strings.showDetails),
             ],
           ),
         ),

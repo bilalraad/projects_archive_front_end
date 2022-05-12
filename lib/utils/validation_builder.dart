@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:projects_archiving/utils/strings.dart';
 
 typedef Action<T> = Function(T builder);
 
@@ -117,12 +118,12 @@ class ValidationBuilder {
   }
 
   /// Value must not be null
-  ValidationBuilder required([String? message]) =>
-      add((v) => v == null || v.isEmpty ? message ?? 'يجب ملئ الحقل' : null);
+  ValidationBuilder required([String? message]) => add((v) =>
+      v == null || v.isEmpty ? message ?? Strings.requiredMessage : null);
 
   ValidationBuilder equal(dynamic value, String valueName, [String? message]) =>
       add((v) => v != value
-          ? message ?? 'يجب ان يكون الحقل مساويا للحقل $valueName'
+          ? message ?? Strings.fieldMustEqualError(valueName)
           : null);
 
   ValidationBuilder notEqual(dynamic value, [String? message]) =>
@@ -131,13 +132,13 @@ class ValidationBuilder {
   /// Value length must be greater than or equal to [minLength]
   ValidationBuilder minLength(int minLength, [String? message]) =>
       add((v) => v!.length < minLength
-          ? message ?? 'يجب ان يتكون النص من $minLength رموز على الاقل'
+          ? message ?? Strings.minLengthError(minLength)
           : null);
 
   /// Value length must be less than or equal to [maxLength]
   ValidationBuilder maxLength(int maxLength, [String? message]) =>
       add((v) => v!.length > maxLength
-          ? message ?? 'يجب ان يتكون النص من $minLength رموز على الاكثر'
+          ? message ?? Strings.minLengthError(maxLength)
           : null);
 
   /// Value must match [regExp]
@@ -145,19 +146,17 @@ class ValidationBuilder {
       add((v) => regExp.hasMatch(v!) ? null : message);
 
   /// Value must be a well formatted email
-  ValidationBuilder email([String? message]) =>
-      add((v) => _emailRegExp.hasMatch(v!)
-          ? null
-          : message ?? 'البريد الالكتروني غير صالح');
+  ValidationBuilder email([String? message]) => add(
+      (v) => _emailRegExp.hasMatch(v!) ? null : message ?? Strings.emailError);
 
   /// Value must be a well formatted phone number
   ValidationBuilder phone([String? message]) =>
       add((v) => !_anyLetter.hasMatch(v!) &&
               _phoneRegExp.hasMatch(a2e(v).replaceAll(_nonDigitsExp, ''))
           ? null
-          : message ?? "رقم الهاتف غير صالح");
+          : message ?? Strings.phoneError);
 
   /// Value must be a well formatted URL address
   ValidationBuilder url([String? message]) =>
-      add((v) => _urlRegExp.hasMatch(v!) ? null : message ?? "الرابط غير صالح");
+      add((v) => _urlRegExp.hasMatch(v!) ? null : message ?? Strings.urlError);
 }

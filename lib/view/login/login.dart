@@ -69,19 +69,19 @@ class _LogInScreenState extends State<LogInScreen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            'اذا كنت ادمن الرجاء اثبات هويتك عن طريق التسجيل',
+                            Strings.ifYouAdminPleaseConfrimIdentity,
                             style: Theme.of(context).textTheme.titleLarge,
                             textAlign: TextAlign.center,
                           ),
                           const Spacer(),
                           AppTextField(
-                            lableText: 'البريد الالكتروني',
+                            lableText: Strings.email,
                             controller: emailC,
                             textAlign: TextAlign.left,
                           ),
                           const SizedBox(height: 10),
                           AppTextField(
-                            lableText: 'كلمة السر',
+                            lableText: Strings.password,
                             controller: passwordC,
                             obscureText: isObscure,
                             textAlign: TextAlign.left,
@@ -108,7 +108,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                     email: emailC.text,
                                     password: passwordC.text);
                                 _userB.state.whenOrNull(data: (results) {
-                                  context.showSnackBar('تم تسجيل الدخول بنجاح');
+                                  context.showSnackBar(Strings.loggedInSuccess);
                                   AutoRouter.of(context)
                                       .replace(const MyHomeRoute());
                                 }, failure: (e) {
@@ -126,7 +126,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 AutoRouter.of(context)
                                     .replace(const MyHomeRoute());
                               },
-                              text: 'تصفح الموقع فقط'),
+                              text: Strings.browseOnly),
                           const SizedBox(height: 10),
                           AppButton(
                               width: 300,
@@ -136,7 +136,7 @@ class _LogInScreenState extends State<LogInScreen> {
                                 AutoRouter.of(context)
                                     .replace(const ForgotPasswordRoute());
                               },
-                              text: 'نسيت كلمة المرور'),
+                              text: Strings.forgotPassword),
                           const Spacer(),
                         ],
                       ),
@@ -173,7 +173,7 @@ class _LogInScreenState extends State<LogInScreen> {
                       children: [
                         const Spacer(),
                         Text(
-                          'كل شيء مؤرشف',
+                          Strings.everythingIsArchived,
                           style: Theme.of(context)
                               .textTheme
                               .displayMedium
@@ -181,7 +181,7 @@ class _LogInScreenState extends State<LogInScreen> {
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          'اهلا بك في ارشيف مشاريع جامعة النهرين كلية هندسة الحاسبات',
+                          Strings.welcome,
                           style: Theme.of(context).textTheme.titleMedium,
                           textAlign: TextAlign.center,
                         ),

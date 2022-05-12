@@ -63,13 +63,13 @@ class _BulkUploadScreenState extends State<BulkUploadScreen> {
                             loading: () => true, orElse: () => false),
                         onPressed: () async {
                           if (_excelFile == null) {
-                            context.showSnackBar('الرجاء رفع الملف اولا',
+                            context.showSnackBar(Strings.pleaseUploadFile,
                                 isError: true);
                             return;
                           }
                           await _pBloc.projectsUpload(_excelFile!);
                           _pBloc.state.whenOrNull(data: (results) {
-                            context.showSnackBar('تم رفع المشاريع بنجاح');
+                            context.showSnackBar(Strings.projectsUploadSuccess);
                             AutoRouter.of(context).replace(const MyHomeRoute());
                           }, failure: (e) {
                             context.showSnackBar(e.readableMessage,

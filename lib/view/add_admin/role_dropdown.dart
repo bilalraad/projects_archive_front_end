@@ -22,7 +22,7 @@ class RoleDropDown extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('مستوى الصلاحية'),
+          const Text(Strings.authorizationLevel),
           DropdownButtonFormField<Role>(
               isDense: true,
               icon: const SizedBox.shrink(),
@@ -34,7 +34,7 @@ class RoleDropDown extends StatelessWidget {
                   .map((e) => DropdownMenuItem<Role>(
                       value: e,
                       child: Text(
-                        Strings.translateRole(e),
+                        e.translate,
                         style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColor, height: .5),
                       )))

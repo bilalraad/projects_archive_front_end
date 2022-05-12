@@ -155,7 +155,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                               onChanged: (v) => project =
                                                   project.copyWith(
                                                       studentName: v!),
-                                              lableText: 'اسم الطالب',
+                                              lableText: Strings.studentName,
                                             );
                                           },
                                         ),
@@ -191,7 +191,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                               onChanged: (v) => project =
                                                   project.copyWith(
                                                       supervisorName: v!),
-                                              lableText: 'اسم المدس',
+                                              lableText: Strings.supervisorName,
                                             );
                                           },
                                         ),
@@ -323,20 +323,20 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                     }
                                     if (files.isEmpty) {
                                       context.showSnackBar(
-                                          'الرجاء رفع تقرير المشروع',
+                                          Strings.pleaseUploadReport,
                                           isError: true);
                                       return;
                                     }
                                     if (project.graduationYear == null) {
                                       context.showSnackBar(
-                                          'الرجاء اختيار سنة التخرج',
+                                          Strings.pleaseSelectYear,
                                           isError: true);
                                       return;
                                     }
                                     await _pBloc.submitProject(project, files);
                                     _pBloc.state.whenOrNull(data: (results) {
-                                      context
-                                          .showSnackBar('تم رفع المشروع بنجاح');
+                                      context.showSnackBar(
+                                          Strings.projectUploadSuccess);
                                       AutoRouter.of(context)
                                           .replace(const MyHomeRoute());
                                     }, failure: (e) {

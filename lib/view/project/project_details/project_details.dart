@@ -104,8 +104,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                   Strings.supervisorName, p.supervisorName),
                               titleWithValue(Strings.graduationYear,
                                   p.graduationYear.year.toString()),
-                              titleWithValue(Strings.level,
-                                  Strings.translateLevel(p.level)),
+                              titleWithValue(Strings.level, p.level.translate),
                             ],
                           ),
                         ),
@@ -157,7 +156,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                       )
                                     : const Align(
                                         alignment: Alignment.center,
-                                        child: Text('لا يوجد كلمات دالة'),
+                                        child: Text(Strings.noKeywords),
                                       ),
                               ),
                             ],
@@ -182,13 +181,13 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                         readOnly: true,
                         decoration:
                             const InputDecoration(border: InputBorder.none),
-                        initialValue: p.abstract ?? 'لم يتم اضافة نبذة مختصرة',
+                        initialValue: p.abstract ?? Strings.noAbstract,
                       ),
                     ),
                     const SizedBox(height: 10),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text('التقرير النهائي', style: titleTextTheme),
+                      child: Text(Strings.finalReport, style: titleTextTheme),
                     ),
                     SizedBox(
                       height: 60,
@@ -215,7 +214,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                 )
                               : const Align(
                                   alignment: Alignment.centerRight,
-                                  child: Text('لم يتم رفع تقرير لهذا المشروع'),
+                                  child: Text(Strings.noReport),
                                 ),
                           const VerticalDivider(),
                           const Spacer(),
@@ -228,7 +227,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                   AutoRouter.of(context)
                                       .push(EditProjectRoute(project: p));
                                 },
-                                text: 'تعديل المشروع'),
+                                text: Strings.editProject),
                           const SizedBox(width: 10),
                           if (_userB.isLoggedIn)
                             AppButton(
@@ -241,13 +240,13 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                   projectP.state.whenOrNull(data: (_) {
                                     ProjectsBloc.of(context)
                                         .add(const ProjectsEvent.started());
-                                    context
-                                        .showSnackBar('تم حذف المشروع بنجاح');
+                                    context.showSnackBar(
+                                        Strings.deleteProjectSuccess);
 
                                     AutoRouter.of(context).replaceNamed('/');
                                   });
                                 },
-                                text: 'حذف المشروع'),
+                                text: Strings.deleteProject),
                         ],
                       ),
                     ),
@@ -262,6 +261,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
   }
 }
 
+//TODO: MOVE THIS ELSEWHERE AND USE IT
 class AppBackButton extends StatelessWidget {
   const AppBackButton({
     Key? key,
@@ -281,7 +281,7 @@ class AppBackButton extends StatelessWidget {
               children: [
                 Icon(Icons.arrow_back_ios,
                     color: Theme.of(context).primaryColor),
-                Text('رجوع',
+                Text(Strings.back,
                     style: TextStyle(color: Theme.of(context).primaryColor)),
               ],
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projects_archiving/utils/strings.dart';
 
 import 'package:projects_archiving/view/widgets/app_button.dart';
 
@@ -21,7 +22,7 @@ class AppErrorWidget extends StatelessWidget {
           AppButton(
             backroundColor: Colors.black,
             onPressed: () => onRefresh(),
-            text: 'اعادة المحاولة',
+            text: Strings.retry,
           )
         ],
       ),

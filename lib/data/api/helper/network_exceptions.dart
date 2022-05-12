@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:projects_archiving/models/laravel_validation_error.dart';
+import 'package:projects_archiving/utils/strings.dart';
 
 part 'network_exceptions.freezed.dart';
 
@@ -77,7 +78,7 @@ extension NetworkErrorHandler on NetworkExceptions {
     var errorMessage = "";
     when(
       requestCancelled: () {
-        errorMessage = 'تم الغاء العملية';
+        errorMessage = Strings.operationCanceled;
       },
       httpError: (Response response) {
         if (response.statusCode == 422) {
@@ -92,30 +93,30 @@ extension NetworkErrorHandler on NetworkExceptions {
             ) {
           errorMessage = response.data;
         } else {
-          errorMessage = 'حدث خطأ غير متوقع';
+          errorMessage = Strings.unKnownError;
         }
       },
       unexpectedError: () {
-        errorMessage = 'حدث خطأ غير متوقع';
+        errorMessage = Strings.unKnownError;
       },
       requestTimeout: () {
-        errorMessage = 'فشل في الاتصال';
+        errorMessage = Strings.connectionFailed;
       },
       noInternetConnection: () {
-        errorMessage = 'لا يوجد اتصال بالانترنت';
+        errorMessage = Strings.noInternet;
       },
       sendTimeout: () {
-        errorMessage = 'فشل في الاتصال الرجاء المحاولة لاحقا';
+        errorMessage = Strings.connectionFailed;
       },
       unableToProcess: () {
         if (kDebugMode) {
           errorMessage = "Unable to process the data backend error";
         } else {
-          errorMessage = 'حدث خطأ غير متوقع الرجاء الابلاغ عنه';
+          errorMessage = Strings.unKnownError;
         }
       },
       formatException: () {
-        errorMessage = 'حدث خطأ غير متوقع الرجاء الابلاغ عنه';
+        errorMessage = Strings.unKnownError;
       },
     );
     return errorMessage;

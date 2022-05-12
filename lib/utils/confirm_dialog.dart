@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
 
 class ConfirmDialog extends StatelessWidget {
@@ -10,11 +11,11 @@ class ConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title ?? "هل انت متاكد من اتمام العملية"),
+      title: Text(title ?? Strings.confirmOperation),
       actionsAlignment: MainAxisAlignment.center,
       actions: [
         AppButton(
-          text: 'موافق',
+          text: Strings.optionConfirm,
           onPressed: () {
             onOkay();
             Navigator.of(context).pop();
@@ -22,7 +23,7 @@ class ConfirmDialog extends StatelessWidget {
           width: 100,
         ),
         AppButton(
-          text: 'الغاء',
+          text: Strings.optionCancel,
           buttonType: ButtonType.secondary,
           onPressed: Navigator.of(context).pop,
           width: 100,

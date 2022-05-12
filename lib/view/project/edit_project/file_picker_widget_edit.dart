@@ -86,7 +86,7 @@ class FilePickerWidgetEdit extends StatelessWidget {
                                 // User canceled the picker
                               }
                             },
-                      text: 'تصفح الملفات'),
+                      text: Strings.browseFiles),
                 )
               ],
             ),

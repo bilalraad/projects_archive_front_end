@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/password_manager/password_manager_cubit.dart';
 import 'package:projects_archiving/utils/context_extentions.dart';
+import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/utils/validation_builder.dart';
 import 'package:projects_archiving/view/project/project_details/project_details.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
@@ -41,21 +42,20 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             child: Column(
               children: [
                 Text(
-                  'اعادة تعيين كلمة المرور',
+                  Strings.resetPassword,
                   style: Theme.of(context)
                       .textTheme
                       .displayMedium
                       ?.copyWith(color: Colors.black),
                 ),
                 Text(
-                  'الرجاء ادخال بريدك الالكتروني\n'
-                  ' سوف يتم ارسال رابط اعادة تغيين كلمة السر الى بريدك الالكتروني',
+                  Strings.resetPasswordSubTitle,
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 10),
                 AppTextField(
-                  lableText: 'البريد الالكتروني',
+                  lableText: Strings.email,
                   controller: _emailC,
                   validator: ValidationBuilder().required().email().build(),
                 ),
@@ -79,7 +79,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       });
                     }
                   },
-                  text: 'ارسال',
+                  text: Strings.send,
                 )
               ],
             ),

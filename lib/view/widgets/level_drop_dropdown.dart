@@ -34,7 +34,7 @@ class AppLevelDropDown extends StatelessWidget {
                   .map((e) => DropdownMenuItem<Level>(
                       value: e,
                       child: Text(
-                        Strings.translateLevel(e),
+                        e.translate,
                         style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColor, height: .5),
                       )))

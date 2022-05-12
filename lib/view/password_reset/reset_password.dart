@@ -5,6 +5,7 @@ import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/password_manager/password_manager_cubit.dart';
 import 'package:projects_archiving/models/reset_password.dart';
 import 'package:projects_archiving/utils/context_extentions.dart';
+import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/utils/validation_builder.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
 import 'package:projects_archiving/view/widgets/app_text_feild.dart';
@@ -47,38 +48,37 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             child: Column(
               children: [
                 Text(
-                  'اعادة تعيين كلمة المرور',
+                  Strings.resetPassword,
                   style: Theme.of(context)
                       .textTheme
                       .displayMedium
                       ?.copyWith(color: Colors.black),
                 ),
                 Text(
-                  'الرجاء اعد ادخال بريدك الالكتروني\n'
-                  'مع كلمة السر الجديدة',
+                  Strings.reEnterEmailWithNewPassword,
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 10),
                 AppTextField(
-                  lableText: 'البريد الالكتروني',
+                  lableText: Strings.email,
                   controller: _emailC,
                   validator: ValidationBuilder().required().email().build(),
                 ),
                 const SizedBox(height: 10),
                 AppTextField(
-                    lableText: 'كلمة السر الجديدة',
+                    lableText: Strings.newPassword,
                     controller: _passwordC,
                     validator:
                         ValidationBuilder().required().minLength(8).build()),
                 const SizedBox(height: 10),
                 AppTextField(
-                    lableText: 'تاكيد كلمة السر',
+                    lableText: Strings.confirmPassword,
                     controller: _confirmPasswordC,
                     validator: (v) {
                       return ValidationBuilder()
                           .required()
-                          .equal(_passwordC.text, "كلمة السر")
+                          .equal(_passwordC.text, Strings.password)
                           .build()
                           .call(v);
                     }),
@@ -99,7 +99,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
                       _forgetB.state.whenOrNull(data: (_) async {
                         await context
-                            .showSnackBar("تم تغيير كلمة السر بنجاح")
+                            .showSnackBar(Strings.resetPasswordSuccess)
                             .closed;
                         if (!mounted) return;
                         AutoRouter.of(context).replace(const LogInRoute());
@@ -109,7 +109,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       });
                     }
                   },
-                  text: 'تغيير كلمة السر',
+                  text: Strings.changePassword,
                 )
               ],
             ),
