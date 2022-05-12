@@ -11,6 +11,7 @@ import 'package:projects_archiving/models/app_file_with_url.dart';
 import 'package:projects_archiving/models/backup.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/models/reset_password.dart';
+import 'package:projects_archiving/models/graduate.dart';
 import 'package:projects_archiving/models/teacher.dart';
 import 'package:projects_archiving/models/user.dart';
 import 'package:projects_archiving/utils/app_error.dart';
@@ -169,8 +170,10 @@ class ProjectsApi {
     final response = await _dioClient.get(Endpoint.teachers);
     return ResWithCount.fromJson(response.data, Teacher.fromJsonModel);
   }
-  // Future<ResWithCount<Student>> students(String level) async {
-  //   final response = await _dioClient.get(Endpoint.students);
-  //   return ResWithCount.fromJson(response.data, Teacher.fromJsonModel);
-  // }
+
+  Future<ResWithCount<Graduate>> students(String? level) async {
+    final response = await _dioClient
+        .get(Endpoint.graduates, queryParameters: {'level': level});
+    return ResWithCount.fromJson(response.data, Graduate.fromJsonModel);
+  }
 }

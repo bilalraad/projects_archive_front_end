@@ -82,7 +82,7 @@ class AppTextField extends StatelessWidget {
 
 class AppDropDownFormFeild<T> extends StatelessWidget {
   const AppDropDownFormFeild({
-    Key? key,
+    GlobalKey<FormFieldState>? key,
     required this.lableText,
     required this.items,
     this.dropIcon,
@@ -92,6 +92,7 @@ class AppDropDownFormFeild<T> extends StatelessWidget {
     this.validator,
     this.suffixIcon,
     this.width,
+    required this.value,
   }) : super(key: key);
   final String? hintText;
   final String lableText;
@@ -102,6 +103,7 @@ class AppDropDownFormFeild<T> extends StatelessWidget {
   final double? width;
   final List<DropdownMenuItem<T>>? items;
   final Widget? dropIcon;
+  final T? value;
 
   @override
   Widget build(BuildContext context) {
@@ -125,8 +127,10 @@ class AppDropDownFormFeild<T> extends StatelessWidget {
     return SizedBox(
       width: width ?? double.infinity,
       child: DropdownButtonFormField<T>(
+        key: key,
         items: items,
         icon: dropIcon,
+        value: value,
         validator: validator,
         onChanged: onChanged,
         decoration: inputDecoration,

@@ -2,10 +2,12 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_archiving/app_router.gr.dart';
-import 'package:projects_archiving/blocs/cubit/teachers_cubit.dart';
 import 'package:projects_archiving/blocs/states/result_state.dart';
+import 'package:projects_archiving/blocs/teachers_and_students/graduates_cubit.dart';
+import 'package:projects_archiving/blocs/teachers_and_students/teachers_cubit.dart';
 import 'package:projects_archiving/data/api/helper/res_with_count.dart';
 import 'package:projects_archiving/models/app_file.dart';
+import 'package:projects_archiving/models/graduate.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/models/teacher.dart';
 import 'package:projects_archiving/utils/context_extentions.dart';
@@ -36,12 +38,12 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       _abstractController;
 
   late AddProjectBloc _pBloc;
-  late TeachersCubit _teachersB;
 
   AddProject project = AddProject.empty();
   List<AppFile> files = [];
 
   final _formKey = GlobalKey<FormState>();
+  final _sNameDropdownKey = GlobalKey<FormFieldState>();
 
   @override
   void initState() {
@@ -66,8 +68,9 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   @override
   void didChangeDependencies() {
     _pBloc = BlocProvider.of<AddProjectBloc>(context);
-    _teachersB = BlocProvider.of<TeachersCubit>(context);
-    _teachersB.teachers();
+    BlocProvider.of<TeachersCubit>(context).teachers();
+    BlocProvider.of<GraduatesCubit>(context).graduates(project.level);
+
     super.didChangeDependencies();
   }
 
@@ -120,15 +123,41 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                               .build(),
                                         ),
                                         const SizedBox(height: 10),
-                                        AppTextField(
-                                          controller: _studentNameController,
-                                          onChanged: (v) => project =
-                                              project.copyWith(studentName: v),
-                                          lableText: Strings.studentName,
-                                          validator: ValidationBuilder()
-                                              .maxLength(255)
-                                              .required()
-                                              .build(),
+                                        BlocBuilder<GraduatesCubit,
+                                            BlocsState<ResWithCount<Graduate>>>(
+                                          builder: (context, state) {
+                                            return AppDropDownFormFeild<String>(
+                                              key: _sNameDropdownKey,
+                                              items: state.whenOrNull<
+                                                  List<
+                                                      DropdownMenuItem<
+                                                          String>>?>(
+                                                data: (gs) => List.generate(
+                                                    gs.results.length, (i) {
+                                                  return DropdownMenuItem<
+                                                          String>(
+                                                      value: gs.results[i].name,
+                                                      child: Text(
+                                                          gs.results[i].name));
+                                                }),
+                                              ),
+                                              value: returnNullIfEmpty(
+                                                  project.studentName),
+                                              validator: ValidationBuilder()
+                                                  .maxLength(255)
+                                                  .required()
+                                                  .build(),
+                                              dropIcon: state.whenOrNull(
+                                                loading: () =>
+                                                    const CircularProgressIndicator
+                                                        .adaptive(),
+                                              ),
+                                              onChanged: (v) => project =
+                                                  project.copyWith(
+                                                      studentName: v!),
+                                              lableText: 'اسم الطالب',
+                                            );
+                                          },
                                         ),
                                         const SizedBox(height: 10),
                                         BlocBuilder<TeachersCubit,
@@ -148,6 +177,8 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                                                 Text(e.name)))
                                                     .toList(),
                                               ),
+                                              value: returnNullIfEmpty(
+                                                  project.supervisorName),
                                               validator: ValidationBuilder()
                                                   .maxLength(255)
                                                   .required()
@@ -247,10 +278,20 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                                 const SizedBox(width: 10),
                                                 AppLevelDropDown(
                                                   selectedLevel: project.level,
-                                                  onLevelChanged: (lvl) =>
-                                                      setState(() => project =
-                                                          project.copyWith(
-                                                              level: lvl!)),
+                                                  onLevelChanged: (lvl) {
+                                                    project = project.copyWith(
+                                                        level: lvl!,
+                                                        studentName: '');
+                                                    _sNameDropdownKey
+                                                        .currentState
+                                                        ?.reset();
+                                                    BlocProvider.of<
+                                                                GraduatesCubit>(
+                                                            context)
+                                                        .graduates(lvl);
+
+                                                    setState(() {});
+                                                  },
                                                 )
                                               ],
                                             ),
@@ -318,4 +359,9 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       ),
     );
   }
+}
+
+String? returnNullIfEmpty(String? value) {
+  if (value == null || value.isEmpty) return null;
+  return value;
 }
