@@ -12,7 +12,7 @@ class MyHomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _userB = BlocProvider.of<UserCubit>(context, listen: false);
+    final userB = BlocProvider.of<UserCubit>(context, listen: false);
     return Scaffold(
       body: Row(
         children: [
@@ -28,7 +28,7 @@ class MyHomeScreen extends StatelessWidget {
             child: Column(
               children: [
                 const SizedBox(height: 20),
-                if (_userB.isLoggedIn)
+                if (userB.isLoggedIn)
                   SideBarItem(
                     icon: const Icon(Icons.add),
                     onPressed: () {
@@ -36,7 +36,7 @@ class MyHomeScreen extends StatelessWidget {
                     },
                     title: Strings.addProject,
                   ),
-                if (_userB.isLoggedIn)
+                if (userB.isLoggedIn)
                   SideBarItem(
                     icon: const Icon(Icons.file_upload_outlined),
                     onPressed: () {
@@ -44,7 +44,7 @@ class MyHomeScreen extends StatelessWidget {
                     },
                     title: Strings.addProjects,
                   ),
-                if (_userB.isLoggedIn)
+                if (userB.isLoggedIn)
                   SideBarItem(
                     icon: const Icon(Icons.person_add),
                     onPressed: () {
@@ -52,7 +52,7 @@ class MyHomeScreen extends StatelessWidget {
                     },
                     title: 'اضافة ادمن',
                   ),
-                if (_userB.isLoggedIn)
+                if (userB.isLoggedIn)
                   SideBarItem(
                     icon: const Icon(Icons.backup_outlined),
                     onPressed: () {
@@ -60,7 +60,7 @@ class MyHomeScreen extends StatelessWidget {
                     },
                     title: 'النسخ الاحتياطي والاستعادة',
                   ),
-                if (!_userB.isLoggedIn)
+                if (!userB.isLoggedIn)
                   SideBarItem(
                     icon: const Icon(Icons.login),
                     onPressed: () {
@@ -69,12 +69,12 @@ class MyHomeScreen extends StatelessWidget {
                     title: Strings.logIn,
                   ),
                 const Spacer(),
-                if (_userB.isLoggedIn)
+                if (userB.isLoggedIn)
                   SideBarItem(
                     icon: const Icon(Icons.logout),
                     onPressed: () async {
-                      await _userB.logOut();
                       AutoRouter.of(context).replace(const LogInRoute());
+                      await userB.logOut();
                     },
                     title: Strings.logOut,
                   ),

@@ -94,7 +94,7 @@ class ProjectsApi {
   }
 
   Future<void> removeFile(AppFileWithUrl file) async {
-    await _dioClient.delete('/' + file.path);
+    await _dioClient.delete('/${file.path}');
   }
 
   Future<void> addProject({
@@ -141,17 +141,17 @@ class ProjectsApi {
     final formData = FormData.fromMap({
       "file": MultipartFile.fromBytes(zipFile.bytes, filename: zipFile.name),
     });
-    await _dioClient.post(Endpoint.backup + '/restore', data: formData);
+    await _dioClient.post('${Endpoint.backup}/restore', data: formData);
     return null;
   }
 
   Future<T?> restorBackupWithKey<T>(String key) async {
-    await _dioClient.post(Endpoint.backup + '/restore', data: {'key': key});
+    await _dioClient.post('${Endpoint.backup}/restore', data: {'key': key});
     return null;
   }
 
   Future<T?> deleteBackup<T>(String key) async {
-    await _dioClient.delete(Endpoint.backup + '/destroy', data: {'key': key});
+    await _dioClient.delete('${Endpoint.backup}/destroy', data: {'key': key});
     return null;
   }
 

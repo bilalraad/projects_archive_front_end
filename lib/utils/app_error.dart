@@ -11,6 +11,7 @@ class AppError {
     required this.raw,
   }) {
     if (kDebugMode) {
+      // ignore: prefer_interpolation_to_compose_strings
       final error = "\nStartError"
               '\n===================================================\n' +
           raw.toString() +

@@ -101,6 +101,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         await context
                             .showSnackBar("تم تغيير كلمة السر بنجاح")
                             .closed;
+                        if (!mounted) return;
                         AutoRouter.of(context).replace(const LogInRoute());
                       }, failure: (e) {
                         context.showSnackBar(e.readableMessage, isError: true);

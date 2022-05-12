@@ -5,20 +5,22 @@ import 'package:projects_archiving/models/project.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void downLoadFile(String path) {
-  launch(dotenv.env['BASE_URL']! + "/$path");
+  launchUrl(Uri.parse("${dotenv.env['BASE_URL']!}/$path"));
 }
 
 void downLoadExcel(ProjectsFilter filter) {
-  var uri = Uri.parse(dotenv.env['BASE_URL']! + Endpoint.projects + "/export");
+  var uri = Uri.parse("${dotenv.env['BASE_URL']!}${Endpoint.projects}/export");
   uri = uri.replace(queryParameters: filter.toJson().cleanUpValues());
 
-  launch(uri.toString());
+  launchUrl(uri);
 }
 
 void downLoadDBackup(String key) {
-  launch(dotenv.env['BASE_URL']! + "/backups/download/database/$key");
+  launchUrl(
+      Uri.parse("${dotenv.env['BASE_URL']!}/backups/download/database/$key"));
 }
 
 void downLoadStorageBackup(String key) {
-  launch(dotenv.env['BASE_URL']! + "/backups/download/storage/$key");
+  launchUrl(
+      Uri.parse("${dotenv.env['BASE_URL']!}/backups/download/storage/$key"));
 }

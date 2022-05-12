@@ -32,12 +32,12 @@ class RoleDropDown extends StatelessWidget {
               ),
               items: Role.values
                   .map((e) => DropdownMenuItem<Role>(
+                      value: e,
                       child: Text(
                         Strings.translateRole(e),
                         style: Theme.of(context).textTheme.subtitle1?.copyWith(
                             color: Theme.of(context).primaryColor, height: .5),
-                      ),
-                      value: e))
+                      )))
                   .toList(),
               value: selectedRole,
               onChanged: onRoleChanged),

@@ -18,11 +18,11 @@ class ProjectsBloc
   static ProjectsBloc of(BuildContext context, {bool listen = false}) =>
       BlocProvider.of<ProjectsBloc>(context, listen: listen);
 
-  ProjectsBloc(ProjectsApi _projectsRepo, ProjectsFilterBloc filterBloc)
+  ProjectsBloc(ProjectsApi projectsRepo, ProjectsFilterBloc filterBloc)
       : super(const Initial()) {
     on<_Started>((event, emit) async {
       await apiCallsWrapper<ResWithCount<Project>>(
-              _projectsRepo.getProjects(filter: filterBloc.state.filter))
+              projectsRepo.getProjects(filter: filterBloc.state.filter))
           .listen((event) {
         emit(event);
       }).asFuture();
@@ -33,7 +33,7 @@ class ProjectsBloc
       });
     });
     on<_LoadProjects>((event, emit) async {
-      await apiCallsWrapper<ResWithCount<Project>>(_projectsRepo.getProjects(
+      await apiCallsWrapper<ResWithCount<Project>>(projectsRepo.getProjects(
               filter: filterBloc.state.filter, skip: event.skip))
           .listen((event) => emit(event))
           .asFuture();

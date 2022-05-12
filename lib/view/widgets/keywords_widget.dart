@@ -16,7 +16,7 @@ class KeyWordsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _keyWordController = TextEditingController();
+    final keyWordController = TextEditingController();
     return Column(
       children: [
         Row(
@@ -25,7 +25,7 @@ class KeyWordsWidget extends StatelessWidget {
               flex: 3,
               child: AppTextField(
                 lableText: 'مثال: تطبيق هاتف',
-                controller: _keyWordController,
+                controller: keyWordController,
               ),
             ),
             const SizedBox(width: 10),
@@ -35,9 +35,9 @@ class KeyWordsWidget extends StatelessWidget {
                   text: 'اضافة',
                   buttonType: ButtonType.secondary,
                   onPressed: () {
-                    if (_keyWordController.text.isNotEmpty) {
-                      onKeyWordAdded(_keyWordController.text);
-                      _keyWordController.clear();
+                    if (keyWordController.text.isNotEmpty) {
+                      onKeyWordAdded(keyWordController.text);
+                      keyWordController.clear();
                     }
                   }),
             ),

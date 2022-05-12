@@ -38,6 +38,7 @@ class _BackupScreenState extends State<BackupScreen> {
 
   void restoreAndLogout(Future<void> restoreFunc) async {
     await restoreFunc;
+    if (!mounted) return;
     BlocProvider.of<UserCubit>(context).logOut();
     AutoRouter.of(context).replace(const LogInRoute());
   }
@@ -98,7 +99,7 @@ class _BackupScreenState extends State<BackupScreen> {
                           for (var file in result.files) {
                             final appfile =
                                 AppFile(bytes: file.bytes!, name: file.name);
-
+                            if (!mounted) return;
                             context.showConfirmDialog(
                               () => restoreAndLogout(
                                   _backupB.restoreBackupWithFile(appfile)),

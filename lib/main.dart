@@ -51,26 +51,25 @@ class MyApp extends StatelessWidget {
 
 Future<Widget> configureInjections(Widget child) async {
   await dotenv.load(fileName: "assets/.env");
-  var _sharedPreference = await SharedPreferences.getInstance();
-  var _sharedPrefHelper = SharedPreferenceHelper(_sharedPreference);
-  var _dio = Network.provideDio(_sharedPrefHelper);
-  var _dioClient = DioClient(_dio);
-  var _projectsRepo = ProjectsApi(_dioClient, _sharedPrefHelper);
+  var sharedPreference = await SharedPreferences.getInstance();
+  var sharedPrefHelper = SharedPreferenceHelper(sharedPreference);
+  var dio = Network.provideDio(sharedPrefHelper);
+  var dioClient = DioClient(dio);
+  var projectsRepo = ProjectsApi(dioClient, sharedPrefHelper);
   var filter = ProjectsFilterBloc();
   return MultiBlocProvider(
     providers: [
       BlocProvider(create: (_) => filter),
       BlocProvider(
-          lazy: false,
-          create: (context) => ProjectsBloc(_projectsRepo, filter)),
-      BlocProvider(create: (_) => AddProjectBloc(_projectsRepo)),
-      BlocProvider(create: (_) => EditProjectBloc(_projectsRepo)),
-      BlocProvider(create: (_) => ProjectDetailsBloc(_projectsRepo)),
-      BlocProvider(create: (_) => UserCubit(_projectsRepo, _sharedPrefHelper)),
-      BlocProvider(create: (_) => BackupandrestoreCubit(_projectsRepo)),
-      BlocProvider(create: (_) => PasswordManagerCubit(_projectsRepo)),
-      BlocProvider(create: (_) => TeachersCubit(_projectsRepo)),
-      BlocProvider(create: (_) => GraduatesCubit(_projectsRepo)),
+          lazy: false, create: (context) => ProjectsBloc(projectsRepo, filter)),
+      BlocProvider(create: (_) => AddProjectBloc(projectsRepo)),
+      BlocProvider(create: (_) => EditProjectBloc(projectsRepo)),
+      BlocProvider(create: (_) => ProjectDetailsBloc(projectsRepo)),
+      BlocProvider(create: (_) => UserCubit(projectsRepo, sharedPrefHelper)),
+      BlocProvider(create: (_) => BackupandrestoreCubit(projectsRepo)),
+      BlocProvider(create: (_) => PasswordManagerCubit(projectsRepo)),
+      BlocProvider(create: (_) => TeachersCubit(projectsRepo)),
+      BlocProvider(create: (_) => GraduatesCubit(projectsRepo)),
     ],
     child: child,
   );

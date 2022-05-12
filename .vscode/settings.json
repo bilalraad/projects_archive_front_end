@@ -1,5 +1,10 @@
 {
-  "cSpell.words": ["Cupertino", "dotenv", "noto"],
+  "cSpell.words": [
+    "Cupertino",
+    "dotenv",
+    "Kufi",
+    "noto"
+  ],
   "cSpell.enableFiletypes": ["!dart"],
   "explorer.experimental.fileNesting.enabled": true,
   "explorer.experimental.fileNesting.expand": false,

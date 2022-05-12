@@ -1,24 +1,24 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/edit_project/edit_project_bloc.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/app_file_with_url.dart';
 import 'package:projects_archiving/models/project.dart';
-import 'package:projects_archiving/utils/enums.dart';
 import 'package:projects_archiving/utils/context_extentions.dart';
+import 'package:projects_archiving/utils/enums.dart';
+import 'package:projects_archiving/utils/strings.dart';
 import 'package:projects_archiving/utils/validation_builder.dart';
 import 'package:projects_archiving/view/project/edit_project/file_picker_widget_edit.dart';
 import 'package:projects_archiving/view/project/project_details/project_details.dart';
+import 'package:projects_archiving/view/widgets/app_button.dart';
+import 'package:projects_archiving/view/widgets/app_text_feild.dart';
 import 'package:projects_archiving/view/widgets/keywords_widget.dart';
 import 'package:projects_archiving/view/widgets/level_drop_dropdown.dart';
 import 'package:projects_archiving/view/widgets/year_picker.dart';
-import 'package:provider/provider.dart';
-
-import 'package:projects_archiving/utils/strings.dart';
-import 'package:projects_archiving/view/widgets/app_button.dart';
-import 'package:projects_archiving/view/widgets/app_text_feild.dart';
 
 class EditProjectScreen extends StatefulWidget {
   final Project project;
@@ -73,7 +73,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
 
   @override
   void didChangeDependencies() {
-    _editBloc = Provider.of<EditProjectBloc>(context);
+    _editBloc = BlocProvider.of<EditProjectBloc>(context);
     super.didChangeDependencies();
   }
 
