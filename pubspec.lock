@@ -353,9 +353,11 @@ packages:
   infinite_scroll_pagination:
     dependency: "direct main"
     description:
-      name: infinite_scroll_pagination
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: "5c753a6e0ad8eb3d826894b5b149b5f43e8325f4"
+      resolved-ref: "5c753a6e0ad8eb3d826894b5b149b5f43e8325f4"
+      url: "https://github.com/nicolashouriet/infinite_scroll_pagination.git"
+    source: git
     version: "3.1.0"
   intl:
     dependency: "direct main"
