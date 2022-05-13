@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
 }
 
 Future<Widget> configureInjections(Widget child) async {
-  await dotenv.load(fileName: "assets/.env");
+  await dotenv.load(fileName: "assets/e.env");
   var sharedPreference = await SharedPreferences.getInstance();
   var sharedPrefHelper = SharedPreferenceHelper(sharedPreference);
   var dio = Network.provideDio(sharedPrefHelper);
