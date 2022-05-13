@@ -1,11 +1,11 @@
 {
-  "name": "projects_archiving",
-  "short_name": "projects_archiving",
+  "name": "Project Archiving",
+  "short_name": "PAS",
   "start_url": ".",
   "display": "standalone",
-  "background_color": "#0175C2",
-  "theme_color": "#0175C2",
-  "description": "A new Flutter project.",
+  "background_color": "#F95F05",
+  "theme_color": "#F95F05",
+  "description": "A college project for storing students graduation projects with files",
   "orientation": "portrait-primary",
   "prefer_related_applications": false,
   "icons": [

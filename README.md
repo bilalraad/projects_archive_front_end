@@ -1,16 +1,36 @@
-# projects_archiving
+# Projects Archiving System
 
-A new Flutter project.
+A college project for storing students graduation projects with report files as pdf and docs
+
+## Features
+
+- Bulk upload from excel sheet.
+
+- Create & Edit a project.
+
+- The ability to create a backup for all the data.
+
+- Download backup data (files and sql data).
+
+- Restore data from the backup list or from downloaded file.
+
+- Authentication with email and password.
+
+- Authorization with JWT.
+
+- Forgot password with email.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To get started you need to clone the Laravel server to your machine and run the command `php artisan serve`.
 
-A few resources to get you started if this is your first Flutter project:
+Also clone this repo to your computer
+then create a file int the `assets` folder named `e.env` and paste this in it:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+``` #env
+BASE_URL="http://127.0.0.1:8000/api"
+```
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Then open the terminal and run `flutter pub get` followed by the command `flutter run web -d chrome --web-port 8001 --web-renderer html`
+
+## And congrats
