@@ -16,5 +16,5 @@ class Endpoint {
   static const String forgotPassword = '/users/forgot-password';
   static const String resetPassword = '/users/reset-password';
   static const String teachers = '/teachers';
-  static const String graduates = '/graduates';
+  // static const String graduates = '/graduates';
 }

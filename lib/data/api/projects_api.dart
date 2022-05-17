@@ -171,9 +171,9 @@ class ProjectsApi {
     return ResWithCount.fromJson(response.data, Teacher.fromJsonModel);
   }
 
-  Future<ResWithCount<Graduate>> students(String? level) async {
-    final response = await _dioClient
-        .get(Endpoint.graduates, queryParameters: {'level': level});
-    return ResWithCount.fromJson(response.data, Graduate.fromJsonModel);
-  }
+  // Future<ResWithCount<Graduate>> students(String? level) async {
+  //   final response = await _dioClient
+  //       .get(Endpoint.graduates, queryParameters: {'level': level});
+  //   return ResWithCount.fromJson(response.data, Graduate.fromJsonModel);
+  // }
 }

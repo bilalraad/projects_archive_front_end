@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/states/result_state.dart';
-import 'package:projects_archiving/blocs/teachers_and_students/graduates_cubit.dart';
 import 'package:projects_archiving/blocs/teachers_and_students/teachers_cubit.dart';
 import 'package:projects_archiving/data/api/helper/res_with_count.dart';
 import 'package:projects_archiving/models/app_file.dart';
-import 'package:projects_archiving/models/graduate.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/models/teacher.dart';
 import 'package:projects_archiving/utils/context_extentions.dart';
@@ -41,9 +39,10 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
 
   AddProject project = AddProject.empty();
   List<AppFile> files = [];
+  List<String> keyWords = [];
 
   final _formKey = GlobalKey<FormState>();
-  final _sNameDropdownKey = GlobalKey<FormFieldState>();
+  // final _sNameDropdownKey = GlobalKey<FormFieldState>();
 
   @override
   void initState() {
@@ -69,7 +68,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   void didChangeDependencies() {
     _pBloc = BlocProvider.of<AddProjectBloc>(context);
     BlocProvider.of<TeachersCubit>(context).teachers();
-    BlocProvider.of<GraduatesCubit>(context).graduates(project.level);
+    // BlocProvider.of<GraduatesCubit>(context).graduates(project.level);
 
     super.didChangeDependencies();
   }
@@ -114,37 +113,47 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                       .build(),
                                 ),
                                 const SizedBox(height: 10),
-                                BlocBuilder<GraduatesCubit,
-                                    BlocsState<ResWithCount<Graduate>>>(
-                                  builder: (context, state) {
-                                    return AppDropDownFormFeild<String>(
-                                      key: _sNameDropdownKey,
-                                      items: state.whenOrNull<
-                                          List<DropdownMenuItem<String>>?>(
-                                        data: (gs) => List.generate(
-                                            gs.results.length, (i) {
-                                          return DropdownMenuItem<String>(
-                                              value: gs.results[i].name,
-                                              child: Text(gs.results[i].name));
-                                        }),
-                                      ),
-                                      value: returnNullIfEmpty(
-                                          project.studentName),
-                                      validator: ValidationBuilder()
-                                          .maxLength(255)
-                                          .required()
-                                          .build(),
-                                      dropIcon: state.whenOrNull(
-                                        loading: () =>
-                                            const CircularProgressIndicator
-                                                .adaptive(),
-                                      ),
-                                      onChanged: (v) => project =
-                                          project.copyWith(studentName: v!),
-                                      lableText: Strings.studentName,
-                                    );
-                                  },
+                                AppTextField(
+                                  controller: _studentNameController,
+                                  lableText: Strings.studentName,
+                                  onChanged: (v) => project =
+                                      project.copyWith(studentName: v),
+                                  validator: ValidationBuilder()
+                                      .maxLength(255)
+                                      .required()
+                                      .build(),
                                 ),
+                                // BlocBuilder<GraduatesCubit,
+                                //     BlocsState<ResWithCount<Graduate>>>(
+                                //   builder: (context, state) {
+                                //     return AppDropDownFormFeild<String>(
+                                //       key: _sNameDropdownKey,
+                                //       items: state.whenOrNull<
+                                //           List<DropdownMenuItem<String>>?>(
+                                //         data: (gs) => List.generate(
+                                //             gs.results.length, (i) {
+                                //           return DropdownMenuItem<String>(
+                                //               value: gs.results[i].name,
+                                //               child: Text(gs.results[i].name));
+                                //         }),
+                                //       ),
+                                //       value: returnNullIfEmpty(
+                                //           project.studentName),
+                                //       validator: ValidationBuilder()
+                                //           .maxLength(255)
+                                //           .required()
+                                //           .build(),
+                                //       dropIcon: state.whenOrNull(
+                                //         loading: () =>
+                                //             const CircularProgressIndicator
+                                //                 .adaptive(),
+                                //       ),
+                                //       onChanged: (v) => project =
+                                //           project.copyWith(studentName: v!),
+                                //       lableText: Strings.studentName,
+                                //     );
+                                //   },
+                                // ),
                                 const SizedBox(height: 10),
                                 BlocBuilder<TeachersCubit,
                                     BlocsState<ResWithCount<Teacher>>>(
@@ -217,11 +226,11 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                 const SizedBox(height: 10),
                                 StatefulBuilder(builder: (context, setState) {
                                   return KeyWordsWidget(
-                                    keywords: project.keywords,
-                                    onKeyWordAdded: (kw) => setState(
-                                        () => project.keywords.add(kw)),
-                                    onkeyWordDeleted: (kw) => setState(
-                                        () => project.keywords.remove(kw)),
+                                    keywords: keyWords,
+                                    onKeyWordAdded: (kw) =>
+                                        setState(() => keyWords.add(kw)),
+                                    onkeyWordDeleted: (kw) =>
+                                        setState(() => keyWords.remove(kw)),
                                   );
                                 }),
                                 const SizedBox(height: 10),
@@ -245,13 +254,13 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                         AppLevelDropDown(
                                           selectedLevel: project.level,
                                           onLevelChanged: (lvl) {
-                                            project = project.copyWith(
-                                                level: lvl!, studentName: '');
-                                            _sNameDropdownKey.currentState
-                                                ?.reset();
-                                            BlocProvider.of<GraduatesCubit>(
-                                                    context)
-                                                .graduates(lvl);
+                                            project =
+                                                project.copyWith(level: lvl!);
+                                            // _sNameDropdownKey.currentState
+                                            //     ?.reset();
+                                            // BlocProvider.of<GraduatesCubit>(
+                                            //         context)
+                                            //     .graduates(lvl);
 
                                             setState(() {});
                                           },
@@ -292,6 +301,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                   isError: true);
                               return;
                             }
+                            project = project.copyWith(keywords: keyWords);
                             await _pBloc.submitProject(project, files);
                             _pBloc.state.whenOrNull(data: (results) {
                               context

@@ -11,7 +11,7 @@ import 'package:projects_archiving/blocs/password_manager/password_manager_cubit
 import 'package:projects_archiving/blocs/project_details/project_details_cubit.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/blocs/projects_filter/projects_filter_bloc.dart';
-import 'package:projects_archiving/blocs/teachers_and_students/graduates_cubit.dart';
+// import 'package:projects_archiving/blocs/teachers_and_students/graduates_cubit.dart';
 import 'package:projects_archiving/blocs/teachers_and_students/teachers_cubit.dart';
 import 'package:projects_archiving/blocs/user/user_cubit.dart';
 import 'package:projects_archiving/data/api/dio_client.dart';
@@ -69,7 +69,7 @@ Future<Widget> configureInjections(Widget child) async {
       BlocProvider(create: (_) => BackupandrestoreCubit(projectsRepo)),
       BlocProvider(create: (_) => PasswordManagerCubit(projectsRepo)),
       BlocProvider(create: (_) => TeachersCubit(projectsRepo)),
-      BlocProvider(create: (_) => GraduatesCubit(projectsRepo)),
+      // BlocProvider(create: (_) => GraduatesCubit(projectsRepo)),
     ],
     child: child,
   );
