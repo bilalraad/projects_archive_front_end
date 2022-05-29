@@ -14,13 +14,13 @@ class AddProjectBloc extends Cubit<BlocsState> with ChangeNotifier {
   Future<void> submitProject(AddProject project, List<AppFile> files) async {
     await apiCallsWrapper(
             _projectsRepo.addProject(newProject: project, files: files))
-        .listen((event) => emit(event))
+        .listen(emit)
         .asFuture();
   }
 
   Future<void> projectsUpload(AppFile excelFile) async {
     await apiCallsWrapper(_projectsRepo.projectsUpload(excelFile))
-        .listen((event) => emit(event))
+        .listen(emit)
         .asFuture();
   }
 }

@@ -3,15 +3,15 @@ import 'dart:io';
 import 'package:dio/adapter.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:projects_archiving/data/api/helper/token.dart';
 import 'package:projects_archiving/data/shared_pref_helper.dart';
+import 'package:projects_archiving/utils/env.dart';
 
 class Network {
   static Dio provideDio(SharedPreferenceHelper sharedPrefHelper) {
     final dio = Dio();
     dio
-      ..options.baseUrl = dotenv.env['BASE_URL']!
+      ..options.baseUrl = BASE_URL
       ..options.contentType = 'application/json; charset=utf-8'
       ..options.headers = {"Accept": "application/json"}
       ..interceptors.add(
