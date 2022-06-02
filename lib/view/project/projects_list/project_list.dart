@@ -6,6 +6,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/blocs/projects_filter/projects_filter_bloc.dart';
 import 'package:projects_archiving/blocs/states/result_state.dart';
+import 'package:projects_archiving/blocs/user/user_cubit.dart';
 import 'package:projects_archiving/data/api/helper/res_with_count.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/utils/download.dart';
@@ -106,16 +107,18 @@ class _ProjectsListState extends State<ProjectsList> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                AppButton(
-                  onPressed: () => downLoadExcel(projectsF.state.filter),
-                  buttonType: ButtonType.secondary,
-                  text: Strings.downloadData,
-                  textColor: Colors.black,
-                  icon: Icon(
-                    Icons.download,
-                    color: Theme.of(context).primaryColor,
+                if (BlocProvider.of<UserCubit>(context, listen: false)
+                    .isLoggedIn)
+                  AppButton(
+                    onPressed: () => downLoadExcel(projectsF.state.filter),
+                    buttonType: ButtonType.secondary,
+                    text: Strings.downloadData,
+                    textColor: Colors.black,
+                    icon: Icon(
+                      Icons.download,
+                      color: Theme.of(context).primaryColor,
+                    ),
                   ),
-                ),
               ],
             ),
           ),
