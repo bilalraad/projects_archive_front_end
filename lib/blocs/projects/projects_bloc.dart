@@ -13,8 +13,6 @@ part 'projects_bloc.freezed.dart';
 
 class ProjectsBloc
     extends Bloc<ProjectsEvent, BlocsState<ResWithCount<Project>>> {
-  late StreamSubscription filterSubscription;
-
   static ProjectsBloc of(BuildContext context, {bool listen = false}) =>
       BlocProvider.of<ProjectsBloc>(context, listen: listen);
 
@@ -27,22 +25,12 @@ class ProjectsBloc
         emit(event);
       }).asFuture();
     });
-    filterSubscription = filterBloc.stream.listen((state) {
-      state.whenOrNull(changed: (filter) {
-        add(const _LoadProjects(0));
-      });
-    });
+
     on<_LoadProjects>((event, emit) async {
       await apiCallsWrapper<ResWithCount<Project>>(projectsRepo.getProjects(
               filter: filterBloc.state.filter, skip: event.skip))
           .listen((event) => emit(event))
           .asFuture();
     });
-  }
-
-  @override
-  Future<void> close() {
-    filterSubscription.cancel();
-    return super.close();
   }
 }
