@@ -1,6 +1,6 @@
 class Strings {
   static const addProject = 'إضافة مشروع';
-  static const addProjects = 'إضافة عنطريق ملف اكسل';
+  static const addProjects = 'إضافة عن طريق ملف اكسل';
   static const add = 'إضافة';
   static const save = 'حفظ';
   static const logIn = 'تسجيل الدخول';
@@ -57,7 +57,7 @@ class Strings {
   static const forgotPassword = 'نسيت كلمة المرور';
   static const everythingIsArchived = 'كل شيء مؤرشف';
   static const welcome =
-      'اهلا بك في ارشيف مشاريع جامعة النهرين كلية هندسة الحاسبات';
+      'اهلا بك في ارشيف مشاريع جامعة النهرين قسم هندسة الحاسوب';
   static const resetPassword = 'اعادة تعيين كلمة المرور';
   static const resetPasswordSubTitle = 'الرجاء ادخال بريدك الالكتروني\n'
       ' سوف يتم ارسال رابط اعادة تغيين كلمة السر الى بريدك الالكتروني';

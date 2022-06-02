@@ -11,7 +11,6 @@ import 'package:projects_archiving/models/app_file_with_url.dart';
 import 'package:projects_archiving/models/backup.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/models/reset_password.dart';
-import 'package:projects_archiving/models/graduate.dart';
 import 'package:projects_archiving/models/teacher.dart';
 import 'package:projects_archiving/models/user.dart';
 import 'package:projects_archiving/utils/app_error.dart';
