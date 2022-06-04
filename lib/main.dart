@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/add_project/add_project_bloc.dart';
@@ -49,6 +50,7 @@ class MyApp extends StatelessWidget {
 }
 
 Future<Widget> configureInjections(Widget child) async {
+  await dotenv.load(fileName: "assets/mobile.env");
   var sharedPreference = await SharedPreferences.getInstance();
   var sharedPrefHelper = SharedPreferenceHelper(sharedPreference);
   var dio = Network.provideDio(sharedPrefHelper);
