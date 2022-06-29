@@ -102,6 +102,9 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                               titleWithValue(Strings.graduationYear,
                                   p.graduationYear.year.toString()),
                               titleWithValue(Strings.level, p.level.translate),
+                              if (p.studentPhoneNo != null)
+                                titleWithValue(Strings.studentPhoneNumber,
+                                    p.studentPhoneNo),
                             ],
                           ),
                         ),

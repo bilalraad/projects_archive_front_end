@@ -89,7 +89,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                   child: Column(
                     children: [
                       Text(
-                        Strings.addProject,
+                        Strings.editProject,
                         style: Theme.of(context)
                             .textTheme
                             .displayMedium

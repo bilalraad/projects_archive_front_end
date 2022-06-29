@@ -191,7 +191,8 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                   onChanged: (v) => project = project.copyWith(
                                       studentPhoneNo:
                                           ValidationBuilder().a2e(v)),
-                                  lableText: Strings.studentPhoneNumber,
+                                  lableText: Strings.studentPhoneNumber +
+                                      Strings.optionalWithBrackets,
                                   validator: ValidationBuilder(isOptional: true)
                                       .phone()
                                       .build(),

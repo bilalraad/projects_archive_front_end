@@ -36,7 +36,7 @@ class AppLevelDropDown extends StatelessWidget {
                       child: Text(
                         e.translate,
                         style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                            color: Theme.of(context).primaryColor, height: .5),
+                            color: Theme.of(context).primaryColor, height: 1.4),
                       )))
                   .toList(),
               value: selectedLevel,

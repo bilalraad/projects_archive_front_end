@@ -126,14 +126,13 @@ class _FilterDialogState extends State<FilterDialog> {
 
                       AutoRouter.of(context).pop();
                     },
-                    text: 'حفظ الفلتر',
+                    text: Strings.saveFilter,
                     textColor: Colors.black,
                   ),
                   const SizedBox(width: 10),
                   AppButton(
                     onPressed: () async {
                       projectsF.add(const ProjectsFilterEvent.started());
-                      await Future.delayed(const Duration(seconds: 1));
                       setState(() => reset());
                     },
                     text: Strings.filterReset,

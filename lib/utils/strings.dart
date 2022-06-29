@@ -8,6 +8,7 @@ class Strings {
   static const projectName = 'اسم المشروع';
   static const graduationYear = 'سنة التخرج';
   static const studentName = 'اسم الطالب';
+  static const saveFilter = 'حفظ الفلتر';
   static const supervisorName = 'اسم المشرف';
   static const level = 'المستوى الجامعي';
   static const keywords = 'الكلمات الدالة';
