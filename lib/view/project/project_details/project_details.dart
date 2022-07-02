@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/project_details/project_details_cubit.dart';
-import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/blocs/user/user_cubit.dart';
 import 'package:projects_archiving/utils/download.dart';
 import 'package:projects_archiving/utils/enums.dart';
@@ -234,12 +233,13 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                 width: 150,
                                 backroundColor: Colors.red,
                                 buttonType: ButtonType.secondary,
-                                onPressed: () {
-                                  projectP.deleteProject(widget.projectId);
-
+                                onPressed: () async {
+                                  await projectP
+                                      .deleteProject(widget.projectId);
+                                  //FIXME: THIS TEMP FIX TO router problem when deleting project
+                                  // ignore: use_build_context_synchronously
+                                  AutoRouter.of(context).pop();
                                   projectP.state.whenOrNull(data: (_) {
-                                    ProjectsBloc.of(context)
-                                        .add(const ProjectsEvent.started());
                                     context.showSnackBar(
                                         Strings.deleteProjectSuccess);
 

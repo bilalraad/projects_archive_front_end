@@ -17,4 +17,4 @@ enum Role {
   const Role(this.translate);
 }
 
-enum PickerFileTypes { pdf, doc, docx, xlsx }
+enum PickerFileTypes { pdf, doc, docx, xlsx, zip }

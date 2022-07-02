@@ -9,6 +9,7 @@ import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/models/teacher.dart';
 import 'package:projects_archiving/utils/context_extentions.dart';
+import 'package:projects_archiving/utils/enums.dart';
 import 'package:projects_archiving/utils/validation_builder.dart';
 import 'package:projects_archiving/view/project/add_project/file_picker_widget.dart';
 import 'package:projects_archiving/view/widgets/app_header.dart';
@@ -38,11 +39,11 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   late AddProjectBloc _pBloc;
 
   AddProject project = AddProject.empty();
-  List<AppFile> files = [];
+  AppFile? _reportFile;
+  AppFile? _sourceCodeFile;
   List<String> keyWords = [];
 
   final _formKey = GlobalKey<FormState>();
-  // final _sNameDropdownKey = GlobalKey<FormFieldState>();
 
   @override
   void initState() {
@@ -68,7 +69,6 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
   void didChangeDependencies() {
     _pBloc = BlocProvider.of<AddProjectBloc>(context);
     BlocProvider.of<TeachersCubit>(context).teachers();
-    // BlocProvider.of<GraduatesCubit>(context).graduates(project.level);
 
     super.didChangeDependencies();
   }
@@ -123,37 +123,6 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                       .required()
                                       .build(),
                                 ),
-                                // BlocBuilder<GraduatesCubit,
-                                //     BlocsState<ResWithCount<Graduate>>>(
-                                //   builder: (context, state) {
-                                //     return AppDropDownFormFeild<String>(
-                                //       key: _sNameDropdownKey,
-                                //       items: state.whenOrNull<
-                                //           List<DropdownMenuItem<String>>?>(
-                                //         data: (gs) => List.generate(
-                                //             gs.results.length, (i) {
-                                //           return DropdownMenuItem<String>(
-                                //               value: gs.results[i].name,
-                                //               child: Text(gs.results[i].name));
-                                //         }),
-                                //       ),
-                                //       value: returnNullIfEmpty(
-                                //           project.studentName),
-                                //       validator: ValidationBuilder()
-                                //           .maxLength(255)
-                                //           .required()
-                                //           .build(),
-                                //       dropIcon: state.whenOrNull(
-                                //         loading: () =>
-                                //             const CircularProgressIndicator
-                                //                 .adaptive(),
-                                //       ),
-                                //       onChanged: (v) => project =
-                                //           project.copyWith(studentName: v!),
-                                //       lableText: Strings.studentName,
-                                //     );
-                                //   },
-                                // ),
                                 const SizedBox(height: 10),
                                 BlocBuilder<TeachersCubit,
                                     BlocsState<ResWithCount<Teacher>>>(
@@ -257,11 +226,6 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                           onLevelChanged: (lvl) {
                                             project =
                                                 project.copyWith(level: lvl!);
-                                            // _sNameDropdownKey.currentState
-                                            //     ?.reset();
-                                            // BlocProvider.of<GraduatesCubit>(
-                                            //         context)
-                                            //     .graduates(lvl);
 
                                             setState(() {});
                                           },
@@ -276,13 +240,61 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      StatefulBuilder(builder: (context, setState) {
-                        return FilePickerWidget(
-                          pickedFiles: files,
-                          onFileRemoved: (f) => setState(() => files.remove(f)),
-                          onFilesPicked: (f) => setState(() => files.add(f)),
-                        );
-                      }),
+                      Wrap(
+                        children: [
+                          SizedBox(
+                            width: 500,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  Strings.finalReport,
+                                  style: Theme.of(context).textTheme.subtitle2,
+                                ),
+                                StatefulBuilder(builder: (context, setState) {
+                                  return FilePickerWidget(
+                                    pickedFiles: _reportFile != null
+                                        ? [_reportFile!]
+                                        : [],
+                                    filesLimit: 1,
+                                    fileTypes: const [PickerFileTypes.pdf],
+                                    onFileRemoved: (f) =>
+                                        setState(() => _reportFile = null),
+                                    onFilesPicked: (f) {
+                                      setState(() => _reportFile = f);
+                                    },
+                                  );
+                                }),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 500,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "الكود الخاص بالمشروع${Strings.optionalWithBrackets}",
+                                  style: Theme.of(context).textTheme.subtitle2,
+                                ),
+                                StatefulBuilder(builder: (context, setState) {
+                                  return FilePickerWidget(
+                                    pickedFiles: _sourceCodeFile != null
+                                        ? [_sourceCodeFile!]
+                                        : [],
+                                    filesLimit: 1,
+                                    fileTypes: const [PickerFileTypes.zip],
+                                    onFileRemoved: (f) =>
+                                        setState(() => _sourceCodeFile = null),
+                                    onFilesPicked: (f) =>
+                                        setState(() => _sourceCodeFile = f),
+                                  );
+                                }),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 10),
                       AppButton(
                           width: 300,
@@ -292,7 +304,7 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                             if (!_formKey.currentState!.validate()) {
                               return;
                             }
-                            if (files.isEmpty) {
+                            if (_reportFile == null) {
                               context.showSnackBar(Strings.pleaseUploadReport,
                                   isError: true);
                               return;
@@ -303,6 +315,11 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                               return;
                             }
                             project = project.copyWith(keywords: keyWords);
+
+                            List<AppFile> files = [_reportFile!];
+                            if (_sourceCodeFile != null) {
+                              files.add(_sourceCodeFile!);
+                            }
                             await _pBloc.submitProject(project, files);
                             _pBloc.state.whenOrNull(data: (results) {
                               context

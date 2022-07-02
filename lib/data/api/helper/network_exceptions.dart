@@ -89,7 +89,9 @@ extension NetworkErrorHandler on NetworkExceptions {
         } else if (response.statusCode == 404 /*Not found*/ ||
                 response.statusCode == 401 /*Wrong credential*/ ||
                 response.statusCode == 409 /*Email taken*/ ||
-                response.statusCode == 403 /*Not Authorized*/
+                response.statusCode == 403 /*Not Authorized*/ ||
+                response.statusCode == 413 /*file size*/
+
             ) {
           errorMessage = response.data;
         } else {

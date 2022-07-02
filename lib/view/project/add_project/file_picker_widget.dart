@@ -32,6 +32,18 @@ class FilePickerWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String getFileTypesNames() {
+      String s = '\n';
+      for (var i = 0; i < fileTypes.length; i++) {
+        if (i < fileTypes.length - 1) {
+          s += "${fileTypes[i].name}, ";
+        } else {
+          s += fileTypes[i].name;
+        }
+      }
+      return s;
+    }
+
     return Column(
       children: [
         DropTarget(
@@ -58,8 +70,9 @@ class FilePickerWidget extends StatelessWidget {
                 const Icon(Icons.cloud_upload_outlined, size: 80),
                 Center(
                   child: Text(
-                    Strings.dropFilesHere,
+                    Strings.dropFilesHere + getFileTypesNames(),
                     style: Theme.of(context).textTheme.titleSmall,
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -170,6 +183,9 @@ Future<void> dragedFileTypeValidation({
         //pdf check
         (selectedTypes.contains(PickerFileTypes.pdf) &&
                 (xfile.mimeType?.endsWith('/pdf') ?? false)) ||
+            //zip check
+            (selectedTypes.contains(PickerFileTypes.zip) &&
+                (xfile.mimeType?.endsWith('/zip') ?? false)) ||
             //word check
             ((selectedTypes.contains(PickerFileTypes.doc) ||
                     selectedTypes.contains(PickerFileTypes.docx)) &&
