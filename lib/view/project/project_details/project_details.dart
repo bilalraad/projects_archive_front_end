@@ -186,7 +186,7 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                     const SizedBox(height: 10),
                     Align(
                       alignment: Alignment.centerRight,
-                      child: Text(Strings.finalReport, style: titleTextTheme),
+                      child: Text(Strings.projectFiles, style: titleTextTheme),
                     ),
                     SizedBox(
                       height: 60,
@@ -200,20 +200,24 @@ class _ProjectDetailsScreenState extends State<ProjectDetailsScreen> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 5),
                                             child: AppButton(
-                                                width: 150,
-                                                backroundColor: e.fileType ==
-                                                        ReportFileType.word
-                                                    ? Colors.black
-                                                    : null,
-                                                onPressed: () =>
-                                                    downLoadFile(e.path),
-                                                text: e.fileType.name),
+                                              width: 150,
+                                              backroundColor: e.fileType ==
+                                                      ReportFileType.zip
+                                                  ? Colors.black
+                                                  : null,
+                                              onPressed: () =>
+                                                  downLoadFile(e.path),
+                                              text: e.fileType !=
+                                                      ReportFileType.zip
+                                                  ? Strings.finalReport
+                                                  : Strings.projectSourceCode,
+                                            ),
                                           ))
                                       .toList(),
                                 )
                               : const Align(
                                   alignment: Alignment.centerRight,
-                                  child: Text(Strings.noReport),
+                                  child: Text(Strings.noFiles),
                                 ),
                           const VerticalDivider(),
                           const Spacer(),

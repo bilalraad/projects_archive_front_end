@@ -7,7 +7,7 @@ enum Level {
   const Level(this.translate);
 }
 
-enum ReportFileType { pdf, word, unKnown }
+enum ReportFileType { pdf, word, zip, unKnown }
 
 enum Role {
   admin('ادمن'),

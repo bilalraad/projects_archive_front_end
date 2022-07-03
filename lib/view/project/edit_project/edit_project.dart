@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:projects_archiving/app_router.gr.dart';
 import 'package:projects_archiving/blocs/edit_project/edit_project_bloc.dart';
-import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/app_file_with_url.dart';
 import 'package:projects_archiving/models/project.dart';
@@ -266,7 +265,8 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "الكود الخاص بالمشروع${Strings.optionalWithBrackets}",
+                                  Strings.projectSourceCode +
+                                      Strings.optionalWithBrackets,
                                   style: Theme.of(context).textTheme.subtitle2,
                                 ),
                                 StatefulBuilder(builder: (context, setState) {

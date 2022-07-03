@@ -22,8 +22,8 @@ class AppFileWithUrl {
     final extension = p.extension(path); // '.dart'
     if (extension.contains('pdf')) {
       return ReportFileType.pdf;
-    } else if (extension.contains('doc') || extension.contains('docx')) {
-      return ReportFileType.word;
+    } else if (extension.contains('zip')) {
+      return ReportFileType.zip;
     } else {
       return ReportFileType.unKnown;
     }

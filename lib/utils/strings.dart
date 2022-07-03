@@ -81,7 +81,8 @@ class Strings {
   static const browseFiles = 'تصفح الملفات';
   static const noKeywords = 'لا يوجد كلمات دالة';
   static const noAbstract = 'لم يتم اضافة نبذة مختصرة';
-  static const noReport = 'لم يتم رفع تقرير لهذا المشروع';
+  static const noFiles = 'لم يتم رفع اي ملف لهذا المشروع';
+  static const projectFiles = 'الملفات الخاصة بالمشروع';
   static const finalReport = 'التقرير النهائي';
   static const editProject = 'تعديل المشروع';
   static const deleteProject = 'حذف المشروع';
@@ -97,6 +98,7 @@ class Strings {
   static const keywordHint = 'مثال: تطبيق هاتف';
   static const filterReset = 'اعادة';
   static const cancel = "الغاء";
+  static const projectSourceCode = 'الكود الخاص بالمشروع';
 
   static String count(String? count) {
     return "العدد: ${count ?? 0}";
