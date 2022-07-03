@@ -3,7 +3,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/app_file_with_url.dart';
+import 'package:projects_archiving/utils/enums.dart';
 import 'package:projects_archiving/utils/strings.dart';
+import 'package:projects_archiving/view/project/add_project/file_picker_widget.dart';
 import 'package:projects_archiving/view/widgets/app_button.dart';
 
 class FilePickerWidgetEdit extends StatelessWidget {
@@ -11,33 +13,47 @@ class FilePickerWidgetEdit extends StatelessWidget {
   final Function(AppFile) onFilesPicked;
   final Function(AppFileWithUrl) onFileRemoved;
 
+  final int filesLimit;
+  final List<PickerFileTypes> fileTypes;
+
   const FilePickerWidgetEdit({
     Key? key,
     this.pickedFiles,
     required this.onFilesPicked,
     required this.onFileRemoved,
+    this.fileTypes = const [
+      PickerFileTypes.doc,
+      PickerFileTypes.docx,
+      PickerFileTypes.pdf
+    ],
+    this.filesLimit = 2,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    String getFileTypesNames() {
+      String s = '\n';
+      for (var i = 0; i < fileTypes.length; i++) {
+        if (i < fileTypes.length - 1) {
+          s += "${fileTypes[i].name}, ";
+        } else {
+          s += fileTypes[i].name;
+        }
+      }
+      return s;
+    }
+
     return Column(
       children: [
         DropTarget(
-          onDragDone: pickedFiles!.length >= 2
+          onDragDone: pickedFiles!.length >= filesLimit
               ? null
               : (detail) async {
-                  final files = detail.files;
-                  for (final xfile in files) {
-                    if ((xfile.mimeType?.endsWith('/pdf') ?? false) ||
-                        (xfile.mimeType?.endsWith('/msword') ?? false) ||
-                        (xfile.mimeType?.endsWith(
-                                '/vnd.openxmlformats-officedocument.wordprocessingml.document') ??
-                            false)) {
-                      final file = AppFile(
-                          bytes: await xfile.readAsBytes(), name: xfile.name);
-                      onFilesPicked(file);
-                    }
-                  }
+                  await dragedFileTypeValidation(
+                      filesDetails: detail,
+                      selectedTypes: fileTypes,
+                      onFileValidated: onFilesPicked,
+                      context: context);
                 },
           child: Container(
             decoration: BoxDecoration(
@@ -53,8 +69,9 @@ class FilePickerWidgetEdit extends StatelessWidget {
                 const Icon(Icons.cloud_upload_outlined, size: 80),
                 Center(
                   child: Text(
-                    Strings.dropFilesHere,
+                    Strings.dropFilesHere + getFileTypesNames(),
                     style: Theme.of(context).textTheme.titleSmall,
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -62,7 +79,7 @@ class FilePickerWidgetEdit extends StatelessWidget {
                   child: AppButton(
                       width: 200,
                       buttonType: ButtonType.secondary,
-                      onPressed: pickedFiles!.length >= 2
+                      onPressed: pickedFiles!.length >= filesLimit
                           ? null
                           : () async {
                               FilePickerResult? result =
@@ -70,11 +87,9 @@ class FilePickerWidgetEdit extends StatelessWidget {
                                       allowMultiple: true,
                                       type: FileType.custom,
                                       withData: true,
-                                      allowedExtensions: [
-                                    'pdf',
-                                    'doc',
-                                    'docx'
-                                  ]);
+                                      allowedExtensions: fileTypes
+                                          .map((e) => e.name)
+                                          .toList());
 
                               if (result != null) {
                                 for (var file in result.files) {

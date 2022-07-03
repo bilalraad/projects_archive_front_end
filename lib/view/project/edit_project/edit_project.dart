@@ -8,6 +8,7 @@ import 'package:projects_archiving/blocs/projects/projects_bloc.dart';
 import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/app_file_with_url.dart';
 import 'package:projects_archiving/models/project.dart';
+import 'package:projects_archiving/utils/app_utils.dart';
 import 'package:projects_archiving/utils/context_extentions.dart';
 import 'package:projects_archiving/utils/enums.dart';
 import 'package:projects_archiving/utils/strings.dart';
@@ -19,6 +20,7 @@ import 'package:projects_archiving/view/widgets/app_text_feild.dart';
 import 'package:projects_archiving/view/widgets/keywords_widget.dart';
 import 'package:projects_archiving/view/widgets/level_drop_dropdown.dart';
 import 'package:projects_archiving/view/widgets/year_picker.dart';
+import 'package:collection/collection.dart';
 
 class EditProjectScreen extends StatefulWidget {
   final Project project;
@@ -35,8 +37,11 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
       _studentPhoneNumberC,
       _abstractC;
   late EditProjectBloc _editBloc;
-  List<AppFileWithUrl> files = [];
-  List<AppFile> filesToBeUploaded = [];
+  AppFileWithUrl? sourceFile;
+  AppFileWithUrl? reportFile;
+
+  AppFile? sourceFileToBeUploaded;
+  AppFile? reportFileToBeUploaded;
   List<AppFileWithUrl> filesToBeRemoved = [];
 
   List<String> keyWords = [];
@@ -54,7 +59,12 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
     _abstractC = TextEditingController(text: widget.project.abstract);
     _studentPhoneNumberC =
         TextEditingController(text: widget.project.studentPhoneNo);
-    files.addAll(widget.project.files);
+    if (widget.project.files.isNotEmpty) {
+      reportFile =
+          widget.project.files.firstWhere((f) => f.title.contains('.pdf'));
+      sourceFile = widget.project.files
+          .firstWhereOrNull((f) => f.title.contains('.zip'));
+    }
     keyWords.addAll(widget.project.keywords);
     graduationYear = widget.project.graduationYear;
     level = widget.project.level;
@@ -213,26 +223,79 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                         ],
                       ),
                       const SizedBox(height: 10),
-                      StatefulBuilder(builder: (context, setState) {
-                        return FilePickerWidgetEdit(
-                          pickedFiles: files,
-                          onFileRemoved: (f) => setState(() {
-                            files.remove(f);
-                            if (f.isTmepFile) {
-                              filesToBeUploaded
-                                  .removeWhere((t) => t.name == f.title);
-                            } else {
-                              filesToBeRemoved.add(f);
-                            }
-                          }),
-                          onFilesPicked: (f) {
-                            setState(() {
-                              files.add(AppFileWithUrl.createTempFile(f.name));
-                              filesToBeUploaded.add(f);
-                            });
-                          },
-                        );
-                      }),
+                      Wrap(
+                        children: [
+                          SizedBox(
+                            width: 500,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  Strings.finalReport,
+                                  style: Theme.of(context).textTheme.subtitle2,
+                                ),
+                                StatefulBuilder(builder: (context, setState) {
+                                  return FilePickerWidgetEdit(
+                                    pickedFiles:
+                                        reportFile != null ? [reportFile!] : [],
+                                    filesLimit: 1,
+                                    fileTypes: const [PickerFileTypes.pdf],
+                                    onFileRemoved: (f) => setState(() {
+                                      if (f.isTmepFile) {
+                                        reportFileToBeUploaded = null;
+                                      } else {
+                                        filesToBeRemoved.add(f);
+
+                                        reportFile = null;
+                                      }
+                                    }),
+                                    onFilesPicked: (f) {
+                                      reportFile =
+                                          AppFileWithUrl.createTempFile(f.name);
+                                      setState(
+                                          () => reportFileToBeUploaded = f);
+                                    },
+                                  );
+                                }),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 500,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "الكود الخاص بالمشروع${Strings.optionalWithBrackets}",
+                                  style: Theme.of(context).textTheme.subtitle2,
+                                ),
+                                StatefulBuilder(builder: (context, setState) {
+                                  return FilePickerWidgetEdit(
+                                    pickedFiles:
+                                        sourceFile != null ? [sourceFile!] : [],
+                                    filesLimit: 1,
+                                    fileTypes: const [PickerFileTypes.zip],
+                                    onFileRemoved: (f) => setState(() {
+                                      if (f.isTmepFile) {
+                                        sourceFileToBeUploaded = null;
+                                      } else {
+                                        filesToBeRemoved.add(f);
+                                        sourceFile = null;
+                                      }
+                                    }),
+                                    onFilesPicked: (f) {
+                                      sourceFile =
+                                          AppFileWithUrl.createTempFile(f.name);
+                                      setState(
+                                          () => sourceFileToBeUploaded = f);
+                                    },
+                                  );
+                                }),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 10),
                       AppButton(
                           width: 300,
@@ -242,12 +305,27 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                             if (!_formKey.currentState!.validate()) {
                               return;
                             }
-                            if (files.isEmpty) {
+                            if (reportFile == null) {
                               context.showSnackBar('الرجاء رفع تقرير المشروع',
                                   isError: true);
                               return;
                             }
                             context.showConfirmDialog(() async {
+                              //uploading files
+                              List<AppFile> filesToBeUploaded = [];
+                              if (reportFileToBeUploaded != null) {
+                                filesToBeUploaded.add(reportFileToBeUploaded!);
+                              }
+                              if (sourceFileToBeUploaded != null) {
+                                if (getFileSizeInMb(sourceFileToBeUploaded!) >
+                                    10) {
+                                  context.showSnackBar(
+                                      Strings.sizeMustBeLessThan10Mb,
+                                      isError: true);
+                                  return;
+                                }
+                                filesToBeUploaded.add(sourceFileToBeUploaded!);
+                              }
                               // Remove files
                               for (var f in filesToBeRemoved) {
                                 _editBloc.removeFile(f);
@@ -257,6 +335,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                                   return;
                                 });
                               }
+
                               // Upload files
                               if (filesToBeUploaded.isNotEmpty) {
                                 await _editBloc.uploadFiles(filesToBeUploaded,
@@ -282,8 +361,6 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                                       level: level),
                                   widget.project.id.toString());
                               _editBloc.state.whenOrNull(data: (_) {
-                                ProjectsBloc.of(context)
-                                    .add(const ProjectsEvent.started());
                                 context
                                     .showSnackBar(Strings.projectEditeSuccess);
                                 AutoRouter.of(context)

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:projects_archiving/models/app_file.dart';
 
 String getFileSize(int bytes, int decimals) {
   if (bytes <= 0) return "0 B";
@@ -27,4 +28,15 @@ MaterialColor buildMaterialColor(Color color) {
     );
   }
   return MaterialColor(color.value, swatch);
+}
+
+String? returnNullIfEmpty(String? value) {
+  if (value == null || value.isEmpty) return null;
+  return value;
+}
+
+double getFileSizeInMb(AppFile file) {
+  int bytes = file.bytes.lengthInBytes;
+  if (bytes <= 0) return 0;
+  return bytes / (1024 * 1024);
 }

@@ -8,6 +8,7 @@ import 'package:projects_archiving/data/api/helper/res_with_count.dart';
 import 'package:projects_archiving/models/app_file.dart';
 import 'package:projects_archiving/models/project.dart';
 import 'package:projects_archiving/models/teacher.dart';
+import 'package:projects_archiving/utils/app_utils.dart';
 import 'package:projects_archiving/utils/context_extentions.dart';
 import 'package:projects_archiving/utils/enums.dart';
 import 'package:projects_archiving/utils/validation_builder.dart';
@@ -309,6 +310,13 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
                                   isError: true);
                               return;
                             }
+                            if (_sourceCodeFile != null &&
+                                getFileSizeInMb(_sourceCodeFile!) > 10) {
+                              context.showSnackBar(
+                                  Strings.sizeMustBeLessThan10Mb,
+                                  isError: true);
+                              return;
+                            }
                             if (project.graduationYear == null) {
                               context.showSnackBar(Strings.pleaseSelectYear,
                                   isError: true);
@@ -342,9 +350,4 @@ class _AddProjectScreenState extends State<AddProjectScreen> {
       ),
     );
   }
-}
-
-String? returnNullIfEmpty(String? value) {
-  if (value == null || value.isEmpty) return null;
-  return value;
 }

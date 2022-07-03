@@ -71,6 +71,8 @@ class Strings {
   static const resetPasswordSuccess = "تم تغيير كلمة السر بنجاح";
   static const changePassword = 'تغيير كلمة السر';
   static const pleaseUploadReport = 'الرجاء رفع تقرير المشروع';
+  static const sizeMustBeLessThan10Mb = 'الملف كبير جدا الحد الاعلى هو ١٠MB';
+
   static const pleaseSelectYear = 'الرجاء اختيار سنة التخرج';
   static const projectUploadSuccess = 'تم رفع المشروع بنجاح';
   static const pleaseUploadFile = 'الرجاء رفع الملف اولا';

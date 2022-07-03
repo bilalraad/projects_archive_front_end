@@ -165,12 +165,6 @@ class PickedFileCard extends StatelessWidget {
   }
 }
 
-// enum PickerFileTypes {
-//   pdf,
-//   word,
-//   xlsx
-// }
-
 Future<void> dragedFileTypeValidation({
   required DropDoneDetails filesDetails,
   required List<PickerFileTypes> selectedTypes,
